@@ -1185,6 +1185,278 @@ function getCurrentUser() {
     return userData ? JSON.parse(userData) : null;
 }
 
+// 기업 교육 신청 데이터 가져오기
+function getEnterpriseRequests() {
+    return JSON.parse(localStorage.getItem('enterpriseRequests') || '[]');
+}
+
+// 신청 관리 테이블 렌더링
+function renderRequestsTable() {
+    const tbody = document.getElementById('requestsTable');
+    if (!tbody) return;
+    
+    const requests = getEnterpriseRequests();
+    
+    if (requests.length === 0) {
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="10" style="text-align: center; padding: 2rem;">
+                    아직 신청 내역이 없습니다.
+                </td>
+            </tr>
+        `;
+        return;
+    }
+    
+    tbody.innerHTML = requests.map(request => {
+        const dates = request.dates || [];
+        const statusBadge = request.confirmedDate ? 'active' : 'pending';
+        const statusText = request.confirmedDate ? '확정' : '대기중';
+        const hasDocument = request.documents && request.documents.businessLicense;
+        
+        return `
+            <tr>
+                <td><strong>${request.requestId}</strong></td>
+                <td>${request.company.name}</td>
+                <td>${request.manager.name}</td>
+                <td>${getProgramName(request.quote.program)}</td>
+                <td>${request.quote.participants}명</td>
+                <td>${dates.map(date => new Date(date).toLocaleDateString('ko-KR')).join(', ')}</td>
+                <td>${request.confirmedDate ? new Date(request.confirmedDate).toLocaleDateString('ko-KR') : '-'}</td>
+                <td>
+                    <span class="b2b-badge b2b-badge-${statusBadge}">
+                        ${statusText}
+                    </span>
+                </td>
+                <td>
+                    ${hasDocument ? 
+                        '<span class="b2b-badge b2b-badge-active"><i class="fas fa-check"></i> 제출</span>' : 
+                        '<span class="b2b-badge b2b-badge-warning"><i class="fas fa-clock"></i> 대기</span>'
+                    }
+                </td>
+                <td>
+                    <button class="b2b-btn b2b-btn-secondary" onclick="viewRequestDetail('${request.requestId}')">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                    <button class="b2b-btn b2b-btn-primary" onclick="confirmRequestDate('${request.requestId}')">
+                        <i class="fas fa-check"></i>
+                    </button>
+                </td>
+            </tr>
+        `;
+    }).join('');
+}
+
+// 신청 상세 보기
+function viewRequestDetail(requestId) {
+    const requests = getEnterpriseRequests();
+    const request = requests.find(r => r.requestId === requestId);
+    
+    if (!request) {
+        showNotification('error', '신청 정보를 찾을 수 없습니다.');
+        return;
+    }
+    
+    // 상세 정보 표시
+    document.getElementById('detailCompanyName').textContent = request.company.name || '-';
+    document.getElementById('detailBusinessNumber').textContent = request.company.businessNumber || '-';
+    document.getElementById('detailIndustry').textContent = request.company.industry || '-';
+    document.getElementById('detailEmployeeCount').textContent = request.company.employeeCount || '-';
+    
+    document.getElementById('detailManagerName').textContent = request.manager.name || '-';
+    document.getElementById('detailPosition').textContent = request.manager.position || '-';
+    document.getElementById('detailEmail').textContent = request.manager.email || '-';
+    document.getElementById('detailPhone').textContent = request.manager.phone || '-';
+    
+    document.getElementById('detailProgram').textContent = getProgramName(request.quote.program) || '-';
+    document.getElementById('detailParticipants').textContent = `${request.quote.participants}명` || '-';
+    document.getElementById('detailEducationType').textContent = request.quote.educationType || '-';
+    document.getElementById('detailTotalAmount').textContent = `₩${(request.quote.totalAmount || 0).toLocaleString()}`;
+    
+    document.getElementById('detailRequestedDates').textContent = (request.dates || []).map(date => 
+        new Date(date).toLocaleDateString('ko-KR')
+    ).join(', ') || '-';
+    document.getElementById('detailConfirmedDate').textContent = request.confirmedDate ? 
+        new Date(request.confirmedDate).toLocaleDateString('ko-KR') : '미확정';
+    document.getElementById('detailSpecialRequest').textContent = request.quote.specialRequest || '없음';
+    
+    // 사업자등록증 표시
+    const documentPreview = document.getElementById('documentPreview');
+    if (request.documents && request.documents.businessLicense) {
+        documentPreview.innerHTML = `
+            <div style="color: var(--b2b-success);">
+                <i class="fas fa-file-pdf" style="font-size: 3rem; margin-bottom: 1rem;"></i>
+                <p>사업자등록증이 제출되었습니다.</p>
+                <p style="font-size: 0.875rem; color: var(--b2b-text-secondary);">
+                    세금계산서 이메일: ${request.documents.taxEmail || '미입력'}
+                </p>
+            </div>
+        `;
+    } else {
+        documentPreview.innerHTML = '<p>사업자등록증이 업로드되지 않았습니다.</p>';
+    }
+    
+    // 모달 표시
+    document.getElementById('requestDetailModal').style.display = 'flex';
+}
+
+// 신청 날짜 확정
+function confirmRequestDate(requestId) {
+    const requests = getEnterpriseRequests();
+    const request = requests.find(r => r.requestId === requestId);
+    
+    if (!request) {
+        showNotification('error', '신청 정보를 찾을 수 없습니다.');
+        return;
+    }
+    
+    if (request.confirmedDate) {
+        showNotification('info', '이미 날짜가 확정된 신청입니다.');
+        return;
+    }
+    
+    // 첫 번째 희망 날짜로 확정
+    if (request.dates && request.dates.length > 0) {
+        request.confirmedDate = request.dates[0];
+        localStorage.setItem('enterpriseRequests', JSON.stringify(requests));
+        renderRequestsTable();
+        showNotification('success', '교육 날짜가 확정되었습니다.');
+    }
+}
+
+// 신청 필터링
+function filterRequests(status) {
+    document.querySelectorAll('.b2b-tab').forEach(tab => tab.classList.remove('active'));
+    event.target.classList.add('active');
+    
+    // 실제 필터링 로직
+    const requests = getEnterpriseRequests();
+    let filteredRequests = [];
+    
+    switch(status) {
+        case 'pending':
+            filteredRequests = requests.filter(r => !r.confirmedDate);
+            break;
+        case 'confirmed':
+            filteredRequests = requests.filter(r => r.confirmedDate && (!r.documents || !r.documents.businessLicense));
+            break;
+        case 'completed':
+            filteredRequests = requests.filter(r => r.confirmedDate && r.documents && r.documents.businessLicense);
+            break;
+        default:
+            filteredRequests = requests;
+    }
+    
+    renderFilteredRequests(filteredRequests);
+}
+
+// 필터링된 신청 렌더링
+function renderFilteredRequests(requests) {
+    const tbody = document.getElementById('requestsTable');
+    if (!tbody) return;
+    
+    if (requests.length === 0) {
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="10" style="text-align: center; padding: 2rem;">
+                    해당 조건의 신청 내역이 없습니다.
+                </td>
+            </tr>
+        `;
+        return;
+    }
+    
+    tbody.innerHTML = requests.map(request => {
+        const dates = request.dates || [];
+        const statusBadge = request.confirmedDate ? 'active' : 'pending';
+        const statusText = request.confirmedDate ? '확정' : '대기중';
+        const hasDocument = request.documents && request.documents.businessLicense;
+        
+        return `
+            <tr>
+                <td><strong>${request.requestId}</strong></td>
+                <td>${request.company.name}</td>
+                <td>${request.manager.name}</td>
+                <td>${getProgramName(request.quote.program)}</td>
+                <td>${request.quote.participants}명</td>
+                <td>${dates.map(date => new Date(date).toLocaleDateString('ko-KR')).join(', ')}</td>
+                <td>${request.confirmedDate ? new Date(request.confirmedDate).toLocaleDateString('ko-KR') : '-'}</td>
+                <td>
+                    <span class="b2b-badge b2b-badge-${statusBadge}">
+                        ${statusText}
+                    </span>
+                </td>
+                <td>
+                    ${hasDocument ? 
+                        '<span class="b2b-badge b2b-badge-active"><i class="fas fa-check"></i> 제출</span>' : 
+                        '<span class="b2b-badge b2b-badge-warning"><i class="fas fa-clock"></i> 대기</span>'
+                    }
+                </td>
+                <td>
+                    <button class="b2b-btn b2b-btn-secondary" onclick="viewRequestDetail('${request.requestId}')">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                    <button class="b2b-btn b2b-btn-primary" onclick="confirmRequestDate('${request.requestId}')">
+                        <i class="fas fa-check"></i>
+                    </button>
+                </td>
+            </tr>
+        `;
+    }).join('');
+}
+
+// 신청 내역 엑셀 다운로드
+function exportRequests() {
+    const requests = getEnterpriseRequests();
+    
+    if (requests.length === 0) {
+        showNotification('warning', '다운로드할 신청 내역이 없습니다.');
+        return;
+    }
+    
+    // CSV 형식으로 변환
+    const headers = ['신청번호', '기업명', '담당자', '프로그램', '인원', '희망날짜', '확정날짜', '상태', '서류제출'];
+    const rows = requests.map(request => {
+        const dates = request.dates || [];
+        const status = request.confirmedDate ? '확정' : '대기중';
+        const hasDocument = request.documents && request.documents.businessLicense ? '제출' : '미제출';
+        
+        return [
+            request.requestId,
+            request.company.name,
+            request.manager.name,
+            getProgramName(request.quote.program),
+            `${request.quote.participants}명`,
+            dates.map(date => new Date(date).toLocaleDateString('ko-KR')).join(', '),
+            request.confirmedDate ? new Date(request.confirmedDate).toLocaleDateString('ko-KR') : '-',
+            status,
+            hasDocument
+        ].join(',');
+    });
+    
+    const csv = [headers.join(','), ...rows].join('\n');
+    
+    // 다운로드
+    const blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = `enterprise_requests_${new Date().toISOString().split('T')[0]}.csv`;
+    link.click();
+    
+    showNotification('success', '신청 내역이 다운로드되었습니다.');
+}
+
+// 신청 상세 인쇄
+function printRequestDetail() {
+    window.print();
+}
+
+// 신청 확정 처리
+function confirmRequest() {
+    showNotification('success', '교육이 확정되었습니다.');
+    closeModal('requestDetailModal');
+}
+
 // 초기화
 document.addEventListener('DOMContentLoaded', function() {
     // 인증 확인
@@ -1216,6 +1488,7 @@ document.addEventListener('DOMContentLoaded', function() {
     renderQuotesTable();
     renderTrainers();
     renderSupportTicketsTable();
+    renderRequestsTable(); // 신청 관리 테이블 추가
     
     // 차트 초기화
     initB2BCharts();
@@ -1241,6 +1514,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // 견적 데이터 자동 갱신 (5초마다)
     setInterval(() => {
         renderQuotesTable();
+        renderRequestsTable(); // 신청 데이터도 자동 갱신
     }, 5000);
     
     console.log('B2B 관리자 대시보드 초기화 완료');

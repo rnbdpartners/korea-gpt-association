@@ -1002,3 +1002,105 @@ body.b2b-admin-body {
         transform: translateX(-50%) translateY(0);
     }
 }
+
+/* 신청 관리 상세 모달 */
+.b2b-modal-large {
+    max-width: 900px;
+    width: 90%;
+}
+
+.request-detail-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.detail-section {
+    background: var(--b2b-bg-secondary);
+    border-radius: 12px;
+    padding: 1.5rem;
+    border: 1px solid var(--b2b-border);
+}
+
+.detail-section h4 {
+    font-size: 1.125rem;
+    color: var(--b2b-primary);
+    margin-bottom: 1rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--b2b-border);
+}
+
+.detail-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.info-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.info-label {
+    color: var(--b2b-text-secondary);
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.info-value {
+    color: var(--b2b-text-primary);
+    font-weight: 600;
+}
+
+.detail-documents {
+    background: var(--b2b-bg-secondary);
+    border-radius: 12px;
+    padding: 1.5rem;
+    border: 1px solid var(--b2b-border);
+    margin-bottom: 2rem;
+}
+
+.detail-documents h4 {
+    font-size: 1.125rem;
+    color: var(--b2b-primary);
+    margin-bottom: 1rem;
+}
+
+.document-preview {
+    background: var(--b2b-bg-primary);
+    border: 1px solid var(--b2b-border);
+    border-radius: 8px;
+    padding: 2rem;
+    text-align: center;
+    min-height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.document-preview img {
+    max-width: 100%;
+    max-height: 400px;
+    border-radius: 8px;
+}
+
+.detail-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+}
+
+/* 반응형 - 신청 관리 */
+@media (max-width: 768px) {
+    .request-detail-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    .b2b-modal-large {
+        max-width: 100%;
+        width: 95%;
+    }
+}

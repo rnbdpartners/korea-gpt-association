@@ -69,6 +69,12 @@
                         </a>
                     </li>
                     <li class="b2b-nav-item">
+                        <a href="#requests" class="b2b-nav-link" data-section="requests">
+                            <i class="fas fa-inbox"></i>
+                            <span>신청 관리</span>
+                        </a>
+                    </li>
+                    <li class="b2b-nav-item">
                         <a href="#programs" class="b2b-nav-link" data-section="programs">
                             <i class="fas fa-graduation-cap"></i>
                             <span>교육 프로그램</span>
@@ -263,6 +269,165 @@
                                 <!-- JavaScript로 동적 생성 -->
                             </tbody>
                         </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 신청 관리 섹션 -->
+            <section id="requests" class="b2b-admin-section">
+                <div class="b2b-section-header">
+                    <h2>신청 관리</h2>
+                    <p>기업 교육 신청 내역을 확인하고 관리하세요</p>
+                </div>
+
+                <div class="b2b-tabs">
+                    <button class="b2b-tab active" onclick="filterRequests('all')">전체</button>
+                    <button class="b2b-tab" onclick="filterRequests('pending')">대기중</button>
+                    <button class="b2b-tab" onclick="filterRequests('confirmed')">확정</button>
+                    <button class="b2b-tab" onclick="filterRequests('completed')">완료</button>
+                </div>
+
+                <div class="b2b-card">
+                    <div class="b2b-card-header">
+                        <h3 class="b2b-card-title">교육 신청 현황</h3>
+                        <button class="b2b-btn b2b-btn-secondary" onclick="exportRequests()">
+                            <i class="fas fa-download"></i>
+                            엑셀 다운로드
+                        </button>
+                    </div>
+                    <div class="b2b-table-container">
+                        <table class="b2b-table">
+                            <thead>
+                                <tr>
+                                    <th>신청번호</th>
+                                    <th>기업명</th>
+                                    <th>담당자</th>
+                                    <th>교육 프로그램</th>
+                                    <th>인원</th>
+                                    <th>희망 날짜</th>
+                                    <th>확정 날짜</th>
+                                    <th>상태</th>
+                                    <th>서류</th>
+                                    <th>관리</th>
+                                </tr>
+                            </thead>
+                            <tbody id="requestsTable">
+                                <!-- JavaScript로 동적 생성 -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- 상세 정보 모달 -->
+                <div id="requestDetailModal" class="b2b-modal">
+                    <div class="b2b-modal-content b2b-modal-large">
+                        <div class="b2b-modal-header">
+                            <h3 class="b2b-modal-title">신청 상세 정보</h3>
+                            <button class="b2b-modal-close" onclick="closeModal('requestDetailModal')">&times;</button>
+                        </div>
+                        <div class="b2b-modal-body">
+                            <div class="request-detail-grid">
+                                <div class="detail-section">
+                                    <h4>기업 정보</h4>
+                                    <div class="detail-info">
+                                        <div class="info-row">
+                                            <span class="info-label">기업명:</span>
+                                            <span class="info-value" id="detailCompanyName">-</span>
+                                        </div>
+                                        <div class="info-row">
+                                            <span class="info-label">사업자번호:</span>
+                                            <span class="info-value" id="detailBusinessNumber">-</span>
+                                        </div>
+                                        <div class="info-row">
+                                            <span class="info-label">업종:</span>
+                                            <span class="info-value" id="detailIndustry">-</span>
+                                        </div>
+                                        <div class="info-row">
+                                            <span class="info-label">직원 수:</span>
+                                            <span class="info-value" id="detailEmployeeCount">-</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="detail-section">
+                                    <h4>담당자 정보</h4>
+                                    <div class="detail-info">
+                                        <div class="info-row">
+                                            <span class="info-label">담당자명:</span>
+                                            <span class="info-value" id="detailManagerName">-</span>
+                                        </div>
+                                        <div class="info-row">
+                                            <span class="info-label">직책:</span>
+                                            <span class="info-value" id="detailPosition">-</span>
+                                        </div>
+                                        <div class="info-row">
+                                            <span class="info-label">이메일:</span>
+                                            <span class="info-value" id="detailEmail">-</span>
+                                        </div>
+                                        <div class="info-row">
+                                            <span class="info-label">연락처:</span>
+                                            <span class="info-value" id="detailPhone">-</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="detail-section">
+                                    <h4>교육 정보</h4>
+                                    <div class="detail-info">
+                                        <div class="info-row">
+                                            <span class="info-label">프로그램:</span>
+                                            <span class="info-value" id="detailProgram">-</span>
+                                        </div>
+                                        <div class="info-row">
+                                            <span class="info-label">참가 인원:</span>
+                                            <span class="info-value" id="detailParticipants">-</span>
+                                        </div>
+                                        <div class="info-row">
+                                            <span class="info-label">교육 형태:</span>
+                                            <span class="info-value" id="detailEducationType">-</span>
+                                        </div>
+                                        <div class="info-row">
+                                            <span class="info-label">예상 금액:</span>
+                                            <span class="info-value" id="detailTotalAmount">-</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="detail-section">
+                                    <h4>일정 정보</h4>
+                                    <div class="detail-info">
+                                        <div class="info-row">
+                                            <span class="info-label">희망 날짜:</span>
+                                            <span class="info-value" id="detailRequestedDates">-</span>
+                                        </div>
+                                        <div class="info-row">
+                                            <span class="info-label">확정 날짜:</span>
+                                            <span class="info-value" id="detailConfirmedDate">-</span>
+                                        </div>
+                                        <div class="info-row">
+                                            <span class="info-label">특별 요청:</span>
+                                            <span class="info-value" id="detailSpecialRequest">-</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="detail-documents">
+                                <h4>제출 서류</h4>
+                                <div class="document-preview" id="documentPreview">
+                                    <p>사업자등록증이 업로드되지 않았습니다.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="detail-actions">
+                                <button class="b2b-btn b2b-btn-secondary" onclick="printRequestDetail()">
+                                    <i class="fas fa-print"></i> 인쇄
+                                </button>
+                                <button class="b2b-btn b2b-btn-primary" onclick="confirmRequest()">
+                                    <i class="fas fa-check"></i> 교육 확정
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </section>

@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>기업 교육 신청 | 한국GPT협회</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="enterprise.css">
+    <link rel="stylesheet" href="enterprise-request.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- FullCalendar CSS -->
+    <link href='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css' rel='stylesheet' />
+</head>
+<body class="enterprise-body">
+    <!-- 헤더 -->
+    <header class="header enterprise-header">
+        <nav class="navbar">
+            <div class="container">
+                <div class="nav-brand">
+                    <h1><a href="index.html" class="logo">한국GPT협회<span class="business">Business</span></a></h1>
+                </div>
+                <div class="nav-menu">
+                    <ul class="nav-links">
+                        <li><a href="enterprise.html">기업교육 홈</a></li>
+                        <li><a href="#" class="active">교육 신청</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- 프로세스 진행 표시 -->
+    <div class="process-indicator">
+        <div class="container">
+            <div class="process-steps">
+                <div class="process-step active" data-step="1">
+                    <div class="step-circle">1</div>
+                    <span>회원가입</span>
+                </div>
+                <div class="process-line"></div>
+                <div class="process-step" data-step="2">
+                    <div class="step-circle">2</div>
+                    <span>견적신청</span>
+                </div>
+                <div class="process-line"></div>
+                <div class="process-step" data-step="3">
+                    <div class="step-circle">3</div>
+                    <span>날짜선택</span>
+                </div>
+                <div class="process-line"></div>
+                <div class="process-step" data-step="4">
+                    <div class="step-circle">4</div>
+                    <span>일정확정</span>
+                </div>
+                <div class="process-line"></div>
+                <div class="process-step" data-step="5">
+                    <div class="step-circle">5</div>
+                    <span>서류등록</span>
+                </div>
+                <div class="process-line"></div>
+                <div class="process-step" data-step="6">
+                    <div class="step-circle">6</div>
+                    <span>완료</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 메인 컨텐츠 -->
+    <main class="request-main">
+        <div class="container">
+            <!-- Step 1: 회원가입 -->
+            <div class="request-step" id="step1" style="display: block;">
+                <div class="step-header">
+                    <h2>기업 회원가입</h2>
+                    <p>기업 교육 서비스를 이용하시려면 먼저 회원가입을 해주세요.</p>
+                </div>
+                <form class="enterprise-signup-form" id="enterpriseSignupForm">
+                    <div class="form-section">
+                        <h3>담당자 정보</h3>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label>담당자명 <span class="required">*</span></label>
+                                <input type="text" name="managerName" required>
+                            </div>
+                            <div class="form-group">
+                                <label>직책 <span class="required">*</span></label>
+                                <input type="text" name="position" required>
+                            </div>
+                            <div class="form-group">
+                                <label>이메일 <span class="required">*</span></label>
+                                <input type="email" name="email" required>
+                            </div>
+                            <div class="form-group">
+                                <label>연락처 <span class="required">*</span></label>
+                                <input type="tel" name="phone" required>
+                            </div>
+                            <div class="form-group">
+                                <label>비밀번호 <span class="required">*</span></label>
+                                <input type="password" name="password" required>
+                            </div>
+                            <div class="form-group">
+                                <label>비밀번호 확인 <span class="required">*</span></label>
+                                <input type="password" name="passwordConfirm" required>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-section">
+                        <h3>기업 정보</h3>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label>기업명 <span class="required">*</span></label>
+                                <input type="text" name="companyName" required>
+                            </div>
+                            <div class="form-group">
+                                <label>사업자등록번호 <span class="required">*</span></label>
+                                <input type="text" name="businessNumber" placeholder="000-00-00000" required>
+                            </div>
+                            <div class="form-group">
+                                <label>업종</label>
+                                <select name="industry">
+                                    <option value="">선택하세요</option>
+                                    <option value="it">IT/소프트웨어</option>
+                                    <option value="manufacturing">제조업</option>
+                                    <option value="finance">금융/보험</option>
+                                    <option value="service">서비스업</option>
+                                    <option value="education">교육</option>
+                                    <option value="medical">의료/제약</option>
+                                    <option value="other">기타</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>직원 수</label>
+                                <select name="employeeCount">
+                                    <option value="">선택하세요</option>
+                                    <option value="1-50">1-50명</option>
+                                    <option value="51-200">51-200명</option>
+                                    <option value="201-500">201-500명</option>
+                                    <option value="500+">500명 이상</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            회원가입 및 다음 단계
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Step 2: 간편 견적 신청 -->
+            <div class="request-step" id="step2" style="display: none;">
+                <div class="step-header">
+                    <h2>간편 견적 신청</h2>
+                    <p>교육 프로그램과 규모를 선택하여 견적을 확인하세요.</p>
+                </div>
+                <form class="quote-form" id="enterpriseQuoteForm">
+                    <div class="form-section">
+                        <h3>교육 프로그램 선택</h3>
+                        <div class="program-cards">
+                            <label class="program-card-select">
+                                <input type="radio" name="program" value="basic" required>
+                                <div class="program-content">
+                                    <h4>ChatGPT 기초 과정</h4>
+                                    <p>AI 기초 이해와 ChatGPT 활용법</p>
+                                    <div class="program-price">20만원/인</div>
+                                </div>
+                            </label>
+                            <label class="program-card-select">
+                                <input type="radio" name="program" value="intermediate" required>
+                                <div class="program-content">
+                                    <h4>업무 자동화 과정</h4>
+                                    <p>실무 적용 가능한 자동화 스킬</p>
+                                    <div class="program-price">35만원/인</div>
+                                </div>
+                            </label>
+                            <label class="program-card-select">
+                                <input type="radio" name="program" value="advanced" required>
+                                <div class="program-content">
+                                    <h4>AI 전문가 과정</h4>
+                                    <p>고급 AI 활용 및 전략 수립</p>
+                                    <div class="program-price">50만원/인</div>
+                                </div>
+                            </label>
+                            <label class="program-card-select">
+                                <input type="radio" name="program" value="custom" required>
+                                <div class="program-content">
+                                    <h4>맞춤형 교육</h4>
+                                    <p>기업 니즈에 맞춘 커스텀 교육</p>
+                                    <div class="program-price">별도 협의</div>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="form-section">
+                        <h3>교육 상세 정보</h3>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label>교육 인원 <span class="required">*</span></label>
+                                <input type="number" name="participants" min="1" required>
+                            </div>
+                            <div class="form-group">
+                                <label>교육 형태 <span class="required">*</span></label>
+                                <select name="educationType" required>
+                                    <option value="">선택하세요</option>
+                                    <option value="offline">오프라인</option>
+                                    <option value="online">온라인</option>
+                                    <option value="hybrid">하이브리드</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>희망 교육 기간</label>
+                                <select name="duration">
+                                    <option value="1day">1일 (8시간)</option>
+                                    <option value="2days">2일 (16시간)</option>
+                                    <option value="3days">3일 (24시간)</option>
+                                    <option value="custom">협의</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>특별 요청사항</label>
+                                <textarea name="specialRequest" rows="3"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="quote-summary">
+                        <h3>예상 견적</h3>
+                        <div class="quote-details">
+                            <div class="quote-item">
+                                <span>선택 프로그램</span>
+                                <span id="selectedProgram">-</span>
+                            </div>
+                            <div class="quote-item">
+                                <span>교육 인원</span>
+                                <span id="selectedParticipants">-</span>
+                            </div>
+                            <div class="quote-item">
+                                <span>교육 형태</span>
+                                <span id="selectedType">-</span>
+                            </div>
+                            <div class="quote-divider"></div>
+                            <div class="quote-total">
+                                <span>예상 총액</span>
+                                <span id="totalAmount">0원</span>
+                            </div>
+                        </div>
+                        <p class="quote-notice">
+                            <i class="fas fa-info-circle"></i>
+                            정확한 견적은 상담 후 확정됩니다.
+                        </p>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" onclick="previousStep(2)">
+                            이전
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            견적 확인 및 다음 단계
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Step 3: 희망 날짜 선택 -->
+            <div class="request-step" id="step3" style="display: none;">
+                <div class="step-header">
+                    <h2>희망 교육 날짜 선택</h2>
+                    <p>가능한 날짜 중에서 희망하는 교육 날짜를 1~3순위까지 선택해주세요.</p>
+                </div>
+                
+                <div class="calendar-section">
+                    <div class="calendar-container">
+                        <div id="calendar"></div>
+                    </div>
+                    
+                    <div class="date-selection">
+                        <h3>선택한 희망 날짜</h3>
+                        <div class="selected-dates">
+                            <div class="date-priority">
+                                <span class="priority-badge">1순위</span>
+                                <input type="text" id="date1" readonly placeholder="날짜를 선택하세요">
+                                <button type="button" class="btn-remove" onclick="removeDate(1)">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                            <div class="date-priority">
+                                <span class="priority-badge">2순위</span>
+                                <input type="text" id="date2" readonly placeholder="날짜를 선택하세요">
+                                <button type="button" class="btn-remove" onclick="removeDate(2)">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                            <div class="date-priority">
+                                <span class="priority-badge">3순위</span>
+                                <input type="text" id="date3" readonly placeholder="날짜를 선택하세요">
+                                <button type="button" class="btn-remove" onclick="removeDate(3)">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="calendar-legend">
+                            <div class="legend-item">
+                                <span class="legend-color available"></span>
+                                <span>선택 가능</span>
+                            </div>
+                            <div class="legend-item">
+                                <span class="legend-color unavailable"></span>
+                                <span>선택 불가</span>
+                            </div>
+                            <div class="legend-item">
+                                <span class="legend-color selected"></span>
+                                <span>선택됨</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="previousStep(3)">
+                        이전
+                    </button>
+                    <button type="button" class="btn btn-primary" onclick="submitDates()" disabled id="submitDatesBtn">
+                        날짜 제출 및 다음 단계
+                    </button>
+                </div>
+            </div>
+
+            <!-- Step 4: 확정 일자 안내 -->
+            <div class="request-step" id="step4" style="display: none;">
+                <div class="step-header">
+                    <h2>교육 일정 확정</h2>
+                    <p>신청하신 내용을 검토하여 최종 교육 일정을 안내드립니다.</p>
+                </div>
+                
+                <div class="confirmation-section">
+                    <div class="confirmation-card">
+                        <div class="confirmation-icon">
+                            <i class="fas fa-calendar-check"></i>
+                        </div>
+                        <h3>확정된 교육 일정</h3>
+                        <div class="confirmed-date" id="confirmedDate">
+                            2024년 2월 15일 (목)
+                        </div>
+                        <div class="confirmation-details">
+                            <div class="detail-item">
+                                <i class="fas fa-clock"></i>
+                                <span>시간: 09:00 - 18:00</span>
+                            </div>
+                            <div class="detail-item">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>장소: 온라인 (Zoom)</span>
+                            </div>
+                            <div class="detail-item">
+                                <i class="fas fa-users"></i>
+                                <span>참가 인원: 20명</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="action-buttons">
+                        <button type="button" class="btn btn-success btn-lg" onclick="acceptSchedule()">
+                            <i class="fas fa-check"></i>
+                            일정 수락
+                        </button>
+                        <button type="button" class="btn btn-secondary btn-lg" onclick="requestChange()">
+                            <i class="fas fa-redo"></i>
+                            일정 변경 요청
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 5: 사업자등록증 업로드 -->
+            <div class="request-step" id="step5" style="display: none;">
+                <div class="step-header">
+                    <h2>서류 등록</h2>
+                    <p>세금계산서 발행을 위한 사업자등록증을 업로드해주세요.</p>
+                </div>
+                
+                <div class="document-upload-section">
+                    <div class="upload-area" id="uploadArea">
+                        <input type="file" id="businessLicense" accept=".pdf,.jpg,.jpeg,.png" style="display: none;">
+                        <div class="upload-placeholder">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <h3>사업자등록증 업로드</h3>
+                            <p>클릭하거나 파일을 드래그하여 업로드하세요</p>
+                            <p class="file-types">지원 형식: PDF, JPG, PNG (최대 10MB)</p>
+                        </div>
+                        <div class="upload-preview" style="display: none;">
+                            <img id="previewImage" src="" alt="미리보기">
+                            <div class="file-info">
+                                <span id="fileName"></span>
+                                <button type="button" class="btn-remove" onclick="removeFile()">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="additional-info">
+                        <h3>추가 정보</h3>
+                        <form id="additionalInfoForm">
+                            <div class="form-group">
+                                <label>세금계산서 수신 이메일</label>
+                                <input type="email" name="taxEmail" placeholder="tax@company.com">
+                            </div>
+                            <div class="form-group">
+                                <label>특이사항</label>
+                                <textarea name="notes" rows="3" placeholder="세금계산서 발행 시 참고사항이 있으면 입력해주세요"></textarea>
+                            </div>
+                        </form>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" onclick="previousStep(5)">
+                            이전
+                        </button>
+                        <button type="button" class="btn btn-primary" onclick="completeRequest()" disabled id="completeBtn">
+                            신청 완료
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 6: 완료 -->
+            <div class="request-step" id="step6" style="display: none;">
+                <div class="completion-section">
+                    <div class="completion-icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <h2>교육 신청이 완료되었습니다!</h2>
+                    <p>담당자가 확인 후 24시간 이내에 연락드리겠습니다.</p>
+                    
+                    <div class="completion-summary">
+                        <h3>신청 내역</h3>
+                        <div class="summary-item">
+                            <span>신청번호</span>
+                            <span>REQ-2024-0001</span>
+                        </div>
+                        <div class="summary-item">
+                            <span>기업명</span>
+                            <span id="summaryCompany">-</span>
+                        </div>
+                        <div class="summary-item">
+                            <span>교육 프로그램</span>
+                            <span id="summaryProgram">-</span>
+                        </div>
+                        <div class="summary-item">
+                            <span>확정 일자</span>
+                            <span id="summaryDate">-</span>
+                        </div>
+                        <div class="summary-item">
+                            <span>담당자</span>
+                            <span id="summaryManager">-</span>
+                        </div>
+                    </div>
+                    
+                    <div class="completion-actions">
+                        <button type="button" class="btn btn-primary" onclick="window.location.href='enterprise.html'">
+                            기업교육 홈으로
+                        </button>
+                        <button type="button" class="btn btn-secondary" onclick="window.print()">
+                            <i class="fas fa-print"></i>
+                            신청서 인쇄
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Scripts -->
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js'></script>
+    <script src="enterprise-request.js"></script>
+</body>
+</html>

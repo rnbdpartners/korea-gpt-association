@@ -1,0 +1,751 @@
+/* 기업 교육 신청 페이지 스타일 */
+
+/* 프로세스 인디케이터 */
+.process-indicator {
+    background: var(--enterprise-bg-darker);
+    padding: 2rem 0;
+    border-bottom: 1px solid var(--enterprise-border);
+    position: sticky;
+    top: 80px;
+    z-index: 100;
+}
+
+.process-steps {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.process-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    position: relative;
+    z-index: 2;
+}
+
+.step-circle {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--enterprise-bg-section);
+    border: 2px solid var(--enterprise-border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    color: var(--enterprise-text-muted);
+    transition: all 0.3s ease;
+}
+
+.process-step.active .step-circle {
+    background: var(--enterprise-primary);
+    border-color: var(--enterprise-primary);
+    color: var(--enterprise-bg-primary);
+    box-shadow: 0 0 0 4px rgba(4, 249, 188, 0.2);
+}
+
+.process-step.completed .step-circle {
+    background: var(--enterprise-success);
+    border-color: var(--enterprise-success);
+    color: white;
+}
+
+.process-step span {
+    font-size: 0.875rem;
+    color: var(--enterprise-text-muted);
+    font-weight: 600;
+}
+
+.process-step.active span {
+    color: var(--enterprise-primary);
+}
+
+.process-line {
+    flex: 1;
+    height: 2px;
+    background: var(--enterprise-border);
+    margin: 0 1rem;
+    position: relative;
+    top: -20px;
+}
+
+/* 메인 컨테이너 */
+.request-main {
+    padding: 3rem 0;
+    min-height: calc(100vh - 200px);
+}
+
+.request-step {
+    background: var(--enterprise-bg-card);
+    border-radius: 20px;
+    padding: 3rem;
+    box-shadow: var(--enterprise-shadow);
+    animation: fadeInUp 0.5s ease;
+}
+
+.step-header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.step-header h2 {
+    font-size: 2.5rem;
+    color: var(--enterprise-text-primary);
+    margin-bottom: 1rem;
+}
+
+.step-header p {
+    font-size: 1.125rem;
+    color: var(--enterprise-text-secondary);
+}
+
+/* 폼 스타일 */
+.form-section {
+    margin-bottom: 3rem;
+}
+
+.form-section h3 {
+    font-size: 1.5rem;
+    color: var(--enterprise-text-primary);
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--enterprise-border);
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    font-weight: 600;
+    color: var(--enterprise-text-primary);
+    margin-bottom: 0.5rem;
+    font-size: 0.95rem;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    padding: 0.875rem 1rem;
+    border: 1px solid var(--enterprise-border);
+    border-radius: 8px;
+    background: var(--enterprise-bg-secondary);
+    color: var(--enterprise-text-primary);
+    font-size: 1rem;
+    transition: all 0.2s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: var(--enterprise-primary);
+    box-shadow: 0 0 0 3px rgba(4, 249, 188, 0.1);
+}
+
+.required {
+    color: var(--enterprise-error);
+}
+
+/* 프로그램 카드 선택 */
+.program-cards {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+}
+
+.program-card-select {
+    display: block;
+    cursor: pointer;
+}
+
+.program-card-select input[type="radio"] {
+    display: none;
+}
+
+.program-card-select .program-content {
+    background: var(--enterprise-bg-secondary);
+    border: 2px solid var(--enterprise-border);
+    border-radius: 12px;
+    padding: 1.5rem;
+    transition: all 0.3s ease;
+}
+
+.program-card-select input[type="radio"]:checked + .program-content {
+    border-color: var(--enterprise-primary);
+    background: rgba(4, 249, 188, 0.05);
+    box-shadow: 0 0 0 3px rgba(4, 249, 188, 0.1);
+}
+
+.program-card-select:hover .program-content {
+    border-color: var(--enterprise-border-light);
+    transform: translateY(-2px);
+}
+
+.program-content h4 {
+    font-size: 1.25rem;
+    color: var(--enterprise-text-primary);
+    margin-bottom: 0.5rem;
+}
+
+.program-content p {
+    color: var(--enterprise-text-secondary);
+    font-size: 0.875rem;
+    margin-bottom: 1rem;
+}
+
+.program-price {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: var(--enterprise-primary);
+}
+
+/* 견적 요약 */
+.quote-summary {
+    background: var(--enterprise-bg-secondary);
+    border-radius: 12px;
+    padding: 2rem;
+    margin-top: 2rem;
+}
+
+.quote-summary h3 {
+    font-size: 1.25rem;
+    color: var(--enterprise-text-primary);
+    margin-bottom: 1.5rem;
+}
+
+.quote-details {
+    margin-bottom: 1.5rem;
+}
+
+.quote-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.75rem 0;
+    color: var(--enterprise-text-secondary);
+}
+
+.quote-divider {
+    height: 1px;
+    background: var(--enterprise-border);
+    margin: 1rem 0;
+}
+
+.quote-total {
+    display: flex;
+    justify-content: space-between;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--enterprise-text-primary);
+}
+
+.quote-total span:last-child {
+    color: var(--enterprise-primary);
+}
+
+.quote-notice {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--enterprise-text-muted);
+    font-size: 0.875rem;
+}
+
+/* 캘린더 섹션 */
+.calendar-section {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 2rem;
+}
+
+.calendar-container {
+    background: var(--enterprise-bg-secondary);
+    border-radius: 12px;
+    padding: 1.5rem;
+    border: 1px solid var(--enterprise-border);
+}
+
+#calendar {
+    max-width: 100%;
+}
+
+/* FullCalendar 커스터마이징 */
+.fc {
+    font-family: inherit;
+}
+
+.fc-theme-standard td,
+.fc-theme-standard th {
+    border-color: var(--enterprise-border);
+}
+
+.fc-theme-standard .fc-scrollgrid {
+    border-color: var(--enterprise-border);
+}
+
+.fc .fc-button-primary {
+    background: var(--enterprise-primary);
+    border-color: var(--enterprise-primary);
+}
+
+.fc .fc-button-primary:hover {
+    background: var(--enterprise-secondary);
+    border-color: var(--enterprise-secondary);
+}
+
+.fc .fc-button-primary:disabled {
+    background: var(--enterprise-border);
+    border-color: var(--enterprise-border);
+}
+
+.fc-day-today {
+    background: rgba(4, 249, 188, 0.05) !important;
+}
+
+.fc-daygrid-day.available {
+    background: rgba(4, 249, 188, 0.1);
+    cursor: pointer;
+}
+
+.fc-daygrid-day.unavailable {
+    background: rgba(239, 68, 68, 0.1);
+    cursor: not-allowed;
+}
+
+.fc-daygrid-day.selected {
+    background: var(--enterprise-primary) !important;
+}
+
+.fc-daygrid-day.selected .fc-daygrid-day-number {
+    color: var(--enterprise-bg-primary);
+    font-weight: 700;
+}
+
+/* 날짜 선택 섹션 */
+.date-selection {
+    background: var(--enterprise-bg-secondary);
+    border-radius: 12px;
+    padding: 1.5rem;
+    border: 1px solid var(--enterprise-border);
+}
+
+.date-selection h3 {
+    font-size: 1.125rem;
+    color: var(--enterprise-text-primary);
+    margin-bottom: 1.5rem;
+}
+
+.selected-dates {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.date-priority {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.priority-badge {
+    background: var(--enterprise-primary);
+    color: var(--enterprise-bg-primary);
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    min-width: 60px;
+    text-align: center;
+}
+
+.date-priority input {
+    flex: 1;
+    padding: 0.75rem;
+    border: 1px solid var(--enterprise-border);
+    border-radius: 6px;
+    background: var(--enterprise-bg-card);
+    color: var(--enterprise-text-primary);
+}
+
+.btn-remove {
+    background: transparent;
+    border: none;
+    color: var(--enterprise-text-muted);
+    cursor: pointer;
+    padding: 0.5rem;
+    transition: color 0.2s ease;
+}
+
+.btn-remove:hover {
+    color: var(--enterprise-error);
+}
+
+/* 캘린더 범례 */
+.calendar-legend {
+    display: flex;
+    gap: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--enterprise-border);
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    color: var(--enterprise-text-secondary);
+}
+
+.legend-color {
+    width: 20px;
+    height: 20px;
+    border-radius: 4px;
+}
+
+.legend-color.available {
+    background: rgba(4, 249, 188, 0.2);
+    border: 1px solid var(--enterprise-primary);
+}
+
+.legend-color.unavailable {
+    background: rgba(239, 68, 68, 0.2);
+    border: 1px solid var(--enterprise-error);
+}
+
+.legend-color.selected {
+    background: var(--enterprise-primary);
+}
+
+/* 확정 섹션 */
+.confirmation-section {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.confirmation-card {
+    background: var(--enterprise-bg-secondary);
+    border-radius: 16px;
+    padding: 3rem;
+    text-align: center;
+    border: 2px solid var(--enterprise-primary);
+    margin-bottom: 2rem;
+}
+
+.confirmation-icon {
+    font-size: 4rem;
+    color: var(--enterprise-primary);
+    margin-bottom: 1.5rem;
+}
+
+.confirmation-card h3 {
+    font-size: 1.5rem;
+    color: var(--enterprise-text-primary);
+    margin-bottom: 1rem;
+}
+
+.confirmed-date {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--enterprise-primary);
+    margin-bottom: 2rem;
+}
+
+.confirmation-details {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: center;
+}
+
+.detail-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: var(--enterprise-text-secondary);
+}
+
+.detail-item i {
+    color: var(--enterprise-primary);
+}
+
+/* 업로드 영역 */
+.document-upload-section {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.upload-area {
+    background: var(--enterprise-bg-secondary);
+    border: 2px dashed var(--enterprise-border);
+    border-radius: 12px;
+    padding: 3rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-bottom: 2rem;
+}
+
+.upload-area:hover {
+    border-color: var(--enterprise-primary);
+    background: rgba(4, 249, 188, 0.05);
+}
+
+.upload-area.dragging {
+    border-color: var(--enterprise-primary);
+    background: rgba(4, 249, 188, 0.1);
+}
+
+.upload-placeholder i {
+    font-size: 3rem;
+    color: var(--enterprise-primary);
+    margin-bottom: 1rem;
+}
+
+.upload-placeholder h3 {
+    font-size: 1.25rem;
+    color: var(--enterprise-text-primary);
+    margin-bottom: 0.5rem;
+}
+
+.upload-placeholder p {
+    color: var(--enterprise-text-secondary);
+    font-size: 0.875rem;
+}
+
+.file-types {
+    color: var(--enterprise-text-muted);
+    font-size: 0.75rem;
+    margin-top: 0.5rem;
+}
+
+.upload-preview {
+    position: relative;
+}
+
+.upload-preview img {
+    max-width: 100%;
+    max-height: 300px;
+    border-radius: 8px;
+}
+
+.file-info {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 1rem;
+    padding: 1rem;
+    background: var(--enterprise-bg-card);
+    border-radius: 8px;
+}
+
+/* 완료 섹션 */
+.completion-section {
+    text-align: center;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.completion-icon {
+    font-size: 5rem;
+    color: var(--enterprise-success);
+    margin-bottom: 2rem;
+    animation: scaleIn 0.5s ease;
+}
+
+.completion-section h2 {
+    font-size: 2.5rem;
+    color: var(--enterprise-text-primary);
+    margin-bottom: 1rem;
+}
+
+.completion-section > p {
+    font-size: 1.125rem;
+    color: var(--enterprise-text-secondary);
+    margin-bottom: 3rem;
+}
+
+.completion-summary {
+    background: var(--enterprise-bg-secondary);
+    border-radius: 12px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    text-align: left;
+}
+
+.completion-summary h3 {
+    font-size: 1.25rem;
+    color: var(--enterprise-text-primary);
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.summary-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--enterprise-border);
+}
+
+.summary-item:last-child {
+    border-bottom: none;
+}
+
+.summary-item span:first-child {
+    color: var(--enterprise-text-secondary);
+}
+
+.summary-item span:last-child {
+    font-weight: 600;
+    color: var(--enterprise-text-primary);
+}
+
+/* 액션 버튼 */
+.form-actions {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 3rem;
+}
+
+.action-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.completion-actions {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.btn {
+    padding: 0.875rem 2rem;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.btn-primary {
+    background: var(--enterprise-primary);
+    color: var(--enterprise-bg-primary);
+}
+
+.btn-primary:hover {
+    background: var(--enterprise-secondary);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(4, 249, 188, 0.3);
+}
+
+.btn-secondary {
+    background: transparent;
+    color: var(--enterprise-text-primary);
+    border: 2px solid var(--enterprise-border);
+}
+
+.btn-secondary:hover {
+    border-color: var(--enterprise-border-light);
+    background: var(--enterprise-bg-secondary);
+}
+
+.btn-success {
+    background: var(--enterprise-success);
+    color: white;
+}
+
+.btn-success:hover {
+    background: #0ea572;
+    transform: translateY(-2px);
+}
+
+.btn-lg {
+    padding: 1rem 2.5rem;
+    font-size: 1.125rem;
+}
+
+.btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* 애니메이션 */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes scaleIn {
+    from {
+        transform: scale(0);
+    }
+    to {
+        transform: scale(1);
+    }
+}
+
+/* 반응형 */
+@media (max-width: 768px) {
+    .process-steps {
+        font-size: 0.75rem;
+    }
+    
+    .step-circle {
+        width: 30px;
+        height: 30px;
+        font-size: 0.875rem;
+    }
+    
+    .process-line {
+        margin: 0 0.5rem;
+    }
+    
+    .request-step {
+        padding: 2rem 1.5rem;
+    }
+    
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .program-cards {
+        grid-template-columns: 1fr;
+    }
+    
+    .calendar-section {
+        grid-template-columns: 1fr;
+    }
+    
+    .form-actions {
+        flex-direction: column;
+    }
+    
+    .btn {
+        width: 100%;
+        justify-content: center;
+    }
+}
