@@ -81,21 +81,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    // 로그인/회원가입 버튼
-    const loginBtn = document.querySelector('.btn-login');
-    const signupBtn = document.querySelector('.btn-signup');
-    
-    if (loginBtn) {
-        loginBtn.addEventListener('click', function() {
-            alert('로그인 페이지로 이동합니다.');
-        });
-    }
-    
-    if (signupBtn) {
-        signupBtn.addEventListener('click', function() {
-            alert('회원가입 페이지로 이동합니다.');
-        });
-    }
+    // 로그인/회원가입 버튼은 이제 링크로 작동
     
     // 소셜 미디어 링크
     const socialLinks = document.querySelectorAll('.social-links a');

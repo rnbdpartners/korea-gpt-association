@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>로그인 | 한국GPT협회</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="auth.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- 헤더 -->
+    <header class="header">
+        <nav class="navbar">
+            <div class="container">
+                <div class="nav-brand">
+                    <h1><a href="index.html" class="logo">한국GPT협회</a></h1>
+                    <span class="tagline">GPT 전문 교육 플랫폼</span>
+                </div>
+                <div class="nav-menu">
+                    <ul class="nav-links">
+                        <li><a href="index.html#courses">강의</a></li>
+                        <li><a href="index.html#enterprise">기업교육</a></li>
+                        <li><a href="index.html#reviews">후기</a></li>
+                        <li><a href="index.html#contact">문의</a></li>
+                    </ul>
+                    <div class="nav-actions">
+                        <a href="login.html" class="btn-login active">로그인</a>
+                        <a href="signup.html" class="btn-signup">회원가입</a>
+                    </div>
+                </div>
+                <button class="mobile-menu-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- 로그인 섹션 -->
+    <section class="auth-section">
+        <div class="container">
+            <div class="auth-container">
+                <div class="auth-header">
+                    <h2>로그인</h2>
+                    <p>한국GPT협회에 다시 오신 것을 환영합니다</p>
+                </div>
+
+                <!-- 소셜 로그인 -->
+                <div class="social-auth">
+                    <button class="social-btn google-btn" id="googleLogin">
+                        <i class="fab fa-google"></i>
+                        구글로 로그인
+                    </button>
+                    <button class="social-btn kakao-btn" id="kakaoLogin">
+                        <i class="fas fa-comment"></i>
+                        카카오로 로그인
+                    </button>
+                </div>
+
+                <div class="divider">
+                    <span>또는</span>
+                </div>
+
+                <!-- 이메일 로그인 폼 -->
+                <form class="auth-form" id="loginForm">
+                    <div class="form-group">
+                        <label for="email">이메일</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="password">비밀번호</label>
+                        <input type="password" id="password" name="password" required>
+                    </div>
+
+                    <div class="form-options">
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="rememberMe">
+                            <span class="checkmark"></span>
+                            로그인 상태 유지
+                        </label>
+                        <a href="#" class="forgot-password">비밀번호를 잊으셨나요?</a>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary auth-submit">
+                        로그인
+                    </button>
+                </form>
+
+                <div class="auth-footer">
+                    <p>아직 계정이 없으신가요? <a href="signup.html">회원가입</a></p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 푸터 -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>한국GPT협회</h3>
+                    <p>AI 교육의 미래를 선도하는 전문 교육 플랫폼</p>
+                </div>
+                <div class="footer-section">
+                    <h4>고객 지원</h4>
+                    <ul>
+                        <li><a href="#">FAQ</a></li>
+                        <li><a href="#">1:1 문의</a></li>
+                        <li><a href="#">환불 정책</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>연락처</h4>
+                    <p>이메일: info@koreangpt.org</p>
+                    <p>전화: 02-1234-5678</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 한국GPT협회. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script src="auth.js"></script>
+</body>
+</html>
