@@ -414,28 +414,33 @@ function loginDemo(type) {
     demoBtn.style.pointerEvents = 'none';
     
     setTimeout(() => {
-        if (typeof performLogin !== 'undefined' && performLogin(credentials.email, credentials.password)) {
-            const currentUser = userManager.getCurrentUser();
-            alert(`데모 계정 로그인 성공!\n\n환영합니다, ${currentUser.name}님!`);
-            
-            // redirect 파라미터가 있는 경우 처리
-            if (redirectTo === 'enterprise.html' && currentUser.role === 'admin') {
-                // 기업교육 페이지에서 온 관리자는 바로 기업교육 관리자 페이지로
-                window.location.href = 'admin-enterprise.html';
-            } else if (redirectTo && redirectTo !== 'login.html') {
-                // 다른 redirect 요청이 있으면 해당 페이지로
-                window.location.href = redirectTo;
-            } else if (currentUser.role === 'admin') {
-                // redirect 파라미터가 없는 관리자는 선택 페이지로
-                window.location.href = 'admin-select.html';
-            } else {
-                // 일반 사용자는 메인 페이지로
-                window.location.href = 'index.html';
-            }
+        // 데모 계정 정보로 로그인 처리
+        const userData = {
+            email: credentials.email,
+            name: type === 'admin' ? '김관리' : type === 'enterprise' ? '이매니저' : '박대표',
+            role: type === 'admin' ? 'admin' : 'user',
+            loginTime: new Date().toISOString()
+        };
+        
+        // 세션 저장
+        localStorage.setItem('currentUser', JSON.stringify(userData));
+        sessionStorage.setItem('isLoggedIn', 'true');
+        
+        alert(`데모 계정 로그인 성공!\n\n환영합니다, ${userData.name}님!`);
+        
+        // redirect 파라미터가 있는 경우 처리
+        if (redirectTo === 'enterprise.html' && userData.role === 'admin') {
+            // 기업교육 페이지에서 온 관리자는 바로 기업교육 관리자 페이지로
+            window.location.href = 'admin-enterprise.html';
+        } else if (redirectTo && redirectTo !== 'login.html') {
+            // 다른 redirect 요청이 있으면 해당 페이지로
+            window.location.href = redirectTo;
+        } else if (userData.role === 'admin') {
+            // redirect 파라미터가 없는 관리자는 선택 페이지로
+            window.location.href = 'admin-select.html';
         } else {
-            alert('데모 계정 로그인에 실패했습니다.');
-            demoBtn.style.opacity = '1';
-            demoBtn.style.pointerEvents = 'auto';
+            // 일반 사용자는 메인 페이지로
+            window.location.href = 'index.html';
         }
     }, 1000);
 }
