@@ -1,9 +1,36 @@
 /* 관리자 페이지 전용 스타일 */
 
+/* CSS 변수 정의 */
+:root {
+    /* 라이트 모드 */
+    --admin-bg-primary: #ffffff;
+    --admin-bg-secondary: #f8fafc;
+    --admin-bg-sidebar: #ffffff;
+    --admin-text-primary: #1e293b;
+    --admin-text-secondary: #64748b;
+    --admin-border-color: #e2e8f0;
+    --admin-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    --admin-shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+/* 다크 모드 */
+[data-theme="dark"] {
+    --admin-bg-primary: #1e293b;
+    --admin-bg-secondary: #0f172a;
+    --admin-bg-sidebar: #1e293b;
+    --admin-text-primary: #f1f5f9;
+    --admin-text-secondary: #94a3b8;
+    --admin-border-color: #334155;
+    --admin-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+    --admin-shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.3);
+}
+
 .admin-body {
     margin: 0;
-    background-color: #f8fafc;
+    background-color: var(--admin-bg-secondary);
+    color: var(--admin-text-primary);
     font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 /* 관리자 헤더 */
@@ -26,6 +53,34 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+}
+
+/* 테마 토글 버튼 */
+.theme-toggle {
+    margin-right: 1rem;
+}
+
+.theme-btn {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+}
+
+.theme-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-1px);
+}
+
+.theme-btn i {
+    font-size: 1rem;
 }
 
 .admin-brand h1 {
@@ -73,9 +128,10 @@
     position: absolute;
     top: 100%;
     right: 0;
-    background: white;
+    background: var(--admin-bg-primary);
+    border: 1px solid var(--admin-border-color);
     border-radius: var(--radius-md);
-    box-shadow: var(--shadow-lg);
+    box-shadow: var(--admin-shadow-lg);
     min-width: 200px;
     padding: 0.5rem 0;
     display: none;
@@ -89,19 +145,19 @@
 .dropdown-item {
     display: block;
     padding: 0.75rem 1rem;
-    color: var(--text-primary);
+    color: var(--admin-text-primary);
     text-decoration: none;
     font-size: 0.875rem;
     transition: background-color 0.2s;
 }
 
 .dropdown-item:hover {
-    background-color: var(--bg-secondary);
+    background-color: var(--admin-bg-secondary);
 }
 
 .dropdown-divider {
     height: 1px;
-    background-color: var(--border-color);
+    background-color: var(--admin-border-color);
     margin: 0.5rem 0;
 }
 
@@ -144,7 +200,7 @@
     align-items: center;
     gap: 0.75rem;
     padding: 0.875rem 1rem;
-    color: var(--text-secondary);
+    color: var(--admin-text-secondary);
     text-decoration: none;
     border-radius: var(--radius-md);
     transition: all 0.2s;
@@ -152,8 +208,8 @@
 }
 
 .nav-link:hover {
-    background-color: var(--bg-secondary);
-    color: var(--text-primary);
+    background-color: var(--admin-bg-secondary);
+    color: var(--admin-text-primary);
 }
 
 .nav-item.active .nav-link {
@@ -193,12 +249,12 @@
 .section-header h2 {
     font-size: 2rem;
     font-weight: 700;
-    color: var(--text-primary);
+    color: var(--admin-text-primary);
     margin: 0;
 }
 
 .section-header p {
-    color: var(--text-secondary);
+    color: var(--admin-text-secondary);
     margin: 0.5rem 0 0 0;
 }
 
@@ -554,9 +610,9 @@
 }
 
 .modal-content {
-    background: white;
+    background: var(--admin-bg-primary);
     border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-lg);
+    box-shadow: var(--admin-shadow-lg);
     max-width: 600px;
     width: 90%;
     max-height: 90vh;
@@ -568,13 +624,13 @@
     align-items: center;
     justify-content: space-between;
     padding: 2rem 2rem 1rem;
-    border-bottom: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--admin-border-color);
 }
 
 .modal-header h3 {
     font-size: 1.5rem;
     font-weight: 600;
-    color: var(--text-primary);
+    color: var(--admin-text-primary);
     margin: 0;
 }
 
@@ -582,14 +638,14 @@
     background: none;
     border: none;
     font-size: 1.5rem;
-    color: var(--text-secondary);
+    color: var(--admin-text-secondary);
     cursor: pointer;
     padding: 0.5rem;
     border-radius: var(--radius-sm);
 }
 
 .modal-close:hover {
-    background: var(--bg-secondary);
+    background: var(--admin-bg-secondary);
 }
 
 .modal-form {
@@ -611,7 +667,7 @@
 
 .form-group label {
     font-weight: 600;
-    color: var(--text-primary);
+    color: var(--admin-text-primary);
     font-size: 0.875rem;
 }
 
@@ -619,10 +675,12 @@
 .form-group select,
 .form-group textarea {
     padding: 0.75rem;
-    border: 1px solid var(--border-color);
+    border: 1px solid var(--admin-border-color);
     border-radius: var(--radius-sm);
     font-size: 0.875rem;
     transition: border-color 0.2s;
+    background: var(--admin-bg-primary);
+    color: var(--admin-text-primary);
 }
 
 .form-group input:focus,
@@ -638,17 +696,18 @@
     justify-content: flex-end;
     margin-top: 2rem;
     padding-top: 1rem;
-    border-top: 1px solid var(--border-color);
+    border-top: 1px solid var(--admin-border-color);
 }
 
 /* 검색 및 필터 */
 .search-input {
     padding: 0.5rem 1rem;
-    border: 1px solid var(--border-color);
+    border: 1px solid var(--admin-border-color);
     border-radius: var(--radius-sm);
-    background: white;
+    background: var(--admin-bg-primary);
     font-size: 0.875rem;
     min-width: 200px;
+    color: var(--admin-text-primary);
 }
 
 .search-input:focus {
@@ -674,10 +733,10 @@
 .member-courses-section h4 {
     font-size: 1.125rem;
     font-weight: 600;
-    color: var(--text-primary);
+    color: var(--admin-text-primary);
     margin-bottom: 1rem;
     padding-bottom: 0.5rem;
-    border-bottom: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--admin-border-color);
 }
 
 .info-item {
@@ -685,7 +744,7 @@
     justify-content: space-between;
     align-items: center;
     padding: 0.75rem 0;
-    border-bottom: 1px solid #f8f9fa;
+    border-bottom: 1px solid var(--admin-border-color);
 }
 
 .info-item:last-child {
@@ -694,13 +753,13 @@
 
 .info-item label {
     font-weight: 500;
-    color: var(--text-secondary);
+    color: var(--admin-text-secondary);
     font-size: 0.875rem;
     min-width: 100px;
 }
 
 .info-item span {
-    color: var(--text-primary);
+    color: var(--admin-text-primary);
     font-weight: 500;
 }
 
@@ -718,7 +777,7 @@
 }
 
 .course-item-detail {
-    background: var(--bg-secondary);
+    background: var(--admin-bg-secondary);
     padding: 1rem;
     border-radius: var(--radius-md);
     display: flex;
@@ -729,7 +788,7 @@
 }
 
 .course-item-detail:hover {
-    background: #e2e8f0;
+    background: var(--admin-border-color);
     transform: translateY(-1px);
 }
 
@@ -739,7 +798,7 @@
 
 .course-name {
     font-weight: 600;
-    color: var(--text-primary);
+    color: var(--admin-text-primary);
     margin-bottom: 0.25rem;
 }
 
@@ -747,7 +806,7 @@
     display: flex;
     gap: 1rem;
     font-size: 0.75rem;
-    color: var(--text-secondary);
+    color: var(--admin-text-secondary);
 }
 
 .course-progress {
@@ -761,13 +820,13 @@
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    background: conic-gradient(var(--primary-color) 0deg, var(--border-color) 0deg);
+    background: conic-gradient(var(--primary-color) 0deg, var(--admin-border-color) 0deg);
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 0.75rem;
     font-weight: 600;
-    color: var(--text-primary);
+    color: var(--admin-text-primary);
     position: relative;
 }
 
@@ -776,7 +835,7 @@
     position: absolute;
     width: 32px;
     height: 32px;
-    background: white;
+    background: var(--admin-bg-primary);
     border-radius: 50%;
 }
 
@@ -800,7 +859,7 @@
 .progress-header h4 {
     font-size: 1.25rem;
     font-weight: 600;
-    color: var(--text-primary);
+    color: var(--admin-text-primary);
     margin: 0;
 }
 
@@ -817,7 +876,7 @@
 .progress-bar {
     width: 100%;
     height: 12px;
-    background: var(--border-color);
+    background: var(--admin-border-color);
     border-radius: 6px;
     overflow: hidden;
 }
@@ -843,13 +902,13 @@
 
 .detail-item label {
     font-size: 0.875rem;
-    color: var(--text-secondary);
+    color: var(--admin-text-secondary);
     font-weight: 500;
 }
 
 .detail-item span {
     font-weight: 600;
-    color: var(--text-primary);
+    color: var(--admin-text-primary);
 }
 
 /* 마케팅 채널 배지 */
@@ -861,8 +920,8 @@
 }
 
 .channel-badge.direct {
-    background: #f3f4f6;
-    color: #374151;
+    background: var(--admin-bg-secondary);
+    color: var(--admin-text-primary);
 }
 
 .channel-badge.google_cpc {
@@ -922,10 +981,10 @@
 .btn-dashboard-settings,
 .btn-add-widget {
     padding: 0.5rem 1rem;
-    border: 1px solid var(--border-color);
+    border: 1px solid var(--admin-border-color);
     border-radius: var(--radius-sm);
-    background: white;
-    color: var(--text-secondary);
+    background: var(--admin-bg-primary);
+    color: var(--admin-text-secondary);
     font-size: 0.875rem;
     cursor: pointer;
     transition: all 0.2s;
@@ -942,11 +1001,11 @@
 }
 
 .dashboard-settings {
-    background: white;
+    background: var(--admin-bg-primary);
     border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-md);
+    box-shadow: var(--admin-shadow-lg);
     margin-bottom: 2rem;
-    border: 1px solid var(--border-color);
+    border: 1px solid var(--admin-border-color);
 }
 
 .dashboard-settings.hidden {
@@ -958,13 +1017,13 @@
     justify-content: space-between;
     align-items: center;
     padding: 1.5rem 2rem;
-    border-bottom: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--admin-border-color);
 }
 
 .settings-header h3 {
     font-size: 1.25rem;
     font-weight: 600;
-    color: var(--text-primary);
+    color: var(--admin-text-primary);
     margin: 0;
 }
 
@@ -972,14 +1031,14 @@
     background: none;
     border: none;
     font-size: 1.5rem;
-    color: var(--text-secondary);
+    color: var(--admin-text-secondary);
     cursor: pointer;
     padding: 0.5rem;
     border-radius: var(--radius-sm);
 }
 
 .settings-close:hover {
-    background: var(--bg-secondary);
+    background: var(--admin-bg-secondary);
 }
 
 .settings-content {
@@ -987,7 +1046,7 @@
 }
 
 .settings-content p {
-    color: var(--text-secondary);
+    color: var(--admin-text-secondary);
     margin-bottom: 1.5rem;
 }
 
@@ -1003,7 +1062,7 @@
     align-items: center;
     justify-content: space-between;
     padding: 1rem;
-    background: var(--bg-secondary);
+    background: var(--admin-bg-secondary);
     border-radius: var(--radius-md);
     cursor: move;
 }
@@ -1022,13 +1081,13 @@
 .widget-info h4 {
     font-size: 0.875rem;
     font-weight: 600;
-    color: var(--text-primary);
+    color: var(--admin-text-primary);
     margin: 0;
 }
 
 .widget-info p {
     font-size: 0.75rem;
-    color: var(--text-secondary);
+    color: var(--admin-text-secondary);
     margin: 0;
 }
 
@@ -1042,7 +1101,7 @@
     position: relative;
     width: 44px;
     height: 24px;
-    background: var(--border-color);
+    background: var(--admin-border-color);
     border-radius: 12px;
     cursor: pointer;
     transition: background 0.2s;
@@ -1059,7 +1118,7 @@
     left: 2px;
     width: 20px;
     height: 20px;
-    background: white;
+    background: var(--admin-bg-primary);
     border-radius: 50%;
     transition: transform 0.2s;
 }
@@ -1073,7 +1132,7 @@
     gap: 1rem;
     justify-content: flex-end;
     padding-top: 1rem;
-    border-top: 1px solid var(--border-color);
+    border-top: 1px solid var(--admin-border-color);
 }
 
 .dashboard-widgets {
@@ -1083,16 +1142,16 @@
 }
 
 .widget {
-    background: white;
+    background: var(--admin-bg-primary);
     border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-sm);
+    box-shadow: var(--admin-shadow);
     overflow: hidden;
     transition: all 0.3s ease;
 }
 
 .widget:hover {
     transform: translateY(-2px);
-    box-shadow: var(--shadow-md);
+    box-shadow: var(--admin-shadow-lg);
 }
 
 .widget-header {
@@ -1100,13 +1159,13 @@
     justify-content: space-between;
     align-items: center;
     padding: 1.5rem 2rem 1rem;
-    border-bottom: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--admin-border-color);
 }
 
 .widget-header h3 {
     font-size: 1.125rem;
     font-weight: 600;
-    color: var(--text-primary);
+    color: var(--admin-text-primary);
     margin: 0;
 }
 
@@ -1118,7 +1177,7 @@
 .widget-action {
     background: none;
     border: none;
-    color: var(--text-secondary);
+    color: var(--admin-text-secondary);
     font-size: 0.875rem;
     cursor: pointer;
     padding: 0.25rem;
@@ -1127,7 +1186,7 @@
 }
 
 .widget-action:hover {
-    background: var(--bg-secondary);
+    background: var(--admin-bg-secondary);
     color: var(--primary-color);
 }
 
@@ -1154,7 +1213,7 @@
 
 .widget-stat-label {
     font-size: 0.875rem;
-    color: var(--text-secondary);
+    color: var(--admin-text-secondary);
     margin: 0.25rem 0 0 0;
 }
 
@@ -1163,9 +1222,9 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: var(--bg-secondary);
+    background: var(--admin-bg-secondary);
     border-radius: var(--radius-md);
-    color: var(--text-secondary);
+    color: var(--admin-text-secondary);
 }
 
 .widget-list-item {
@@ -1173,7 +1232,7 @@
     justify-content: space-between;
     align-items: center;
     padding: 0.75rem 0;
-    border-bottom: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--admin-border-color);
 }
 
 .widget-list-item:last-child {
@@ -1183,13 +1242,13 @@
 .widget-item-info h4 {
     font-size: 0.875rem;
     font-weight: 600;
-    color: var(--text-primary);
+    color: var(--admin-text-primary);
     margin: 0 0 0.25rem 0;
 }
 
 .widget-item-info p {
     font-size: 0.75rem;
-    color: var(--text-secondary);
+    color: var(--admin-text-secondary);
     margin: 0;
 }
 
@@ -1211,16 +1270,16 @@
 }
 
 .settings-card {
-    background: white;
+    background: var(--admin-bg-primary);
     border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-sm);
+    box-shadow: var(--admin-shadow);
     overflow: hidden;
     transition: all 0.3s ease;
 }
 
 .settings-card:hover {
     transform: translateY(-2px);
-    box-shadow: var(--shadow-md);
+    box-shadow: var(--admin-shadow-lg);
 }
 
 .settings-card-header {
@@ -1247,7 +1306,7 @@
 }
 
 .settings-card-content p {
-    color: var(--text-secondary);
+    color: var(--admin-text-secondary);
     margin-bottom: 1.5rem;
     line-height: 1.6;
 }
@@ -1278,7 +1337,7 @@
 
 .editor-tabs {
     display: flex;
-    border-bottom: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--admin-border-color);
     margin-bottom: 1rem;
 }
 
@@ -1286,7 +1345,7 @@
     background: none;
     border: none;
     padding: 0.75rem 1.5rem;
-    color: var(--text-secondary);
+    color: var(--admin-text-secondary);
     cursor: pointer;
     font-weight: 500;
     border-bottom: 2px solid transparent;
@@ -1300,7 +1359,7 @@
 
 .editor-tab:hover {
     color: var(--primary-color);
-    background: var(--bg-secondary);
+    background: var(--admin-bg-secondary);
 }
 
 .editor-content {
@@ -1321,19 +1380,19 @@
     align-items: center;
     gap: 0.5rem;
     padding: 0.75rem;
-    background: var(--bg-secondary);
+    background: var(--admin-bg-secondary);
     border-radius: var(--radius-sm);
     margin-bottom: 1rem;
     flex-wrap: wrap;
 }
 
 .editor-btn {
-    background: white;
-    border: 1px solid var(--border-color);
+    background: var(--admin-bg-primary);
+    border: 1px solid var(--admin-border-color);
     border-radius: var(--radius-sm);
     padding: 0.5rem;
     cursor: pointer;
-    color: var(--text-secondary);
+    color: var(--admin-text-secondary);
     width: 36px;
     height: 36px;
     display: flex;
@@ -1351,16 +1410,17 @@
 .editor-separator {
     width: 1px;
     height: 24px;
-    background: var(--border-color);
+    background: var(--admin-border-color);
     margin: 0 0.5rem;
 }
 
 .editor-area {
     min-height: 300px;
-    border: 1px solid var(--border-color);
+    border: 1px solid var(--admin-border-color);
     border-radius: var(--radius-md);
     padding: 1rem;
-    background: white;
+    background: var(--admin-bg-primary);
+    color: var(--admin-text-primary);
     line-height: 1.6;
     overflow-y: auto;
 }
@@ -1373,13 +1433,15 @@
 #htmlEditor {
     width: 100%;
     min-height: 360px;
-    border: 1px solid var(--border-color);
+    border: 1px solid var(--admin-border-color);
     border-radius: var(--radius-md);
     padding: 1rem;
     font-family: 'Monaco', 'Consolas', monospace;
     font-size: 0.875rem;
     line-height: 1.5;
     resize: vertical;
+    background: var(--admin-bg-primary);
+    color: var(--admin-text-primary);
 }
 
 #htmlEditor:focus {
@@ -1393,7 +1455,7 @@
     gap: 1rem;
     margin-top: 1.5rem;
     padding-top: 1rem;
-    border-top: 1px solid var(--border-color);
+    border-top: 1px solid var(--admin-border-color);
 }
 
 /* 드래그 앤 드롭 편집 */
@@ -1439,11 +1501,11 @@
 
 .dashboard-controls select {
     padding: 0.5rem 1rem;
-    border: 1px solid var(--border-color);
+    border: 1px solid var(--admin-border-color);
     border-radius: var(--radius-sm);
-    background: white;
+    background: var(--admin-bg-primary);
     font-size: 0.875rem;
-    color: var(--text-primary);
+    color: var(--admin-text-primary);
 }
 
 .dashboard-controls .btn {
@@ -1508,11 +1570,11 @@
 }
 
 .kpi-card {
-    background: white;
+    background: var(--admin-bg-primary);
     border-radius: 16px;
     padding: 2rem;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-    border: 1px solid var(--border-color);
+    box-shadow: var(--admin-shadow);
+    border: 1px solid var(--admin-border-color);
     transition: all 0.3s ease;
     position: relative;
     overflow: hidden;
@@ -1530,7 +1592,7 @@
 
 .kpi-card:hover {
     transform: translateY(-4px);
-    box-shadow: 0 12px 24px -4px rgba(0, 0, 0, 0.15);
+    box-shadow: var(--admin-shadow-lg);
 }
 
 .kpi-card.revenue::before {
@@ -1609,13 +1671,13 @@
 .kpi-content h3 {
     font-size: 2.5rem;
     font-weight: 800;
-    color: var(--text-primary);
+    color: var(--admin-text-primary);
     margin: 0 0 0.5rem 0;
     letter-spacing: -0.02em;
 }
 
 .kpi-content p {
-    color: var(--text-secondary);
+    color: var(--admin-text-secondary);
     font-size: 1rem;
     font-weight: 600;
     margin: 0 0 1rem 0;
@@ -1640,17 +1702,17 @@
 }
 
 .chart-card {
-    background: white;
+    background: var(--admin-bg-primary);
     border-radius: 16px;
     padding: 2rem;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-    border: 1px solid var(--border-color);
+    box-shadow: var(--admin-shadow);
+    border: 1px solid var(--admin-border-color);
     transition: all 0.3s ease;
 }
 
 .chart-card:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 15px -3px rgba(0, 0, 0, 0.15);
+    box-shadow: var(--admin-shadow-lg);
 }
 
 .chart-header {
@@ -1663,7 +1725,7 @@
 .chart-header h3 {
     font-size: 1.25rem;
     font-weight: 700;
-    color: var(--text-primary);
+    color: var(--admin-text-primary);
     margin: 0;
     letter-spacing: -0.01em;
 }
@@ -1675,10 +1737,10 @@
 
 .chart-btn {
     padding: 0.5rem 1rem;
-    border: 1px solid var(--border-color);
+    border: 1px solid var(--admin-border-color);
     border-radius: var(--radius-sm);
-    background: white;
-    color: var(--text-secondary);
+    background: var(--admin-bg-primary);
+    color: var(--admin-text-secondary);
     font-size: 0.875rem;
     cursor: pointer;
     transition: all 0.2s;
@@ -1716,17 +1778,17 @@
 }
 
 .insight-card {
-    background: white;
+    background: var(--admin-bg-primary);
     border-radius: 16px;
     padding: 2rem;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-    border: 1px solid var(--border-color);
+    box-shadow: var(--admin-shadow);
+    border: 1px solid var(--admin-border-color);
     transition: all 0.3s ease;
 }
 
 .insight-card:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 15px -3px rgba(0, 0, 0, 0.15);
+    box-shadow: var(--admin-shadow-lg);
 }
 
 .insight-header {
@@ -1739,7 +1801,7 @@
 .insight-header h3 {
     font-size: 1.25rem;
     font-weight: 700;
-    color: var(--text-primary);
+    color: var(--admin-text-primary);
     margin: 0;
 }
 
@@ -1773,13 +1835,13 @@
     align-items: center;
     gap: 1rem;
     padding: 1rem;
-    background: var(--bg-secondary);
+    background: var(--admin-bg-secondary);
     border-radius: var(--radius-md);
     transition: all 0.2s;
 }
 
 .journey-step:hover {
-    background: #e2e8f0;
+    background: var(--admin-border-color);
     transform: translateX(4px);
 }
 
@@ -1800,13 +1862,13 @@
 .step-info h4 {
     font-size: 1rem;
     font-weight: 600;
-    color: var(--text-primary);
+    color: var(--admin-text-primary);
     margin: 0 0 0.25rem 0;
 }
 
 .step-info p {
     font-size: 0.875rem;
-    color: var(--text-secondary);
+    color: var(--admin-text-secondary);
     margin: 0;
 }
 
@@ -1841,7 +1903,7 @@
     align-items: center;
     gap: 0.75rem;
     padding: 0.75rem 0;
-    border-bottom: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--admin-border-color);
 }
 
 .activity-item:last-child {
@@ -1868,7 +1930,7 @@
 
 .activity-content p {
     font-size: 0.875rem;
-    color: var(--text-primary);
+    color: var(--admin-text-primary);
     margin: 0 0 0.25rem 0;
 }
 
@@ -1889,7 +1951,7 @@
     align-items: flex-start;
     gap: 0.75rem;
     padding: 1rem;
-    background: var(--bg-secondary);
+    background: var(--admin-bg-secondary);
     border-radius: var(--radius-md);
     border-left: 4px solid var(--primary-color);
 }
@@ -1911,13 +1973,13 @@
 .ai-insight-content h5 {
     font-size: 0.875rem;
     font-weight: 600;
-    color: var(--text-primary);
+    color: var(--admin-text-primary);
     margin: 0 0 0.25rem 0;
 }
 
 .ai-insight-content p {
     font-size: 0.875rem;
-    color: var(--text-secondary);
+    color: var(--admin-text-secondary);
     margin: 0;
     line-height: 1.5;
 }
@@ -1958,9 +2020,9 @@
 
 /* Dropzone 스타일 */
 .dropzone {
-    border: 2px dashed var(--border-color);
+    border: 2px dashed var(--admin-border-color);
     border-radius: var(--radius-md);
-    background: var(--bg-secondary);
+    background: var(--admin-bg-secondary);
     padding: 2rem;
     text-align: center;
     cursor: pointer;
@@ -1980,7 +2042,7 @@
 }
 
 .dropzone .dz-message {
-    color: var(--text-secondary);
+    color: var(--admin-text-secondary);
     font-size: 1rem;
     font-weight: 500;
 }
@@ -1994,23 +2056,23 @@
 
 /* 콘텐츠 관리 섹션 */
 .content-management {
-    background: white;
+    background: var(--admin-bg-primary);
     border-radius: 16px;
     padding: 2rem;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-    border: 1px solid var(--border-color);
+    box-shadow: var(--admin-shadow);
+    border: 1px solid var(--admin-border-color);
     margin-bottom: 2rem;
 }
 
 .content-management h3 {
     font-size: 1.25rem;
     font-weight: 700;
-    color: var(--text-primary);
+    color: var(--admin-text-primary);
     margin-bottom: 1.5rem;
 }
 
 .upload-area {
-    border: 2px dashed var(--border-color);
+    border: 2px dashed var(--admin-border-color);
     border-radius: var(--radius-md);
     padding: 3rem 2rem;
     text-align: center;
@@ -2030,7 +2092,7 @@
 }
 
 .upload-text {
-    color: var(--text-secondary);
+    color: var(--admin-text-secondary);
     font-size: 1rem;
     margin-bottom: 0.5rem;
 }

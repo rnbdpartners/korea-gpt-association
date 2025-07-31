@@ -3166,8 +3166,50 @@ function viewSystemLogs() {
     `);
 }
 
+// 테마 관리
+const themeManager = {
+    init() {
+        // 저장된 테마 로드
+        const savedTheme = localStorage.getItem('admin-theme') || 'light';
+        this.setTheme(savedTheme);
+        
+        // 테마 토글 버튼 이벤트
+        const themeToggle = document.getElementById('themeToggle');
+        if (themeToggle) {
+            themeToggle.addEventListener('click', () => {
+                const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+                const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+                this.setTheme(newTheme);
+            });
+        }
+    },
+    
+    setTheme(theme) {
+        document.documentElement.setAttribute('data-theme', theme);
+        localStorage.setItem('admin-theme', theme);
+        
+        // 버튼 텍스트와 아이콘 업데이트
+        const themeToggle = document.getElementById('themeToggle');
+        if (themeToggle) {
+            const icon = themeToggle.querySelector('i');
+            const text = themeToggle.querySelector('span');
+            
+            if (theme === 'dark') {
+                icon.className = 'fas fa-sun';
+                text.textContent = '라이트모드';
+            } else {
+                icon.className = 'fas fa-moon';
+                text.textContent = '다크모드';
+            }
+        }
+    }
+};
+
 // 메인 초기화에 추가 기능 포함
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function() {    
+    // 테마 관리 초기화
+    themeManager.init();
+    
     // 기존 초기화
     setupNavigation();
     setupDropdown();
