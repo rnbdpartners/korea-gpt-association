@@ -1,5 +1,10 @@
 // B2B 기업용 관리자 페이지 JavaScript
 
+// B2B 견적 데이터 가져오기
+function getQuotesFromStorage() {
+    return JSON.parse(localStorage.getItem('quotes') || '[]');
+}
+
 // B2B 샘플 데이터
 const b2bData = {
     companies: [
@@ -142,24 +147,7 @@ const b2bData = {
             renewalDate: '2024-04-01'
         }
     ],
-    quotes: [
-        {
-            id: 'QT-2024-015',
-            company: '네이버',
-            program: 'AI 프롬프트 마스터',
-            amount: 15000000,
-            status: 'pending',
-            requestDate: '2024-01-28'
-        },
-        {
-            id: 'QT-2024-016',
-            company: '쿠팡',
-            program: '기업 맞춤 ChatGPT',
-            amount: 25000000,
-            status: 'sent',
-            requestDate: '2024-01-25'
-        }
-    ],
+    quotes: [],
     trainers: [
         {
             id: 1,
@@ -412,7 +400,31 @@ function renderQuotesTable() {
     const tbody = document.getElementById('quotesTable');
     if (!tbody) return;
     
-    tbody.innerHTML = b2bData.quotes.map(quote => `
+    // 로컬스토리지에서 견적 데이터 가져오기
+    const storageQuotes = getQuotesFromStorage();
+    
+    // 저장된 견적을 B2B 데이터 형식으로 변환
+    const formattedQuotes = storageQuotes.map(quote => ({
+        id: quote.quoteNumber,
+        company: quote.companyName,
+        program: getProgramName(quote.programType),
+        amount: quote.subtotal + quote.travelFee,
+        status: 'pending',
+        requestDate: new Date(quote.quoteDate).toLocaleDateString('ko-KR'),
+        contactName: quote.contactName,
+        contactPhone: quote.contactPhone,
+        contactEmail: quote.contactEmail,
+        educationHours: quote.educationHours,
+        participantCount: quote.participantCount,
+        isOnsite: quote.isOnsite,
+        region: quote.region,
+        requirements: quote.requirements
+    }));
+    
+    // 기존 샘플 데이터와 합치기
+    const allQuotes = [...formattedQuotes, ...b2bData.quotes];
+    
+    tbody.innerHTML = allQuotes.map(quote => `
         <tr>
             <td><strong>${quote.id}</strong></td>
             <td>${quote.company}</td>
@@ -584,6 +596,16 @@ function initB2BCharts() {
     }
 }
 
+// 프로그램명 변환 헬퍼
+function getProgramName(type) {
+    const names = {
+        'basic': 'ChatGPT 기초 과정',
+        'advanced': 'AI 업무 활용 실무',
+        'custom': '맞춤형 교육'
+    };
+    return names[type] || type;
+}
+
 // 헬퍼 함수들
 function getProjectStatusBadge(status) {
     const badges = {
@@ -728,11 +750,117 @@ function renewContract(id) {
 }
 
 function processQuote(id) {
-    showNotification('success', `견적 ${id} 처리 완료`);
+    // 견적 상태 업데이트
+    const quotes = getQuotesFromStorage();
+    const quote = quotes.find(q => q.quoteNumber === id);
+    
+    if (quote) {
+        // 견적 상세 모달 표시
+        showQuoteDetailModal(quote);
+    } else {
+        showNotification('success', `견적 ${id} 처리 완료`);
+    }
 }
 
 function viewQuote(id) {
-    showNotification('info', `견적 ${id} 상세 보기`);
+    // 견적 상세 보기
+    const quotes = getQuotesFromStorage();
+    const quote = quotes.find(q => q.quoteNumber === id);
+    
+    if (quote) {
+        showQuoteDetailModal(quote);
+    } else {
+        showNotification('info', `견적 ${id} 상세 보기`);
+    }
+}
+
+// 견적 상세 모달 표시
+function showQuoteDetailModal(quote) {
+    const modalHTML = `
+        <div id="quoteDetailModal" class="b2b-modal show">
+            <div class="b2b-modal-content">
+                <div class="b2b-modal-header">
+                    <h3 class="b2b-modal-title">견적 상세 정보</h3>
+                    <button class="b2b-modal-close" onclick="closeQuoteDetailModal()">&times;</button>
+                </div>
+                <div class="b2b-modal-body">
+                    <div class="b2b-form-group">
+                        <label class="b2b-form-label">견적번호</label>
+                        <p>${quote.quoteNumber}</p>
+                    </div>
+                    <div class="b2b-form-group">
+                        <label class="b2b-form-label">기업 정보</label>
+                        <p><strong>${quote.companyName}</strong></p>
+                        <p>담당자: ${quote.contactName}</p>
+                        <p>연락처: ${quote.contactPhone}</p>
+                        <p>이메일: ${quote.contactEmail}</p>
+                    </div>
+                    <div class="b2b-form-group">
+                        <label class="b2b-form-label">교육 프로그램</label>
+                        <p>${getProgramName(quote.programType)}</p>
+                        <p>교육시간: ${quote.educationHours}시간</p>
+                        <p>참여인원: ${quote.participantCount}명</p>
+                        <p>교육방식: ${quote.isOnsite ? '방문 교육' : '온라인 교육'}</p>
+                        ${quote.isOnsite && quote.region === 'other' ? '<p>지역: 수도권 외</p>' : ''}
+                    </div>
+                    <div class="b2b-form-group">
+                        <label class="b2b-form-label">견적 금액</label>
+                        <p>교육비: ₩${quote.subtotal.toLocaleString()}</p>
+                        ${quote.travelFee > 0 ? `<p>출장비: ₩${quote.travelFee.toLocaleString()}</p>` : ''}
+                        <p><strong>총액 (VAT 별도): ₩${(quote.subtotal + quote.travelFee).toLocaleString()}</strong></p>
+                    </div>
+                    ${quote.requirements ? `
+                    <div class="b2b-form-group">
+                        <label class="b2b-form-label">기타 요구사항</label>
+                        <p>${quote.requirements}</p>
+                    </div>
+                    ` : ''}
+                    <div class="b2b-form-group">
+                        <label class="b2b-form-label">요청일시</label>
+                        <p>${new Date(quote.quoteDate).toLocaleString('ko-KR')}</p>
+                    </div>
+                </div>
+                <div class="b2b-modal-footer">
+                    <button class="b2b-btn b2b-btn-secondary" onclick="closeQuoteDetailModal()">닫기</button>
+                    <button class="b2b-btn b2b-btn-primary" onclick="downloadQuotePDF('${quote.quoteNumber}')">
+                        <i class="fas fa-download"></i> PDF 다운로드
+                    </button>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    // 기존 모달 제거
+    const existingModal = document.getElementById('quoteDetailModal');
+    if (existingModal) {
+        existingModal.remove();
+    }
+    
+    // 새 모달 추가
+    document.body.insertAdjacentHTML('beforeend', modalHTML);
+}
+
+// 견적 상세 모달 닫기
+function closeQuoteDetailModal() {
+    const modal = document.getElementById('quoteDetailModal');
+    if (modal) {
+        modal.remove();
+    }
+}
+
+// 견적서 PDF 다운로드
+function downloadQuotePDF(quoteNumber) {
+    const quotes = getQuotesFromStorage();
+    const quote = quotes.find(q => q.quoteNumber === quoteNumber);
+    
+    if (quote && window.QuoteSystem) {
+        // QuoteSystem의 데이터 설정
+        window.QuoteSystem.currentQuote.data = quote;
+        // PDF 다운로드 실행
+        window.QuoteSystem.downloadPDF();
+    } else {
+        showNotification('error', 'PDF 다운로드 중 오류가 발생했습니다.');
+    }
 }
 
 function processTicket(id) {
@@ -850,6 +978,11 @@ document.addEventListener('DOMContentLoaded', function() {
             showNotification('success', 'B2B 설정이 저장되었습니다.');
         });
     }
+    
+    // 견적 데이터 자동 갱신 (5초마다)
+    setInterval(() => {
+        renderQuotesTable();
+    }, 5000);
     
     console.log('B2B 관리자 대시보드 초기화 완료');
 });
