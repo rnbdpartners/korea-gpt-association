@@ -138,6 +138,10 @@ function handleLoginSubmit(e) {
     const formData = new FormData(e.target);
     const data = Object.fromEntries(formData);
     
+    // URL 파라미터에서 redirect 확인
+    const urlParams = new URLSearchParams(window.location.search);
+    const redirectTo = urlParams.get('redirect');
+    
     // 기본 검증
     if (!data.email || !data.password) {
         alert('이메일과 비밀번호를 입력해주세요.');
@@ -172,10 +176,18 @@ function handleLoginSubmit(e) {
             
             alert(`로그인 성공!\n\n환영합니다, ${account.name}님!`);
             
-            // 관리자면 관리자 선택 페이지로, 일반 사용자면 메인 페이지로
-            if (account.role === 'admin') {
+            // redirect 파라미터가 있는 경우 처리
+            if (redirectTo === 'enterprise.html' && account.role === 'admin') {
+                // 기업교육 페이지에서 온 관리자는 바로 기업교육 관리자 페이지로
+                window.location.href = 'admin-enterprise.html';
+            } else if (redirectTo && redirectTo !== 'login.html') {
+                // 다른 redirect 요청이 있으면 해당 페이지로
+                window.location.href = redirectTo;
+            } else if (account.role === 'admin') {
+                // redirect 파라미터가 없는 관리자는 선택 페이지로
                 window.location.href = 'admin-select.html';
             } else {
+                // 일반 사용자는 메인 페이지로
                 window.location.href = 'index.html';
             }
         } else {

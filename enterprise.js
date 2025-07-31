@@ -12,8 +12,10 @@ function checkAdminMode() {
     const isLoggedIn = sessionStorage.getItem('isLoggedIn') === 'true';
     
     if (isLoggedIn && currentUser.role === 'admin') {
-        // 관리자인 경우 admin-enterprise.html로 리다이렉트
+        // 관리자인 경우 기업교육 관리자 페이지로 리다이렉트
         if (!window.location.pathname.includes('admin-enterprise.html')) {
+            // 관리자가 기업교육 페이지에서 접근한 것을 표시
+            sessionStorage.setItem('adminSource', 'enterprise');
             window.location.href = 'admin-enterprise.html';
         }
     }
