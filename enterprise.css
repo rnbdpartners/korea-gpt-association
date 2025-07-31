@@ -28,6 +28,36 @@
     --enterprise-notice-text: #fbbf24;
 }
 
+/* 기본 body 스타일 오버라이드 */
+body.enterprise-body {
+    background: var(--enterprise-bg-dark) !important;
+    color: var(--enterprise-text-primary) !important;
+    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif !important;
+}
+
+/* 헤더 스타일 오버라이드 */
+.enterprise-header {
+    background: var(--enterprise-bg-darker) !important;
+    border-bottom: 1px solid var(--enterprise-border);
+}
+
+.enterprise-header .navbar {
+    background: transparent !important;
+}
+
+.enterprise-header .nav-links a {
+    color: var(--enterprise-text-primary) !important;
+    transition: color 0.3s ease;
+}
+
+.enterprise-header .nav-links a:hover {
+    color: var(--enterprise-primary) !important;
+}
+
+.enterprise-header .logo {
+    color: var(--enterprise-text-primary) !important;
+}
+
 /* 공통 섹션 스타일 */
 .section-header {
     text-align: center;
