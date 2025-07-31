@@ -172,9 +172,9 @@ function handleLoginSubmit(e) {
             
             alert(`로그인 성공!\n\n환영합니다, ${account.name}님!`);
             
-            // 관리자면 관리자 페이지로, 일반 사용자면 메인 페이지로
+            // 관리자면 관리자 선택 페이지로, 일반 사용자면 메인 페이지로
             if (account.role === 'admin') {
-                window.location.href = 'admin.html';
+                window.location.href = 'admin-select.html';
             } else {
                 window.location.href = 'index.html';
             }

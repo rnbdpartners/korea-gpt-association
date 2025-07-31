@@ -3995,4 +3995,13 @@ function getNotificationIcon(type) {
     return icons[type] || 'info-circle';
 }
 
+// 로그아웃 함수 추가
+function logout() {
+    if (confirm('로그아웃 하시겠습니까?')) {
+        localStorage.removeItem('currentUser');
+        sessionStorage.removeItem('isLoggedIn');
+        window.location.href = 'login.html';
+    }
+}
+
 console.log('관리자 대시보드 스크립트 로드 완료');
