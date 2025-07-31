@@ -1,5 +1,258 @@
 // B2B 기업용 관리자 페이지 JavaScript
 
+// 편집 모드 상태
+let isEditMode = false;
+let currentEditingElement = null;
+
+// 페이지 로드 시 초기화
+document.addEventListener('DOMContentLoaded', function() {
+    checkAdminAccess();
+    initializeEditMode();
+    makeElementsEditable();
+});
+
+// 관리자 접근 권한 확인
+function checkAdminAccess() {
+    const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
+    const isLoggedIn = sessionStorage.getItem('isLoggedIn') === 'true';
+    
+    if (!isLoggedIn || currentUser.role !== 'admin') {
+        alert('관리자 권한이 필요합니다.');
+        window.location.href = 'login.html';
+        return;
+    }
+}
+
+// 편집 모드 초기화
+function initializeEditMode() {
+    // 편집 모드 토글 버튼 추가
+    const headerContent = document.querySelector('.b2b-admin-header-content');
+    if (headerContent) {
+        const editToggleBtn = document.createElement('button');
+        editToggleBtn.className = 'edit-mode-toggle';
+        editToggleBtn.innerHTML = '<i class="fas fa-edit"></i> 편집 모드';
+        editToggleBtn.onclick = toggleEditMode;
+        headerContent.appendChild(editToggleBtn);
+    }
+
+    // 편집 툴바 생성
+    createEditToolbar();
+}
+
+// 편집 모드 토글
+function toggleEditMode() {
+    isEditMode = !isEditMode;
+    document.body.classList.toggle('editor-mode', isEditMode);
+    
+    const toggleBtn = document.querySelector('.edit-mode-toggle');
+    toggleBtn.classList.toggle('active', isEditMode);
+    toggleBtn.innerHTML = isEditMode ? 
+        '<i class="fas fa-save"></i> 편집 완료' : 
+        '<i class="fas fa-edit"></i> 편집 모드';
+    
+    if (!isEditMode) {
+        saveAllChanges();
+    }
+}
+
+// 편집 툴바 생성
+function createEditToolbar() {
+    const toolbar = document.createElement('div');
+    toolbar.className = 'editor-toolbar';
+    toolbar.innerHTML = `
+        <h3>편집 도구</h3>
+        <div class="editor-tools">
+            <button class="editor-tool-btn" onclick="editText()">
+                <i class="fas fa-font"></i> 텍스트 편집
+            </button>
+            <button class="editor-tool-btn" onclick="editStyle()">
+                <i class="fas fa-palette"></i> 스타일 변경
+            </button>
+            <button class="editor-tool-btn" onclick="addSection()">
+                <i class="fas fa-plus-square"></i> 섹션 추가
+            </button>
+            <button class="editor-tool-btn" onclick="deleteElement()">
+                <i class="fas fa-trash"></i> 요소 삭제
+            </button>
+            <button class="editor-tool-btn" onclick="duplicateElement()">
+                <i class="fas fa-copy"></i> 복사
+            </button>
+            <button class="editor-tool-btn" onclick="moveElement()">
+                <i class="fas fa-arrows-alt"></i> 이동
+            </button>
+        </div>
+    `;
+    document.body.appendChild(toolbar);
+}
+
+// 편집 가능한 요소로 만들기
+function makeElementsEditable() {
+    const editableSelectors = [
+        '.b2b-section-header h2',
+        '.b2b-section-header p',
+        '.b2b-card-title',
+        '.b2b-stat-value',
+        '.b2b-stat-label',
+        '.b2b-btn',
+        'td',
+        'p'
+    ];
+    
+    editableSelectors.forEach(selector => {
+        document.querySelectorAll(selector).forEach(element => {
+            element.classList.add('editable-element');
+            element.addEventListener('click', handleElementClick);
+            element.addEventListener('mouseover', handleElementHover);
+            element.addEventListener('mouseout', handleElementOut);
+        });
+    });
+}
+
+// 요소 클릭 처리
+function handleElementClick(e) {
+    if (!isEditMode) return;
+    
+    e.preventDefault();
+    e.stopPropagation();
+    
+    // 이전 선택 해제
+    document.querySelectorAll('.editing').forEach(el => el.classList.remove('editing'));
+    
+    // 현재 요소 선택
+    currentEditingElement = e.target;
+    currentEditingElement.classList.add('editing');
+    
+    // 인라인 편집 툴팁 표시
+    showEditTooltip(e.target);
+}
+
+// 요소 호버 처리
+function handleElementHover(e) {
+    if (!isEditMode) return;
+    e.target.style.cursor = 'pointer';
+}
+
+// 요소 호버 아웃 처리
+function handleElementOut(e) {
+    if (!isEditMode) return;
+}
+
+// 편집 툴팁 표시
+function showEditTooltip(element) {
+    // 기존 툴팁 제거
+    const existingTooltip = document.querySelector('.edit-tooltip');
+    if (existingTooltip) existingTooltip.remove();
+    
+    const tooltip = document.createElement('div');
+    tooltip.className = 'edit-tooltip show';
+    tooltip.innerHTML = `
+        <button class="edit-tooltip-btn" onclick="quickEdit()">
+            <i class="fas fa-edit"></i>
+        </button>
+        <button class="edit-tooltip-btn" onclick="changeColor()">
+            <i class="fas fa-paint-brush"></i>
+        </button>
+        <button class="edit-tooltip-btn" onclick="changeFontSize()">
+            <i class="fas fa-text-height"></i>
+        </button>
+        <button class="edit-tooltip-btn" onclick="deleteCurrentElement()">
+            <i class="fas fa-trash"></i>
+        </button>
+    `;
+    
+    // 툴팁 위치 설정
+    const rect = element.getBoundingClientRect();
+    tooltip.style.top = `${rect.top - 50}px`;
+    tooltip.style.left = `${rect.left}px`;
+    
+    document.body.appendChild(tooltip);
+}
+
+// 빠른 편집
+function quickEdit() {
+    if (!currentEditingElement) return;
+    
+    const currentText = currentEditingElement.innerText;
+    const newText = prompt('텍스트를 수정하세요:', currentText);
+    
+    if (newText !== null && newText !== currentText) {
+        currentEditingElement.innerText = newText;
+        saveChange(currentEditingElement, 'text', newText);
+    }
+}
+
+// 색상 변경
+function changeColor() {
+    if (!currentEditingElement) return;
+    
+    const colors = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899'];
+    const currentColor = window.getComputedStyle(currentEditingElement).color;
+    
+    const colorPicker = document.createElement('div');
+    colorPicker.style.cssText = `
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: #000;
+        padding: 20px;
+        border-radius: 8px;
+        display: flex;
+        gap: 10px;
+        z-index: 10001;
+    `;
+    
+    colors.forEach(color => {
+        const colorBtn = document.createElement('button');
+        colorBtn.style.cssText = `
+            width: 40px;
+            height: 40px;
+            background: ${color};
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        `;
+        colorBtn.onclick = () => {
+            currentEditingElement.style.color = color;
+            saveChange(currentEditingElement, 'color', color);
+            colorPicker.remove();
+        };
+        colorPicker.appendChild(colorBtn);
+    });
+    
+    document.body.appendChild(colorPicker);
+    
+    // 클릭 외부 시 닫기
+    setTimeout(() => {
+        document.addEventListener('click', function closeColorPicker(e) {
+            if (!colorPicker.contains(e.target)) {
+                colorPicker.remove();
+                document.removeEventListener('click', closeColorPicker);
+            }
+        });
+    }, 100);
+}
+
+// 변경사항 저장
+function saveChange(element, type, value) {
+    const changes = JSON.parse(localStorage.getItem('pageChanges') || '{}');
+    const elementId = element.id || `element-${Date.now()}`;
+    
+    if (!element.id) element.id = elementId;
+    
+    if (!changes[elementId]) changes[elementId] = {};
+    changes[elementId][type] = value;
+    
+    localStorage.setItem('pageChanges', JSON.stringify(changes));
+}
+
+// 모든 변경사항 저장
+function saveAllChanges() {
+    const changes = JSON.parse(localStorage.getItem('pageChanges') || '{}');
+    console.log('저장된 변경사항:', changes);
+    alert('모든 변경사항이 저장되었습니다.');
+}
+
 // B2B 견적 데이터 가져오기
 function getQuotesFromStorage() {
     return JSON.parse(localStorage.getItem('quotes') || '[]');

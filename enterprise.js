@@ -1,5 +1,32 @@
 // 기업교육 페이지 JavaScript
 
+// 관리자 모드 체크 및 초기화
+document.addEventListener('DOMContentLoaded', function() {
+    checkAdminMode();
+    initializeAdminFeatures();
+});
+
+// 관리자 모드 확인
+function checkAdminMode() {
+    const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
+    const isLoggedIn = sessionStorage.getItem('isLoggedIn') === 'true';
+    
+    if (isLoggedIn && currentUser.role === 'admin') {
+        // 관리자인 경우 admin-enterprise.html로 리다이렉트
+        if (!window.location.pathname.includes('admin-enterprise.html')) {
+            window.location.href = 'admin-enterprise.html';
+        }
+    }
+}
+
+// 관리자 기능 초기화
+function initializeAdminFeatures() {
+    const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
+    if (currentUser.role === 'admin' && window.location.pathname.includes('admin-enterprise.html')) {
+        enableAdminMode();
+    }
+}
+
 // 견적 데이터 저장
 let quoteData = {
     company: '',

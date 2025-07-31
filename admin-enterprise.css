@@ -1,51 +1,201 @@
-/* B2B 기업용 관리자 페이지 전용 스타일 */
+/* B2B 기업용 관리자 페이지 전용 스타일 - 다크 테마 */
 
-/* CSS 변수 정의 - 기업용 테마 */
+/* CSS 변수 정의 - 다크 테마 */
 :root {
-    /* B2B 전용 색상 팔레트 */
-    --b2b-primary: #0066cc;
-    --b2b-secondary: #004499;
-    --b2b-accent: #00cc99;
-    --b2b-bg-primary: #ffffff;
-    --b2b-bg-secondary: #f8fafc;
-    --b2b-bg-dark: #1e293b;
-    --b2b-bg-darker: #0f172a;
-    --b2b-text-primary: #1e293b;
-    --b2b-text-secondary: #64748b;
-    --b2b-text-muted: #94a3b8;
-    --b2b-border: #e2e8f0;
-    --b2b-border-dark: #334155;
-    --b2b-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-    --b2b-shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.1);
+    /* B2B 전용 색상 팔레트 - 검정색 테마 */
+    --b2b-primary: #3b82f6;
+    --b2b-secondary: #1e40af;
+    --b2b-accent: #06b6d4;
+    --b2b-bg-primary: #000000;
+    --b2b-bg-secondary: #0a0a0a;
+    --b2b-bg-dark: #050505;
+    --b2b-bg-darker: #000000;
+    --b2b-text-primary: #f9fafb;
+    --b2b-text-secondary: #9ca3af;
+    --b2b-text-muted: #6b7280;
+    --b2b-border: #1f2937;
+    --b2b-border-dark: #111827;
+    --b2b-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
+    --b2b-shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.7);
     --b2b-success: #10b981;
     --b2b-warning: #f59e0b;
     --b2b-error: #ef4444;
     --b2b-info: #3b82f6;
+    --elementor-primary: #71d7f7;
+    --elementor-secondary: #ff6b6b;
+    --elementor-accent: #ffd166;
 }
 
-/* 다크 모드 */
-[data-theme="dark"] {
-    --b2b-bg-primary: #1e293b;
-    --b2b-bg-secondary: #0f172a;
-    --b2b-text-primary: #f1f5f9;
-    --b2b-text-secondary: #94a3b8;
-    --b2b-border: #334155;
-    --b2b-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
-    --b2b-shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.3);
+/* Elementor 스타일 편집 모드 변수 */
+.editor-mode {
+    --editor-highlight: #71d7f7;
+    --editor-hover: rgba(113, 215, 247, 0.2);
+    --editor-active: rgba(113, 215, 247, 0.4);
+    --editor-handle: #ff6b6b;
+    --editor-toolbar-bg: rgba(0, 0, 0, 0.9);
 }
 
 /* 기본 스타일 */
 body.b2b-admin-body {
     margin: 0;
-    background-color: var(--b2b-bg-secondary);
+    background-color: var(--b2b-bg-primary);
     color: var(--b2b-text-primary);
     font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
     transition: background-color 0.3s ease, color 0.3s ease;
 }
 
+/* Elementor 스타일 편집 모드 */
+.editor-mode .editable-element {
+    position: relative;
+    transition: all 0.2s ease;
+}
+
+.editor-mode .editable-element:hover {
+    outline: 2px solid var(--editor-highlight);
+    outline-offset: 2px;
+    background-color: var(--editor-hover);
+    cursor: pointer;
+}
+
+.editor-mode .editable-element.editing {
+    outline: 3px solid var(--editor-highlight);
+    background-color: var(--editor-active);
+}
+
+/* 편집 툴바 */
+.editor-toolbar {
+    position: fixed;
+    top: 100px;
+    right: 20px;
+    background: var(--editor-toolbar-bg);
+    border: 1px solid var(--b2b-border);
+    border-radius: 12px;
+    padding: 1rem;
+    box-shadow: var(--b2b-shadow-lg);
+    z-index: 9999;
+    backdrop-filter: blur(10px);
+    display: none;
+}
+
+.editor-mode .editor-toolbar {
+    display: block;
+}
+
+.editor-toolbar h3 {
+    color: var(--elementor-primary);
+    font-size: 0.875rem;
+    margin: 0 0 1rem 0;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.editor-tools {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.editor-tool-btn {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: var(--b2b-text-primary);
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.875rem;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.editor-tool-btn:hover {
+    background: rgba(113, 215, 247, 0.2);
+    border-color: var(--elementor-primary);
+    transform: translateX(-2px);
+}
+
+.editor-tool-btn i {
+    font-size: 1rem;
+}
+
+/* 인라인 편집 툴팁 */
+.edit-tooltip {
+    position: absolute;
+    background: var(--editor-toolbar-bg);
+    border: 1px solid var(--elementor-primary);
+    border-radius: 8px;
+    padding: 0.5rem;
+    display: none;
+    z-index: 10000;
+    backdrop-filter: blur(10px);
+}
+
+.edit-tooltip.show {
+    display: flex;
+    gap: 0.25rem;
+}
+
+.edit-tooltip-btn {
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    color: var(--b2b-text-primary);
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.75rem;
+    transition: all 0.2s ease;
+}
+
+.edit-tooltip-btn:hover {
+    background: var(--elementor-primary);
+    color: #000;
+}
+
+/* 드래그 핸들 */
+.drag-handle {
+    position: absolute;
+    top: -10px;
+    left: -10px;
+    width: 20px;
+    height: 20px;
+    background: var(--editor-handle);
+    border-radius: 50%;
+    cursor: move;
+    display: none;
+    z-index: 1000;
+}
+
+.editor-mode .editable-element:hover .drag-handle,
+.editor-mode .editable-element.dragging .drag-handle {
+    display: block;
+}
+
+/* 리사이즈 핸들 */
+.resize-handle {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background: var(--elementor-primary);
+    border: 2px solid #000;
+    border-radius: 50%;
+    display: none;
+}
+
+.resize-handle.se {
+    bottom: -5px;
+    right: -5px;
+    cursor: se-resize;
+}
+
+.editor-mode .editable-element:hover .resize-handle,
+.editor-mode .editable-element.resizing .resize-handle {
+    display: block;
+}
+
 /* B2B 관리자 헤더 */
 .b2b-admin-header {
-    background: linear-gradient(135deg, var(--b2b-primary) 0%, var(--b2b-secondary) 100%);
+    background: linear-gradient(135deg, #111111 0%, #000000 100%);
     color: white;
     padding: 1rem 0;
     position: fixed;
@@ -54,6 +204,38 @@ body.b2b-admin-body {
     right: 0;
     z-index: 1000;
     box-shadow: var(--b2b-shadow-lg);
+    border-bottom: 1px solid var(--b2b-border);
+}
+
+/* 편집 모드 토글 버튼 */
+.edit-mode-toggle {
+    background: var(--elementor-primary);
+    color: #000;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.2s ease;
+}
+
+.edit-mode-toggle:hover {
+    background: var(--elementor-secondary);
+    transform: translateY(-1px);
+}
+
+.edit-mode-toggle.active {
+    background: var(--elementor-secondary);
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(255, 107, 107, 0.7); }
+    70% { box-shadow: 0 0 0 10px rgba(255, 107, 107, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(255, 107, 107, 0); }
 }
 
 .b2b-admin-header-content {
@@ -91,7 +273,7 @@ body.b2b-admin-body {
 
 .b2b-admin-sidebar {
     width: 280px;
-    background: var(--b2b-bg-primary);
+    background: #050505;
     border-right: 1px solid var(--b2b-border);
     box-shadow: var(--b2b-shadow);
     position: fixed;
@@ -151,8 +333,20 @@ body.b2b-admin-body {
     flex: 1;
     margin-left: 280px;
     padding: 2rem;
-    background: var(--b2b-bg-secondary);
+    background: var(--b2b-bg-primary);
     min-height: calc(100vh - 80px);
+}
+
+/* 편집 가능 영역 표시 */
+.editor-mode .b2b-admin-main {
+    background-image: 
+        repeating-linear-gradient(
+            45deg,
+            transparent,
+            transparent 35px,
+            rgba(113, 215, 247, 0.03) 35px,
+            rgba(113, 215, 247, 0.03) 70px
+        );
 }
 
 .b2b-admin-section {
@@ -184,7 +378,7 @@ body.b2b-admin-body {
 
 /* B2B 카드 스타일 */
 .b2b-card {
-    background: var(--b2b-bg-primary);
+    background: #0a0a0a;
     border: 1px solid var(--b2b-border);
     border-radius: 16px;
     padding: 2rem;
@@ -220,7 +414,7 @@ body.b2b-admin-body {
 }
 
 .b2b-stat-card {
-    background: var(--b2b-bg-primary);
+    background: #0a0a0a;
     border: 1px solid var(--b2b-border);
     border-radius: 16px;
     padding: 2rem;
@@ -712,5 +906,99 @@ body.b2b-admin-body {
 @keyframes spin {
     to {
         transform: rotate(360deg);
+    }
+}
+
+/* 추가 다크 테마 스타일 */
+.b2b-table-container {
+    background: #0a0a0a;
+}
+
+.b2b-table th {
+    background: #050505;
+    color: var(--b2b-text-primary);
+}
+
+.b2b-table tbody tr:hover {
+    background-color: rgba(113, 215, 247, 0.1);
+}
+
+.b2b-form-input,
+.b2b-form-select,
+.b2b-form-textarea {
+    background: #0a0a0a;
+    color: var(--b2b-text-primary);
+    border-color: var(--b2b-border);
+}
+
+.b2b-search-input {
+    background: #0a0a0a;
+}
+
+.b2b-dropdown-menu {
+    background: #0a0a0a;
+}
+
+.b2b-modal-content {
+    background: #0a0a0a;
+}
+
+/* 편집 모드 추가 효과 */
+.editor-mode * {
+    user-select: none;
+}
+
+.editor-mode .editable-element {
+    position: relative;
+}
+
+.editor-mode .editable-element::after {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    border: 2px dashed transparent;
+    transition: all 0.2s ease;
+    pointer-events: none;
+}
+
+.editor-mode .editable-element:hover::after {
+    border-color: var(--editor-highlight);
+}
+
+/* 컨텐츠 편집 중 스타일 */
+.editor-mode .editable-element[contenteditable="true"] {
+    outline: 3px solid var(--elementor-primary);
+    outline-offset: 2px;
+    background: rgba(113, 215, 247, 0.1);
+}
+
+/* 편집 모드 안내 메시지 */
+.editor-mode::before {
+    content: '편집 모드 활성화됨 - 요소를 클릭하여 편집하세요';
+    position: fixed;
+    top: 90px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--elementor-primary);
+    color: #000;
+    padding: 0.5rem 1.5rem;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 0.875rem;
+    z-index: 9998;
+    animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateX(-50%) translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
     }
 }
