@@ -321,3 +321,103 @@
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
 }
+
+/* 데모 계정 섹션 */
+.demo-section {
+    margin-top: 2rem;
+}
+
+.demo-accounts {
+    background: var(--bg-secondary);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    text-align: center;
+}
+
+.demo-accounts h4 {
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+    font-size: 1rem;
+}
+
+.demo-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+}
+
+.demo-btn {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.75rem 1rem;
+    background: white;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: left;
+    width: 100%;
+}
+
+.demo-btn:hover {
+    border-color: var(--primary-color);
+    box-shadow: 0 2px 10px rgba(4, 249, 188, 0.1);
+    transform: translateY(-1px);
+}
+
+.demo-btn i {
+    font-size: 1.25rem;
+    width: 20px;
+    text-align: center;
+}
+
+.admin-demo i {
+    color: #f59e0b;
+}
+
+.user-demo i {
+    color: var(--primary-color);
+}
+
+.demo-btn div {
+    flex: 1;
+}
+
+.demo-btn strong {
+    display: block;
+    color: var(--text-primary);
+    font-size: 0.875rem;
+    margin-bottom: 0.25rem;
+}
+
+.demo-btn small {
+    color: var(--text-secondary);
+    font-size: 0.75rem;
+}
+
+.demo-note {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    color: var(--text-secondary);
+    font-size: 0.75rem;
+    margin: 0;
+}
+
+.demo-note i {
+    color: var(--primary-color);
+}
+
+/* 반응형 - 데모 버튼 */
+@media (min-width: 480px) {
+    .demo-buttons {
+        flex-direction: row;
+    }
+    
+    .demo-btn {
+        flex: 1;
+    }
+}

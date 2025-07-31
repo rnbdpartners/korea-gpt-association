@@ -1,8 +1,134 @@
+// 테스트용 데모 계정 데이터
+const DEMO_ACCOUNTS = [
+    // 관리자 계정
+    {
+        id: 'admin001',
+        email: 'admin@koreangpt.org',
+        password: 'admin123!',
+        name: '관리자',
+        role: 'admin',
+        company: '한국GPT협회',
+        phone: '02-1234-5678',
+        createdAt: '2024-01-01T00:00:00Z'
+    },
+    // 일반 사용자 계정들
+    {
+        id: 'demo001',
+        email: 'demo@test.com',
+        password: 'demo123!',
+        name: '김데모',
+        role: 'user',
+        company: '테스트 회사',
+        phone: '010-1234-5678',
+        createdAt: '2024-01-15T09:00:00Z'
+    },
+    {
+        id: 'enterprise001',
+        email: 'manager@samsung.com',
+        password: 'samsung123!',
+        name: '이기업',
+        role: 'user',
+        company: '삼성전자',
+        phone: '010-2345-6789',
+        createdAt: '2024-02-01T10:30:00Z'
+    },
+    {
+        id: 'startup001',
+        email: 'ceo@startup.kr',
+        password: 'startup123!',
+        name: '박스타트',
+        role: 'user',
+        company: '스타트업코리아',
+        phone: '010-3456-7890',
+        createdAt: '2024-02-10T14:20:00Z'
+    },
+    {
+        id: 'edu001',
+        email: 'prof@university.ac.kr',
+        password: 'edu123!',
+        name: '최교수',
+        role: 'user',
+        company: '한국대학교',
+        phone: '010-4567-8901',
+        createdAt: '2024-02-15T16:45:00Z'
+    }
+];
+
+// 테스트용 견적 데이터
+const DEMO_QUOTES = [
+    {
+        id: '1708123456789',
+        userId: 'enterprise001',
+        userName: '이기업',
+        company: '삼성전자',
+        name: '이기업',
+        phone: '010-2345-6789',
+        email: 'manager@samsung.com',
+        program: 'intermediate',
+        participants: 50,
+        type: 'hybrid',
+        schedule: '2024-04',
+        totalPrice: 16000000,
+        status: 'contacted',
+        timestamp: '2024-02-17T09:30:00Z'
+    },
+    {
+        id: '1708123456790',
+        userId: 'startup001',
+        userName: '박스타트',
+        company: '스타트업코리아',
+        name: '박스타트',
+        phone: '010-3456-7890',
+        email: 'ceo@startup.kr',
+        program: 'basic',
+        participants: 15,
+        type: 'online',
+        schedule: '2024-03',
+        totalPrice: 2250000,
+        status: 'pending',
+        timestamp: '2024-02-16T14:20:00Z'
+    },
+    {
+        id: '1708123456791',
+        userId: 'edu001',
+        userName: '최교수',
+        company: '한국대학교',
+        name: '최교수',
+        phone: '010-4567-8901',
+        email: 'prof@university.ac.kr',
+        program: 'advanced',
+        participants: 25,
+        type: 'offline',
+        schedule: '2024-05',
+        totalPrice: 12500000,
+        status: 'completed',
+        timestamp: '2024-02-15T11:15:00Z'
+    }
+];
+
 // 사용자 관리 및 권한 시스템
 class UserManager {
     constructor() {
         this.currentUser = null;
+        this.initializeDemoData();
         this.loadCurrentUser();
+    }
+
+    // 데모 데이터 초기화
+    initializeDemoData() {
+        // 사용자 데이터가 없으면 데모 계정 생성
+        if (!localStorage.getItem('users')) {
+            const users = {};
+            DEMO_ACCOUNTS.forEach(account => {
+                users[account.email] = account;
+            });
+            localStorage.setItem('users', JSON.stringify(users));
+        }
+
+        // 견적 데이터가 없으면 데모 견적 생성
+        if (!localStorage.getItem('quoteHistory')) {
+            localStorage.setItem('quoteHistory', JSON.stringify(DEMO_QUOTES));
+        }
     }
 
     // 현재 로그인된 사용자 로드

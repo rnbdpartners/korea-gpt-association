@@ -349,4 +349,48 @@ function initKakaoAuth() {
     // Kakao.init('YOUR_KAKAO_APP_KEY');
 }
 
+// 데모 계정 로그인
+function loginDemo(type) {
+    const demoCredentials = {
+        admin: {
+            email: 'admin@koreangpt.org',
+            password: 'admin123!'
+        },
+        enterprise: {
+            email: 'manager@samsung.com',
+            password: 'samsung123!'
+        },
+        startup: {
+            email: 'ceo@startup.kr',
+            password: 'startup123!'
+        }
+    };
+    
+    const credentials = demoCredentials[type];
+    if (!credentials) return;
+    
+    // 버튼 로딩 상태
+    const demoBtn = event.target.closest('.demo-btn');
+    demoBtn.style.opacity = '0.7';
+    demoBtn.style.pointerEvents = 'none';
+    
+    setTimeout(() => {
+        if (typeof performLogin !== 'undefined' && performLogin(credentials.email, credentials.password)) {
+            const currentUser = userManager.getCurrentUser();
+            alert(`데모 계정 로그인 성공!\n\n환영합니다, ${currentUser.name}님!`);
+            
+            // 관리자면 관리자 페이지로, 일반 사용자면 메인 페이지로
+            if (currentUser.role === 'admin') {
+                window.location.href = 'admin.html';
+            } else {
+                window.location.href = 'index.html';
+            }
+        } else {
+            alert('데모 계정 로그인에 실패했습니다.');
+            demoBtn.style.opacity = '1';
+            demoBtn.style.pointerEvents = 'auto';
+        }
+    }, 1000);
+}
+
 console.log('모든 인증 기능이 로드되었습니다.');

@@ -537,6 +537,27 @@ body {
     font-size: 0.875rem;
 }
 
+.demo-info {
+    margin-top: 1rem;
+    padding: 1rem;
+    background: rgba(4, 249, 188, 0.1);
+    border-radius: var(--radius-md);
+    color: var(--primary-color) !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.demo-info a {
+    color: var(--primary-color);
+    text-decoration: underline;
+}
+
+.demo-info a:hover {
+    text-decoration: none;
+}
+
 /* 관리자 링크 */
 .admin-link {
     color: var(--text-secondary) !important;
