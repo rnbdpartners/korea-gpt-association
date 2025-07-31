@@ -1,0 +1,857 @@
+// B2B 기업용 관리자 페이지 JavaScript
+
+// B2B 샘플 데이터
+const b2bData = {
+    companies: [
+        {
+            id: 1,
+            name: '삼성전자',
+            industry: 'IT/소프트웨어',
+            contact: '김담당',
+            phone: '02-1234-5678',
+            email: 'kim@samsung.com',
+            size: '대기업',
+            status: 'active',
+            joinDate: '2023-03-15',
+            contractValue: 50000000
+        },
+        {
+            id: 2,
+            name: 'LG전자',
+            industry: '제조업',
+            contact: '이매니저',
+            phone: '02-8765-4321',
+            email: 'lee@lg.com',
+            size: '대기업',
+            status: 'active',
+            joinDate: '2023-06-20',
+            contractValue: 35000000
+        },
+        {
+            id: 3,
+            name: '현대자동차',
+            industry: '제조업',
+            contact: '박팀장',
+            phone: '02-5555-1234',
+            email: 'park@hyundai.com',
+            size: '대기업',
+            status: 'pending',
+            joinDate: '2023-12-01',
+            contractValue: 28000000
+        },
+        {
+            id: 4,
+            name: '카카오',
+            industry: 'IT/소프트웨어',
+            contact: '최개발',
+            phone: '02-9999-8888',
+            email: 'choi@kakao.com',
+            size: '대기업',
+            status: 'active',
+            joinDate: '2023-08-10',
+            contractValue: 42000000
+        },
+        {
+            id: 5,
+            name: '스타트업코리아',
+            industry: 'IT/소프트웨어',
+            contact: '신대표',
+            phone: '02-1111-2222',
+            email: 'shin@startup.co.kr',
+            size: '중소기업',
+            status: 'active',
+            joinDate: '2024-01-15',
+            contractValue: 8000000
+        }
+    ],
+    programs: [
+        {
+            id: 1,
+            name: 'AI 프롬프트 마스터',
+            type: '기초',
+            duration: '8시간',
+            participants: 156,
+            satisfaction: 4.8,
+            status: 'active'
+        },
+        {
+            id: 2,
+            name: '기업 맞춤 ChatGPT',
+            type: '중급',
+            duration: '16시간',
+            participants: 89,
+            satisfaction: 4.9,
+            status: 'active'
+        },
+        {
+            id: 3,
+            name: 'AI 업무 자동화',
+            type: '고급',
+            duration: '24시간',
+            participants: 45,
+            satisfaction: 4.7,
+            status: 'active'
+        }
+    ],
+    projects: [
+        {
+            id: 1,
+            name: '삼성전자 AI 교육 프로젝트',
+            company: '삼성전자',
+            progress: 85,
+            startDate: '2024-01-01',
+            endDate: '2024-03-31',
+            status: 'active'
+        },
+        {
+            id: 2,
+            name: 'LG전자 프롬프트 교육',
+            company: 'LG전자',
+            progress: 100,
+            startDate: '2023-12-01',
+            endDate: '2024-01-15',
+            status: 'completed'
+        },
+        {
+            id: 3,
+            name: '현대자동차 AI 도입 컨설팅',
+            company: '현대자동차',
+            progress: 25,
+            startDate: '2024-01-15',
+            endDate: '2024-06-30',
+            status: 'planning'
+        }
+    ],
+    contracts: [
+        {
+            id: 'CT-2024-001',
+            company: '삼성전자',
+            amount: 50000000,
+            startDate: '2024-01-01',
+            endDate: '2024-12-31',
+            status: 'active',
+            renewalDate: '2024-11-01'
+        },
+        {
+            id: 'CT-2024-002',
+            company: 'LG전자',
+            amount: 35000000,
+            startDate: '2023-06-01',
+            endDate: '2024-05-31',
+            status: 'renewal',
+            renewalDate: '2024-04-01'
+        }
+    ],
+    quotes: [
+        {
+            id: 'QT-2024-015',
+            company: '네이버',
+            program: 'AI 프롬프트 마스터',
+            amount: 15000000,
+            status: 'pending',
+            requestDate: '2024-01-28'
+        },
+        {
+            id: 'QT-2024-016',
+            company: '쿠팡',
+            program: '기업 맞춤 ChatGPT',
+            amount: 25000000,
+            status: 'sent',
+            requestDate: '2024-01-25'
+        }
+    ],
+    trainers: [
+        {
+            id: 1,
+            name: '김AI',
+            specialty: 'ChatGPT 전문가',
+            experience: '5년',
+            rating: 4.9,
+            projects: 23,
+            status: 'active'
+        },
+        {
+            id: 2,
+            name: '이프롬프트',
+            specialty: '프롬프트 엔지니어링',
+            experience: '3년',
+            rating: 4.8,
+            projects: 15,
+            status: 'active'
+        },
+        {
+            id: 3,
+            name: '박머신러닝',
+            specialty: 'AI 업무 자동화',
+            experience: '7년',
+            rating: 5.0,
+            projects: 31,
+            status: 'active'
+        }
+    ],
+    supportTickets: [
+        {
+            id: 'TK-2024-089',
+            company: '삼성전자',
+            title: '교육 자료 추가 요청',
+            priority: 'medium',
+            status: 'open',
+            assignee: '김담당',
+            createdDate: '2024-01-30'
+        },
+        {
+            id: 'TK-2024-090',
+            company: 'LG전자',
+            title: '강사 변경 요청',
+            priority: 'high',
+            status: 'inprogress',
+            assignee: '이매니저',
+            createdDate: '2024-01-29'
+        }
+    ]
+};
+
+// 테마 관리
+const b2bThemeManager = {
+    init() {
+        const savedTheme = localStorage.getItem('b2b-admin-theme') || 'light';
+        this.setTheme(savedTheme);
+        
+        const themeToggle = document.getElementById('themeToggle');
+        if (themeToggle) {
+            themeToggle.addEventListener('click', () => {
+                const currentTheme = document.body.getAttribute('data-theme') || 'light';
+                const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+                this.setTheme(newTheme);
+            });
+        }
+    },
+    
+    setTheme(theme) {
+        document.body.setAttribute('data-theme', theme);
+        document.documentElement.setAttribute('data-theme', theme);
+        localStorage.setItem('b2b-admin-theme', theme);
+        
+        const themeToggle = document.getElementById('themeToggle');
+        if (themeToggle) {
+            const icon = themeToggle.querySelector('i');
+            const text = themeToggle.querySelector('span');
+            
+            if (theme === 'dark') {
+                icon.className = 'fas fa-sun';
+                text.textContent = '라이트모드';
+            } else {
+                icon.className = 'fas fa-moon';
+                text.textContent = '다크모드';
+            }
+        }
+    }
+};
+
+// 네비게이션 관리
+function setupB2BNavigation() {
+    const navLinks = document.querySelectorAll('.b2b-nav-link');
+    const sections = document.querySelectorAll('.b2b-admin-section');
+    
+    navLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            
+            const targetSection = link.getAttribute('data-section');
+            
+            // 네비게이션 활성화 상태 변경
+            document.querySelectorAll('.b2b-nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            link.closest('.b2b-nav-item').classList.add('active');
+            
+            // 섹션 표시
+            sections.forEach(section => {
+                section.classList.remove('active');
+            });
+            document.getElementById(targetSection).classList.add('active');
+        });
+    });
+}
+
+// 드롭다운 관리
+function setupB2BDropdown() {
+    const dropdownToggle = document.querySelector('.dropdown-toggle');
+    const dropdownMenu = document.querySelector('.b2b-dropdown-menu');
+    
+    if (dropdownToggle && dropdownMenu) {
+        dropdownToggle.addEventListener('click', () => {
+            dropdownMenu.classList.toggle('show');
+        });
+        
+        document.addEventListener('click', (e) => {
+            if (!dropdownToggle.contains(e.target)) {
+                dropdownMenu.classList.remove('show');
+            }
+        });
+    }
+}
+
+// 기업 테이블 렌더링
+function renderCompaniesTable() {
+    const tbody = document.getElementById('companiesTable');
+    if (!tbody) return;
+    
+    tbody.innerHTML = b2bData.companies.map(company => `
+        <tr>
+            <td><strong>${company.name}</strong></td>
+            <td>${company.industry}</td>
+            <td>${company.contact}</td>
+            <td>${company.size}</td>
+            <td>
+                <span class="b2b-badge b2b-badge-${company.status === 'active' ? 'active' : 'pending'}">
+                    ${company.status === 'active' ? '활성' : '대기중'}
+                </span>
+            </td>
+            <td>${company.joinDate}</td>
+            <td>
+                <button class="b2b-btn b2b-btn-secondary" onclick="viewCompany(${company.id})">
+                    <i class="fas fa-eye"></i>
+                </button>
+                <button class="b2b-btn b2b-btn-warning" onclick="editCompany(${company.id})">
+                    <i class="fas fa-edit"></i>
+                </button>
+            </td>
+        </tr>
+    `).join('');
+}
+
+// 교육 프로그램 렌더링
+function renderPrograms() {
+    const container = document.getElementById('programsGrid');
+    if (!container) return;
+    
+    container.innerHTML = b2bData.programs.map(program => `
+        <div class="b2b-stat-card">
+            <div class="b2b-stat-value">${program.participants}</div>
+            <div class="b2b-stat-label">${program.name}</div>
+            <div class="b2b-stat-change">
+                <i class="fas fa-star"></i>
+                만족도 ${program.satisfaction}/5.0
+            </div>
+            <div style="margin-top: 1rem;">
+                <span class="b2b-badge b2b-badge-info">${program.type}</span>
+                <span class="b2b-badge b2b-badge-active">${program.duration}</span>
+            </div>
+        </div>
+    `).join('');
+}
+
+// 프로젝트 테이블 렌더링
+function renderProjectsTable() {
+    const tbody = document.getElementById('projectsTable');
+    if (!tbody) return;
+    
+    tbody.innerHTML = b2bData.projects.map(project => `
+        <tr>
+            <td><strong>${project.name}</strong></td>
+            <td>${project.company}</td>
+            <td>
+                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                    <div style="flex: 1; background: var(--b2b-bg-secondary); border-radius: 4px; height: 8px;">
+                        <div style="background: var(--b2b-primary); height: 100%; width: ${project.progress}%; border-radius: 4px;"></div>
+                    </div>
+                    <span>${project.progress}%</span>
+                </div>
+            </td>
+            <td>${project.startDate}</td>
+            <td>${project.endDate}</td>
+            <td>
+                <span class="b2b-badge b2b-badge-${getProjectStatusBadge(project.status)}">
+                    ${getProjectStatusText(project.status)}
+                </span>
+            </td>
+            <td>
+                <button class="b2b-btn b2b-btn-secondary" onclick="viewProject(${project.id})">
+                    <i class="fas fa-eye"></i>
+                </button>
+                <button class="b2b-btn b2b-btn-warning" onclick="editProject(${project.id})">
+                    <i class="fas fa-edit"></i>
+                </button>
+            </td>
+        </tr>
+    `).join('');
+}
+
+// 계약 테이블 렌더링
+function renderContractsTable() {
+    const tbody = document.getElementById('contractsTable');
+    if (!tbody) return;
+    
+    tbody.innerHTML = b2bData.contracts.map(contract => `
+        <tr>
+            <td><strong>${contract.id}</strong></td>
+            <td>${contract.company}</td>
+            <td>₩${contract.amount.toLocaleString()}</td>
+            <td>${contract.startDate} ~ ${contract.endDate}</td>
+            <td>
+                <span class="b2b-badge b2b-badge-${contract.status === 'active' ? 'active' : 'warning'}">
+                    ${contract.status === 'active' ? '활성' : '갱신 필요'}
+                </span>
+            </td>
+            <td>${contract.renewalDate}</td>
+            <td>
+                <button class="b2b-btn b2b-btn-secondary" onclick="viewContract('${contract.id}')">
+                    <i class="fas fa-file-alt"></i>
+                </button>
+                <button class="b2b-btn b2b-btn-primary" onclick="renewContract('${contract.id}')">
+                    <i class="fas fa-redo"></i>
+                </button>
+            </td>
+        </tr>
+    `).join('');
+}
+
+// 견적 테이블 렌더링
+function renderQuotesTable() {
+    const tbody = document.getElementById('quotesTable');
+    if (!tbody) return;
+    
+    tbody.innerHTML = b2bData.quotes.map(quote => `
+        <tr>
+            <td><strong>${quote.id}</strong></td>
+            <td>${quote.company}</td>
+            <td>${quote.program}</td>
+            <td>₩${quote.amount.toLocaleString()}</td>
+            <td>
+                <span class="b2b-badge b2b-badge-${getQuoteStatusBadge(quote.status)}">
+                    ${getQuoteStatusText(quote.status)}
+                </span>
+            </td>
+            <td>${quote.requestDate}</td>
+            <td>
+                <button class="b2b-btn b2b-btn-primary" onclick="processQuote('${quote.id}')">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+                <button class="b2b-btn b2b-btn-secondary" onclick="viewQuote('${quote.id}')">
+                    <i class="fas fa-eye"></i>
+                </button>
+            </td>
+        </tr>
+    `).join('');
+}
+
+// 강사 렌더링
+function renderTrainers() {
+    const container = document.getElementById('trainersGrid');
+    if (!container) return;
+    
+    container.innerHTML = b2bData.trainers.map(trainer => `
+        <div class="b2b-stat-card">
+            <div class="b2b-stat-value">${trainer.rating}</div>
+            <div class="b2b-stat-label">${trainer.name}</div>
+            <div class="b2b-stat-change">
+                <i class="fas fa-project-diagram"></i>
+                ${trainer.projects}개 프로젝트
+            </div>
+            <div style="margin-top: 1rem;">
+                <div style="font-size: 0.875rem; color: var(--b2b-text-secondary); margin-bottom: 0.5rem;">
+                    ${trainer.specialty}
+                </div>
+                <span class="b2b-badge b2b-badge-info">${trainer.experience}</span>
+                <span class="b2b-badge b2b-badge-active">${trainer.status === 'active' ? '활성' : '비활성'}</span>
+            </div>
+        </div>
+    `).join('');
+}
+
+// 지원 티켓 테이블 렌더링
+function renderSupportTicketsTable() {
+    const tbody = document.getElementById('supportTicketsTable');
+    if (!tbody) return;
+    
+    tbody.innerHTML = b2bData.supportTickets.map(ticket => `
+        <tr>
+            <td><strong>${ticket.id}</strong></td>
+            <td>${ticket.company}</td>
+            <td>${ticket.title}</td>
+            <td>
+                <span class="b2b-badge b2b-badge-${getPriorityBadge(ticket.priority)}">
+                    ${getPriorityText(ticket.priority)}
+                </span>
+            </td>
+            <td>
+                <span class="b2b-badge b2b-badge-${getTicketStatusBadge(ticket.status)}">
+                    ${getTicketStatusText(ticket.status)}
+                </span>
+            </td>
+            <td>${ticket.assignee}</td>
+            <td>${ticket.createdDate}</td>
+            <td>
+                <button class="b2b-btn b2b-btn-primary" onclick="processTicket('${ticket.id}')">
+                    <i class="fas fa-reply"></i>
+                </button>
+                <button class="b2b-btn b2b-btn-secondary" onclick="viewTicket('${ticket.id}')">
+                    <i class="fas fa-eye"></i>
+                </button>
+            </td>
+        </tr>
+    `).join('');
+}
+
+// 차트 초기화
+function initB2BCharts() {
+    // B2B 매출 차트
+    const revenueCtx = document.getElementById('b2bRevenueChart');
+    if (revenueCtx) {
+        new Chart(revenueCtx, {
+            type: 'line',
+            data: {
+                labels: ['1월', '2월', '3월', '4월', '5월', '6월'],
+                datasets: [{
+                    label: 'B2B 매출',
+                    data: [65000000, 72000000, 68000000, 84500000, 91000000, 95000000],
+                    borderColor: 'var(--b2b-primary)',
+                    backgroundColor: 'rgba(0, 102, 204, 0.1)',
+                    fill: true,
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            callback: function(value) {
+                                return '₩' + (value / 1000000) + 'M';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    // 성과 분석 차트
+    const performanceCtx = document.getElementById('b2bPerformanceChart');
+    if (performanceCtx) {
+        new Chart(performanceCtx, {
+            type: 'bar',
+            data: {
+                labels: ['삼성전자', 'LG전자', '현대자동차', '카카오', '스타트업코리아'],
+                datasets: [{
+                    label: '계약 금액 (백만원)',
+                    data: [50, 35, 28, 42, 8],
+                    backgroundColor: 'var(--b2b-primary)'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                }
+            }
+        });
+    }
+
+    // 만족도 차트
+    const satisfactionCtx = document.getElementById('b2bSatisfactionChart');
+    if (satisfactionCtx) {
+        new Chart(satisfactionCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['매우 만족', '만족', '보통', '불만족'],
+                datasets: [{
+                    data: [65, 25, 8, 2],
+                    backgroundColor: [
+                        'var(--b2b-success)',
+                        'var(--b2b-primary)',
+                        'var(--b2b-warning)',
+                        'var(--b2b-error)'
+                    ]
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false
+            }
+        });
+    }
+}
+
+// 헬퍼 함수들
+function getProjectStatusBadge(status) {
+    const badges = {
+        'planning': 'warning',
+        'active': 'info',
+        'completed': 'active'
+    };
+    return badges[status] || 'info';
+}
+
+function getProjectStatusText(status) {
+    const texts = {
+        'planning': '기획중',
+        'active': '진행중',
+        'completed': '완료'
+    };
+    return texts[status] || status;
+}
+
+function getQuoteStatusBadge(status) {
+    const badges = {
+        'pending': 'warning',
+        'sent': 'info',
+        'accepted': 'active'
+    };
+    return badges[status] || 'info';
+}
+
+function getQuoteStatusText(status) {
+    const texts = {
+        'pending': '대기중',
+        'sent': '발송완료',
+        'accepted': '승인됨'
+    };
+    return texts[status] || status;
+}
+
+function getPriorityBadge(priority) {
+    const badges = {
+        'low': 'info',
+        'medium': 'warning',
+        'high': 'error'
+    };
+    return badges[priority] || 'info';
+}
+
+function getPriorityText(priority) {
+    const texts = {
+        'low': '낮음',
+        'medium': '보통',
+        'high': '높음'
+    };
+    return texts[priority] || priority;
+}
+
+function getTicketStatusBadge(status) {
+    const badges = {
+        'open': 'warning',
+        'inprogress': 'info',
+        'closed': 'active'
+    };
+    return badges[status] || 'info';
+}
+
+function getTicketStatusText(status) {
+    const texts = {
+        'open': '미해결',
+        'inprogress': '처리중',
+        'closed': '해결완료'
+    };
+    return texts[status] || status;
+}
+
+// 모달 관리
+function openAddCompanyModal() {
+    document.getElementById('addCompanyModal').classList.add('show');
+}
+
+function closeModal(modalId) {
+    document.getElementById(modalId).classList.remove('show');
+}
+
+function openAddProgramModal() {
+    showNotification('info', '프로그램 추가 기능은 곧 구현됩니다.');
+}
+
+function openAddContractModal() {
+    showNotification('info', '계약 추가 기능은 곧 구현됩니다.');
+}
+
+function openAddTrainerModal() {
+    showNotification('info', '강사 추가 기능은 곧 구현됩니다.');
+}
+
+// 필터링 함수들
+function filterProjects(status) {
+    // 탭 활성화 상태 변경
+    document.querySelectorAll('.b2b-tab').forEach(tab => tab.classList.remove('active'));
+    event.target.classList.add('active');
+    
+    // 실제 필터링 로직은 여기에 구현
+    showNotification('info', `${status} 프로젝트 필터링`);
+}
+
+function filterQuotes(status) {
+    document.querySelectorAll('.b2b-tab').forEach(tab => tab.classList.remove('active'));
+    event.target.classList.add('active');
+    
+    showNotification('info', `${status} 견적 필터링`);
+}
+
+function filterTickets(status) {
+    document.querySelectorAll('.b2b-tab').forEach(tab => tab.classList.remove('active'));
+    event.target.classList.add('active');
+    
+    showNotification('info', `${status} 티켓 필터링`);
+}
+
+// 액션 함수들
+function viewCompany(id) {
+    showNotification('info', `기업 ${id} 상세 보기`);
+}
+
+function editCompany(id) {
+    showNotification('info', `기업 ${id} 편집`);
+}
+
+function viewProject(id) {
+    showNotification('info', `프로젝트 ${id} 상세 보기`);
+}
+
+function editProject(id) {
+    showNotification('info', `프로젝트 ${id} 편집`);
+}
+
+function viewContract(id) {
+    showNotification('info', `계약 ${id} 상세 보기`);
+}
+
+function renewContract(id) {
+    showNotification('success', `계약 ${id} 갱신 처리`);
+}
+
+function processQuote(id) {
+    showNotification('success', `견적 ${id} 처리 완료`);
+}
+
+function viewQuote(id) {
+    showNotification('info', `견적 ${id} 상세 보기`);
+}
+
+function processTicket(id) {
+    showNotification('success', `티켓 ${id} 처리 시작`);
+}
+
+function viewTicket(id) {
+    showNotification('info', `티켓 ${id} 상세 보기`);
+}
+
+function generateB2BReport() {
+    showNotification('success', 'B2B 성과 리포트를 생성하여 다운로드했습니다.');
+}
+
+// 알림 시스템
+function showNotification(type, message) {
+    // 기존 알림 제거
+    const existingNotification = document.querySelector('.b2b-notification');
+    if (existingNotification) {
+        existingNotification.remove();
+    }
+    
+    // 새 알림 생성
+    const notification = document.createElement('div');
+    notification.className = `b2b-notification b2b-notification-${type}`;
+    notification.innerHTML = `
+        <i class="fas fa-${getNotificationIcon(type)}"></i>
+        ${message}
+    `;
+    
+    // 메인 콘텐츠 상단에 추가
+    const main = document.querySelector('.b2b-admin-main');
+    main.insertBefore(notification, main.firstChild);
+    
+    // 3초 후 자동 제거
+    setTimeout(() => {
+        notification.remove();
+    }, 3000);
+}
+
+function getNotificationIcon(type) {
+    const icons = {
+        'success': 'check-circle',
+        'warning': 'exclamation-triangle',
+        'error': 'times-circle',
+        'info': 'info-circle'
+    };
+    return icons[type] || 'info-circle';
+}
+
+// 로그아웃
+function logout() {
+    if (confirm('로그아웃 하시겠습니까?')) {
+        localStorage.removeItem('currentUser');
+        sessionStorage.removeItem('isLoggedIn');
+        window.location.href = 'login.html';
+    }
+}
+
+// 현재 사용자 확인
+function getCurrentUser() {
+    const userData = localStorage.getItem('currentUser');
+    return userData ? JSON.parse(userData) : null;
+}
+
+// 초기화
+document.addEventListener('DOMContentLoaded', function() {
+    // 인증 확인
+    const currentUser = getCurrentUser();
+    if (!currentUser || currentUser.role !== 'admin') {
+        alert('관리자 권한이 필요합니다. 로그인 페이지로 이동합니다.');
+        window.location.href = 'login.html';
+        return;
+    }
+
+    // 관리자 정보 표시
+    const adminUserName = document.querySelector('.admin-user-name');
+    if (adminUserName) {
+        adminUserName.textContent = `${currentUser.name} 관리자`;
+    }
+
+    // 테마 관리 초기화
+    b2bThemeManager.init();
+    
+    // 네비게이션 및 드롭다운 초기화
+    setupB2BNavigation();
+    setupB2BDropdown();
+    
+    // 데이터 렌더링
+    renderCompaniesTable();
+    renderPrograms();
+    renderProjectsTable();
+    renderContractsTable();
+    renderQuotesTable();
+    renderTrainers();
+    renderSupportTicketsTable();
+    
+    // 차트 초기화
+    initB2BCharts();
+    
+    // 폼 이벤트 리스너
+    const addCompanyForm = document.getElementById('addCompanyForm');
+    if (addCompanyForm) {
+        addCompanyForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            showNotification('success', '새 기업이 추가되었습니다.');
+            closeModal('addCompanyModal');
+        });
+    }
+
+    const b2bSettingsForm = document.getElementById('b2bSettingsForm');
+    if (b2bSettingsForm) {
+        b2bSettingsForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            showNotification('success', 'B2B 설정이 저장되었습니다.');
+        });
+    }
+    
+    console.log('B2B 관리자 대시보드 초기화 완료');
+});
+
+console.log('B2B 관리자 스크립트 로드 완료');

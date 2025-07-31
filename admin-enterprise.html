@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>B2B 관리자 대시보드 | 한국GPT협회</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="admin-enterprise.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- 차트 및 분석 라이브러리 -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/date-fns@2.29.3/index.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@2.0.0/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+    <!-- 드래그앤드롭 라이브러리 -->
+    <script src="https://unpkg.com/dropzone@5/dist/min/dropzone.min.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/dropzone@5/dist/min/dropzone.min.css" type="text/css" />
+</head>
+<body class="b2b-admin-body" data-theme="light">
+    <!-- B2B 관리자 헤더 -->
+    <header class="b2b-admin-header">
+        <div class="b2b-admin-header-content">
+            <div class="b2b-admin-brand">
+                <h1><a href="admin-enterprise.html">한국GPT협회 B2B 관리자</a></h1>
+            </div>
+            <div class="b2b-admin-nav">
+                <div class="theme-toggle">
+                    <button id="themeToggle" class="theme-btn">
+                        <i class="fas fa-moon"></i>
+                        <span>다크모드</span>
+                    </button>
+                </div>
+                <div class="b2b-dropdown">
+                    <button class="dropdown-toggle">
+                        <i class="fas fa-user-circle"></i>
+                        <span class="admin-user-name">관리자님</span>
+                    </button>
+                    <div class="b2b-dropdown-menu">
+                        <a href="#" class="b2b-dropdown-item">
+                            <i class="fas fa-user"></i> 프로필
+                        </a>
+                        <a href="admin-select.html" class="b2b-dropdown-item">
+                            <i class="fas fa-exchange-alt"></i> 관리자 변경
+                        </a>
+                        <a href="#" class="b2b-dropdown-item" onclick="logout()">
+                            <i class="fas fa-sign-out-alt"></i> 로그아웃
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="b2b-admin-layout">
+        <!-- B2B 사이드바 -->
+        <aside class="b2b-admin-sidebar">
+            <nav class="b2b-sidebar-nav">
+                <ul class="b2b-nav-menu">
+                    <li class="b2b-nav-item active">
+                        <a href="#dashboard" class="b2b-nav-link" data-section="dashboard">
+                            <i class="fas fa-chart-line"></i>
+                            <span>B2B 대시보드</span>
+                        </a>
+                    </li>
+                    <li class="b2b-nav-item">
+                        <a href="#companies" class="b2b-nav-link" data-section="companies">
+                            <i class="fas fa-building"></i>
+                            <span>기업 관리</span>
+                        </a>
+                    </li>
+                    <li class="b2b-nav-item">
+                        <a href="#programs" class="b2b-nav-link" data-section="programs">
+                            <i class="fas fa-graduation-cap"></i>
+                            <span>교육 프로그램</span>
+                        </a>
+                    </li>
+                    <li class="b2b-nav-item">
+                        <a href="#projects" class="b2b-nav-link" data-section="projects">
+                            <i class="fas fa-project-diagram"></i>
+                            <span>프로젝트 관리</span>
+                        </a>
+                    </li>
+                    <li class="b2b-nav-item">
+                        <a href="#contracts" class="b2b-nav-link" data-section="contracts">
+                            <i class="fas fa-file-contract"></i>
+                            <span>계약 관리</span>
+                        </a>
+                    </li>
+                    <li class="b2b-nav-item">
+                        <a href="#quotes" class="b2b-nav-link" data-section="quotes">
+                            <i class="fas fa-calculator"></i>
+                            <span>견적 관리</span>
+                        </a>
+                    </li>
+                    <li class="b2b-nav-item">
+                        <a href="#trainers" class="b2b-nav-link" data-section="trainers">
+                            <i class="fas fa-chalkboard-teacher"></i>
+                            <span>강사 관리</span>
+                        </a>
+                    </li>
+                    <li class="b2b-nav-item">
+                        <a href="#reports" class="b2b-nav-link" data-section="reports">
+                            <i class="fas fa-chart-bar"></i>
+                            <span>성과 리포트</span>
+                        </a>
+                    </li>
+                    <li class="b2b-nav-item">
+                        <a href="#support" class="b2b-nav-link" data-section="support">
+                            <i class="fas fa-headset"></i>
+                            <span>기업 지원</span>
+                        </a>
+                    </li>
+                    <li class="b2b-nav-item">
+                        <a href="#settings" class="b2b-nav-link" data-section="settings">
+                            <i class="fas fa-cog"></i>
+                            <span>B2B 설정</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- B2B 메인 콘텐츠 -->
+        <main class="b2b-admin-main">
+            <!-- B2B 대시보드 섹션 -->
+            <section id="dashboard" class="b2b-admin-section active">
+                <div class="b2b-section-header">
+                    <h2>B2B 비즈니스 대시보드</h2>
+                    <p>기업 고객 대상 교육 사업 현황을 한눈에 확인하세요</p>
+                </div>
+
+                <!-- B2B KPI 통계 -->
+                <div class="b2b-stats-grid">
+                    <div class="b2b-stat-card">
+                        <div class="b2b-stat-value">247</div>
+                        <div class="b2b-stat-label">파트너 기업</div>
+                        <div class="b2b-stat-change positive">
+                            <i class="fas fa-arrow-up"></i>
+                            +12.5% 전월 대비
+                        </div>
+                    </div>
+                    <div class="b2b-stat-card">
+                        <div class="b2b-stat-value">₩84.5M</div>
+                        <div class="b2b-stat-label">월 매출</div>
+                        <div class="b2b-stat-change positive">
+                            <i class="fas fa-arrow-up"></i>
+                            +23.1% 전월 대비
+                        </div>
+                    </div>
+                    <div class="b2b-stat-card">
+                        <div class="b2b-stat-value">15</div>
+                        <div class="b2b-stat-label">진행 중 프로젝트</div>
+                        <div class="b2b-stat-change">
+                            <i class="fas fa-minus"></i>
+                            변화 없음
+                        </div>
+                    </div>
+                    <div class="b2b-stat-card">
+                        <div class="b2b-stat-value">4.8</div>
+                        <div class="b2b-stat-label">기업 만족도</div>
+                        <div class="b2b-stat-change positive">
+                            <i class="fas fa-arrow-up"></i>
+                            +0.3 전월 대비
+                        </div>
+                    </div>
+                </div>
+
+                <!-- B2B 차트 영역 -->
+                <div class="b2b-card">
+                    <div class="b2b-card-header">
+                        <h3 class="b2b-card-title">월별 B2B 매출 추이</h3>
+                        <div class="b2b-tabs">
+                            <button class="b2b-tab active">매출</button>
+                            <button class="b2b-tab">계약</button>
+                            <button class="b2b-tab">만족도</button>
+                        </div>
+                    </div>
+                    <canvas id="b2bRevenueChart"></canvas>
+                </div>
+
+                <!-- B2B 최근 활동 -->
+                <div class="b2b-card">
+                    <div class="b2b-card-header">
+                        <h3 class="b2b-card-title">최근 기업 활동</h3>
+                        <button class="b2b-btn b2b-btn-secondary">
+                            <i class="fas fa-external-link-alt"></i>
+                            전체 보기
+                        </button>
+                    </div>
+                    <div class="b2b-table-container">
+                        <table class="b2b-table">
+                            <thead>
+                                <tr>
+                                    <th>기업명</th>
+                                    <th>활동</th>
+                                    <th>프로그램</th>
+                                    <th>상태</th>
+                                    <th>일시</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>삼성전자</strong></td>
+                                    <td>교육 프로그램 완료</td>
+                                    <td>AI 프롬프트 마스터</td>
+                                    <td><span class="b2b-badge b2b-badge-active">완료</span></td>
+                                    <td>2024-01-30 14:30</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>LG전자</strong></td>
+                                    <td>견적서 요청</td>
+                                    <td>기업 맞춤 AI 교육</td>
+                                    <td><span class="b2b-badge b2b-badge-pending">검토중</span></td>
+                                    <td>2024-01-30 11:15</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>현대자동차</strong></td>
+                                    <td>프로젝트 시작</td>
+                                    <td>ChatGPT 업무활용</td>
+                                    <td><span class="b2b-badge b2b-badge-info">진행중</span></td>
+                                    <td>2024-01-29 16:45</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 기업 관리 섹션 -->
+            <section id="companies" class="b2b-admin-section">
+                <div class="b2b-section-header">
+                    <h2>기업 관리</h2>
+                    <p>파트너 기업 정보를 관리하고 추적하세요</p>
+                </div>
+
+                <div class="b2b-search-container">
+                    <input type="text" class="b2b-search-input" placeholder="기업명, 담당자, 업종으로 검색...">
+                    <i class="fas fa-search b2b-search-icon"></i>
+                </div>
+
+                <div class="b2b-card">
+                    <div class="b2b-card-header">
+                        <h3 class="b2b-card-title">등록된 기업 목록</h3>
+                        <button class="b2b-btn b2b-btn-primary" onclick="openAddCompanyModal()">
+                            <i class="fas fa-plus"></i>
+                            기업 추가
+                        </button>
+                    </div>
+                    <div class="b2b-table-container">
+                        <table class="b2b-table">
+                            <thead>
+                                <tr>
+                                    <th>기업명</th>
+                                    <th>업종</th>
+                                    <th>담당자</th>
+                                    <th>규모</th>
+                                    <th>계약상태</th>
+                                    <th>가입일</th>
+                                    <th>관리</th>
+                                </tr>
+                            </thead>
+                            <tbody id="companiesTable">
+                                <!-- JavaScript로 동적 생성 -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 교육 프로그램 섹션 -->
+            <section id="programs" class="b2b-admin-section">
+                <div class="b2b-section-header">
+                    <h2>교육 프로그램 관리</h2>
+                    <p>기업 맞춤형 교육 프로그램을 관리하세요</p>
+                </div>
+
+                <div class="b2b-card">
+                    <div class="b2b-card-header">
+                        <h3 class="b2b-card-title">교육 프로그램 현황</h3>
+                        <button class="b2b-btn b2b-btn-primary" onclick="openAddProgramModal()">
+                            <i class="fas fa-plus"></i>
+                            프로그램 추가
+                        </button>
+                    </div>
+                    <div id="programsGrid" class="b2b-stats-grid">
+                        <!-- JavaScript로 동적 생성 -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- 프로젝트 관리 섹션 -->
+            <section id="projects" class="b2b-admin-section">
+                <div class="b2b-section-header">
+                    <h2>프로젝트 관리</h2>
+                    <p>진행 중인 기업 교육 프로젝트를 추적하고 관리하세요</p>
+                </div>
+
+                <div class="b2b-tabs">
+                    <button class="b2b-tab active" onclick="filterProjects('all')">전체</button>
+                    <button class="b2b-tab" onclick="filterProjects('planning')">기획중</button>
+                    <button class="b2b-tab" onclick="filterProjects('active')">진행중</button>
+                    <button class="b2b-tab" onclick="filterProjects('completed')">완료</button>
+                </div>
+
+                <div class="b2b-card">
+                    <div class="b2b-table-container">
+                        <table class="b2b-table">
+                            <thead>
+                                <tr>
+                                    <th>프로젝트명</th>
+                                    <th>기업</th>
+                                    <th>진행률</th>
+                                    <th>시작일</th>
+                                    <th>완료 예정일</th>
+                                    <th>상태</th>
+                                    <th>관리</th>
+                                </tr>
+                            </thead>
+                            <tbody id="projectsTable">
+                                <!-- JavaScript로 동적 생성 -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 계약 관리 섹션 -->
+            <section id="contracts" class="b2b-admin-section">
+                <div class="b2b-section-header">
+                    <h2>계약 관리</h2>
+                    <p>기업과의 계약 현황과 계약서를 관리하세요</p>
+                </div>
+
+                <div class="b2b-card">
+                    <div class="b2b-card-header">
+                        <h3 class="b2b-card-title">계약 현황</h3>
+                        <button class="b2b-btn b2b-btn-primary" onclick="openAddContractModal()">
+                            <i class="fas fa-file-contract"></i>
+                            계약 추가
+                        </button>
+                    </div>
+                    <div class="b2b-table-container">
+                        <table class="b2b-table">
+                            <thead>
+                                <tr>
+                                    <th>계약번호</th>
+                                    <th>기업명</th>
+                                    <th>계약금액</th>
+                                    <th>계약기간</th>
+                                    <th>상태</th>
+                                    <th>갱신일</th>
+                                    <th>관리</th>
+                                </tr>
+                            </thead>
+                            <tbody id="contractsTable">
+                                <!-- JavaScript로 동적 생성 -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 견적 관리 섹션 -->
+            <section id="quotes" class="b2b-admin-section">
+                <div class="b2b-section-header">
+                    <h2>견적 관리</h2>
+                    <p>기업 고객의 견적 요청을 관리하고 응답하세요</p>
+                </div>
+
+                <div class="b2b-card">
+                    <div class="b2b-card-header">
+                        <h3 class="b2b-card-title">견적 요청 현황</h3>
+                        <div class="b2b-tabs">
+                            <button class="b2b-tab active" onclick="filterQuotes('all')">전체</button>
+                            <button class="b2b-tab" onclick="filterQuotes('pending')">대기중</button>
+                            <button class="b2b-tab" onclick="filterQuotes('sent')">발송완료</button>
+                            <button class="b2b-tab" onclick="filterQuotes('accepted')">승인됨</button>
+                        </div>
+                    </div>
+                    <div class="b2b-table-container">
+                        <table class="b2b-table">
+                            <thead>
+                                <tr>
+                                    <th>견적번호</th>
+                                    <th>기업명</th>
+                                    <th>요청 프로그램</th>
+                                    <th>예상금액</th>
+                                    <th>상태</th>
+                                    <th>요청일</th>
+                                    <th>관리</th>
+                                </tr>
+                            </thead>
+                            <tbody id="quotesTable">
+                                <!-- JavaScript로 동적 생성 -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 강사 관리 섹션 -->
+            <section id="trainers" class="b2b-admin-section">
+                <div class="b2b-section-header">
+                    <h2>강사 관리</h2>
+                    <p>기업 교육을 담당하는 강사진을 관리하세요</p>
+                </div>
+
+                <div class="b2b-card">
+                    <div class="b2b-card-header">
+                        <h3 class="b2b-card-title">등록된 강사 목록</h3>
+                        <button class="b2b-btn b2b-btn-primary" onclick="openAddTrainerModal()">
+                            <i class="fas fa-user-plus"></i>
+                            강사 추가
+                        </button>
+                    </div>
+                    <div id="trainersGrid" class="b2b-stats-grid">
+                        <!-- JavaScript로 동적 생성 -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- 성과 리포트 섹션 -->
+            <section id="reports" class="b2b-admin-section">
+                <div class="b2b-section-header">
+                    <h2>성과 리포트</h2>
+                    <p>B2B 사업의 성과를 분석하고 리포트를 생성하세요</p>
+                </div>
+
+                <div class="b2b-card">
+                    <div class="b2b-card-header">
+                        <h3 class="b2b-card-title">월별 성과 분석</h3>
+                        <button class="b2b-btn b2b-btn-secondary" onclick="generateB2BReport()">
+                            <i class="fas fa-download"></i>
+                            리포트 다운로드
+                        </button>
+                    </div>
+                    <canvas id="b2bPerformanceChart"></canvas>
+                </div>
+
+                <div class="b2b-card">
+                    <div class="b2b-card-header">
+                        <h3 class="b2b-card-title">기업별 만족도 분석</h3>
+                    </div>
+                    <canvas id="b2bSatisfactionChart"></canvas>
+                </div>
+            </section>
+
+            <!-- 기업 지원 섹션 -->
+            <section id="support" class="b2b-admin-section">
+                <div class="b2b-section-header">
+                    <h2>기업 지원</h2>
+                    <p>기업 고객의 문의사항과 지원 요청을 관리하세요</p>
+                </div>
+
+                <div class="b2b-card">
+                    <div class="b2b-card-header">
+                        <h3 class="b2b-card-title">지원 티켓 현황</h3>
+                        <div class="b2b-tabs">
+                            <button class="b2b-tab active" onclick="filterTickets('all')">전체</button>
+                            <button class="b2b-tab" onclick="filterTickets('open')">미해결</button>
+                            <button class="b2b-tab" onclick="filterTickets('inprogress')">처리중</button>
+                            <button class="b2b-tab" onclick="filterTickets('closed')">해결완료</button>
+                        </div>
+                    </div>
+                    <div class="b2b-table-container">
+                        <table class="b2b-table">
+                            <thead>
+                                <tr>
+                                    <th>티켓번호</th>
+                                    <th>기업명</th>
+                                    <th>제목</th>
+                                    <th>우선순위</th>
+                                    <th>상태</th>
+                                    <th>담당자</th>
+                                    <th>생성일</th>
+                                    <th>관리</th>
+                                </tr>
+                            </thead>
+                            <tbody id="supportTicketsTable">
+                                <!-- JavaScript로 동적 생성 -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- B2B 설정 섹션 -->
+            <section id="settings" class="b2b-admin-section">
+                <div class="b2b-section-header">
+                    <h2>B2B 설정</h2>
+                    <p>B2B 사업 관련 설정을 관리하세요</p>
+                </div>
+
+                <div class="b2b-card">
+                    <div class="b2b-card-header">
+                        <h3 class="b2b-card-title">기본 설정</h3>
+                    </div>
+                    <form id="b2bSettingsForm">
+                        <div class="b2b-form-group">
+                            <label class="b2b-form-label">기본 할인율 (%)</label>
+                            <input type="number" class="b2b-form-input" value="10" min="0" max="50">
+                        </div>
+                        <div class="b2b-form-group">
+                            <label class="b2b-form-label">최소 교육 인원</label>
+                            <input type="number" class="b2b-form-input" value="20" min="1">
+                        </div>
+                        <div class="b2b-form-group">
+                            <label class="b2b-form-label">계약 갱신 알림 (일 전)</label>
+                            <input type="number" class="b2b-form-input" value="30" min="1">
+                        </div>
+                        <div class="b2b-form-group">
+                            <label class="b2b-form-label">견적서 유효기간 (일)</label>
+                            <input type="number" class="b2b-form-input" value="14" min="1">
+                        </div>
+                        <button type="submit" class="b2b-btn b2b-btn-primary">
+                            <i class="fas fa-save"></i>
+                            설정 저장
+                        </button>
+                    </form>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- 모달들 -->
+    <div id="addCompanyModal" class="b2b-modal">
+        <div class="b2b-modal-content">
+            <div class="b2b-modal-header">
+                <h3 class="b2b-modal-title">기업 추가</h3>
+                <button class="b2b-modal-close" onclick="closeModal('addCompanyModal')">&times;</button>
+            </div>
+            <form id="addCompanyForm">
+                <div class="b2b-form-group">
+                    <label class="b2b-form-label">기업명 *</label>
+                    <input type="text" class="b2b-form-input" required>
+                </div>
+                <div class="b2b-form-group">
+                    <label class="b2b-form-label">업종 *</label>
+                    <select class="b2b-form-select" required>
+                        <option value="">선택하세요</option>
+                        <option value="IT">IT/소프트웨어</option>
+                        <option value="제조업">제조업</option>
+                        <option value="금융">금융/보험</option>
+                        <option value="서비스">서비스업</option>
+                        <option value="기타">기타</option>
+                    </select>
+                </div>
+                <div class="b2b-form-group">
+                    <label class="b2b-form-label">담당자명 *</label>
+                    <input type="text" class="b2b-form-input" required>
+                </div>
+                <div class="b2b-form-group">
+                    <label class="b2b-form-label">연락처 *</label>
+                    <input type="tel" class="b2b-form-input" required>
+                </div>
+                <div class="b2b-form-group">
+                    <label class="b2b-form-label">이메일 *</label>
+                    <input type="email" class="b2b-form-input" required>
+                </div>
+                <div class="b2b-form-group">
+                    <label class="b2b-form-label">기업 규모</label>
+                    <select class="b2b-form-select">
+                        <option value="중소기업">중소기업 (50명 미만)</option>
+                        <option value="중견기업">중견기업 (50-299명)</option>
+                        <option value="대기업">대기업 (300명 이상)</option>
+                    </select>
+                </div>
+                <button type="submit" class="b2b-btn b2b-btn-primary">기업 추가</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="admin-enterprise.js"></script>
+</body>
+</html>

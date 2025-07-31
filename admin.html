@@ -15,14 +15,20 @@
     <script src="https://unpkg.com/dropzone@5/dist/min/dropzone.min.js"></script>
     <link rel="stylesheet" href="https://unpkg.com/dropzone@5/dist/min/dropzone.min.css" type="text/css" />
 </head>
-<body class="admin-body">
+<body class="admin-body" data-theme="light">
     <!-- 관리자 헤더 -->
     <header class="admin-header">
         <div class="admin-header-content">
             <div class="admin-brand">
-                <h1><a href="admin.html">한국GPT협회 관리자</a></h1>
+                <h1><a href="admin.html">한국GPT협회 B2C 관리자</a></h1>
             </div>
             <div class="admin-nav">
+                <div class="theme-toggle">
+                    <button id="themeToggle" class="theme-btn">
+                        <i class="fas fa-moon"></i>
+                        <span>다크모드</span>
+                    </button>
+                </div>
                 <div class="admin-user">
                     <span>관리자님</span>
                     <div class="admin-dropdown">
@@ -31,10 +37,10 @@
                         </button>
                         <div class="dropdown-menu">
                             <a href="#" class="dropdown-item">내 정보</a>
-                            <a href="#" class="dropdown-item">설정</a>
+                            <a href="admin-select.html" class="dropdown-item">관리자 변경</a>
                             <div class="dropdown-divider"></div>
                             <a href="index.html" class="dropdown-item">사이트 보기</a>
-                            <a href="#" class="dropdown-item">로그아웃</a>
+                            <a href="#" class="dropdown-item" onclick="logout()">로그아웃</a>
                         </div>
                     </div>
                 </div>
@@ -87,6 +93,48 @@
                         <a href="#quotes" class="nav-link" data-section="quotes">
                             <i class="fas fa-file-invoice"></i>
                             <span>견적 관리</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#search" class="nav-link" data-section="search">
+                            <i class="fas fa-search"></i>
+                            <span>통합 검색</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#customers" class="nav-link" data-section="customers">
+                            <i class="fas fa-user-friends"></i>
+                            <span>고객 관리</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#support" class="nav-link" data-section="support">
+                            <i class="fas fa-headset"></i>
+                            <span>고객 지원</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#tickets" class="nav-link" data-section="tickets">
+                            <i class="fas fa-ticket-alt"></i>
+                            <span>티켓 관리</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#analytics" class="nav-link" data-section="analytics">
+                            <i class="fas fa-chart-bar"></i>
+                            <span>분석 리포트</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#content" class="nav-link" data-section="content">
+                            <i class="fas fa-edit"></i>
+                            <span>콘텐츠 관리</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#media" class="nav-link" data-section="media">
+                            <i class="fas fa-images"></i>
+                            <span>미디어 라이브러리</span>
                         </a>
                     </li>
                     <li class="nav-item">
@@ -546,6 +594,922 @@
                             <!-- 견적 데이터가 여기에 표시됩니다 -->
                         </tbody>
                     </table>
+                </div>
+            </section>
+
+            <!-- 통합 검색 섹션 -->
+            <section id="search" class="admin-section">
+                <div class="section-header">
+                    <h2>통합 검색</h2>
+                    <div class="section-actions">
+                        <button class="btn btn-secondary" onclick="clearSearchHistory()">
+                            <i class="fas fa-trash"></i> 검색 기록 지우기
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 통합 검색 박스 -->
+                <div class="unified-search-container">
+                    <div class="search-box">
+                        <div class="search-input-container">
+                            <i class="fas fa-search search-icon"></i>
+                            <input type="text" id="unifiedSearch" placeholder="회원, 주문, 강의, 티켓 등 모든 데이터를 검색하세요..." class="unified-search-input">
+                            <button class="search-filters-btn" onclick="toggleSearchFilters()">
+                                <i class="fas fa-filter"></i>
+                            </button>
+                        </div>
+                        
+                        <!-- 검색 필터 -->
+                        <div class="search-filters" id="searchFilters" style="display: none;">
+                            <div class="filter-group">
+                                <label>검색 범위</label>
+                                <div class="filter-checkboxes">
+                                    <label><input type="checkbox" value="members" checked> 회원</label>
+                                    <label><input type="checkbox" value="orders" checked> 주문</label>
+                                    <label><input type="checkbox" value="courses" checked> 강의</label>
+                                    <label><input type="checkbox" value="tickets" checked> 티켓</label>
+                                    <label><input type="checkbox" value="reviews" checked> 후기</label>
+                                </div>
+                            </div>
+                            <div class="filter-group">
+                                <label>기간</label>
+                                <select class="filter-select">
+                                    <option value="all">전체 기간</option>
+                                    <option value="today">오늘</option>
+                                    <option value="week">최근 7일</option>
+                                    <option value="month">최근 30일</option>
+                                    <option value="quarter">최근 3개월</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 검색 결과 -->
+                    <div class="search-results" id="searchResults">
+                        <div class="search-results-header">
+                            <h3>검색 결과</h3>
+                            <div class="results-count">총 <span id="resultsCount">0</span>개 결과</div>
+                        </div>
+                        
+                        <div class="results-tabs">
+                            <button class="results-tab active" data-type="all">전체</button>
+                            <button class="results-tab" data-type="members">회원</button>
+                            <button class="results-tab" data-type="orders">주문</button>
+                            <button class="results-tab" data-type="courses">강의</button>
+                            <button class="results-tab" data-type="tickets">티켓</button>
+                        </div>
+                        
+                        <div class="results-content" id="resultsContent">
+                            <div class="no-results">
+                                <i class="fas fa-search"></i>
+                                <p>검색어를 입력하세요</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 검색 히스토리 -->
+                <div class="search-history">
+                    <h3>최근 검색</h3>
+                    <div class="history-tags" id="searchHistory">
+                        <!-- 검색 히스토리가 여기에 표시됩니다 -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- 고객 관리 섹션 -->
+            <section id="customers" class="admin-section">
+                <div class="section-header">
+                    <h2>고객 관리</h2>
+                    <div class="section-actions">
+                        <button class="btn btn-primary" onclick="addCustomer()">
+                            <i class="fas fa-plus"></i> 새 고객 추가
+                        </button>
+                        <button class="btn btn-secondary" onclick="exportCustomers()">
+                            <i class="fas fa-download"></i> 고객 데이터 내보내기
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- 고객 통계 -->
+                <div class="customer-stats-grid">
+                    <div class="stat-card customer-total">
+                        <div class="stat-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 id="totalCustomers">1,247</h3>
+                            <p>총 고객 수</p>
+                            <span class="stat-change positive">+12.5%</span>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card customer-active">
+                        <div class="stat-icon">
+                            <i class="fas fa-user-check"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 id="activeCustomers">892</h3>
+                            <p>활성 고객</p>
+                            <span class="stat-change positive">+8.3%</span>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card customer-new">
+                        <div class="stat-icon">
+                            <i class="fas fa-user-plus"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 id="newCustomers">34</h3>
+                            <p>신규 고객 (이번 달)</p>
+                            <span class="stat-change positive">+15.2%</span>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card customer-value">
+                        <div class="stat-icon">
+                            <i class="fas fa-won-sign"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 id="avgCustomerValue">₩235,000</h3>
+                            <p>평균 고객 가치</p>
+                            <span class="stat-change positive">+5.7%</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 고객 세그먼트 분석 -->
+                <div class="customer-segments">
+                    <h3>고객 세그먼트</h3>
+                    <div class="segments-grid">
+                        <div class="segment-card">
+                            <div class="segment-header">
+                                <h4>VIP 고객</h4>
+                                <span class="segment-count">89명</span>
+                            </div>
+                            <div class="segment-criteria">
+                                <p>3개 이상 강의 구매, 총 구매액 50만원 이상</p>
+                            </div>
+                            <div class="segment-actions">
+                                <button class="btn btn-sm btn-primary" onclick="viewSegment('vip')">상세보기</button>
+                            </div>
+                        </div>
+                        
+                        <div class="segment-card">
+                            <div class="segment-header">
+                                <h4>단골 고객</h4>
+                                <span class="segment-count">234명</span>
+                            </div>
+                            <div class="segment-criteria">
+                                <p>2개 이상 강의 구매, 6개월 내 활동</p>
+                            </div>
+                            <div class="segment-actions">
+                                <button class="btn btn-sm btn-primary" onclick="viewSegment('regular')">상세보기</button>
+                            </div>
+                        </div>
+                        
+                        <div class="segment-card">
+                            <div class="segment-header">
+                                <h4>일반 고객</h4>
+                                <span class="segment-count">569명</span>
+                            </div>
+                            <div class="segment-criteria">
+                                <p>1개 강의 구매, 활동 이력 있음</p>
+                            </div>
+                            <div class="segment-actions">
+                                <button class="btn btn-sm btn-primary" onclick="viewSegment('normal')">상세보기</button>
+                            </div>
+                        </div>
+                        
+                        <div class="segment-card">
+                            <div class="segment-header">
+                                <h4>잠재 고객</h4>
+                                <span class="segment-count">355명</span>
+                            </div>
+                            <div class="segment-criteria">
+                                <p>회원가입만, 구매 이력 없음</p>
+                            </div>
+                            <div class="segment-actions">
+                                <button class="btn btn-sm btn-primary" onclick="viewSegment('potential')">상세보기</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 고객 목록 테이블 -->
+                <div class="customer-management-table">
+                    <div class="table-controls">
+                        <div class="table-search">
+                            <i class="fas fa-search"></i>
+                            <input type="text" placeholder="고객명, 이메일, 전화번호 검색..." id="customerSearch">
+                        </div>
+                        <div class="table-filters">
+                            <select id="customerSegmentFilter">
+                                <option value="all">모든 세그먼트</option>
+                                <option value="vip">VIP 고객</option>
+                                <option value="regular">단골 고객</option>
+                                <option value="normal">일반 고객</option>
+                                <option value="potential">잠재 고객</option>
+                            </select>
+                            <select id="customerStatusFilter">
+                                <option value="all">모든 상태</option>
+                                <option value="active">활성</option>
+                                <option value="inactive">비활성</option>
+                                <option value="churned">이탈</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="data-table">
+                        <table id="customersTable">
+                            <thead>
+                                <tr>
+                                    <th>고객 정보</th>
+                                    <th>세그먼트</th>
+                                    <th>가입일</th>
+                                    <th>마지막 활동</th>
+                                    <th>구매 횟수</th>
+                                    <th>총 구매액</th>
+                                    <th>상태</th>
+                                    <th>관리</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- 고객 데이터가 여기에 표시됩니다 -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 고객 지원 섹션 -->
+            <section id="support" class="admin-section">
+                <div class="section-header">
+                    <h2>고객 지원</h2>
+                    <div class="section-actions">
+                        <button class="btn btn-primary" onclick="createNewTicket()">
+                            <i class="fas fa-plus"></i> 새 티켓 생성
+                        </button>
+                        <button class="btn btn-secondary" onclick="openKnowledgeBase()">
+                            <i class="fas fa-book"></i> 지식베이스
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- 지원 현황 대시보드 -->
+                <div class="support-dashboard">
+                    <div class="support-stats-grid">
+                        <div class="stat-card support-open">
+                            <div class="stat-icon">
+                                <i class="fas fa-ticket-alt"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h3 id="openTickets">23</h3>
+                                <p>열린 티켓</p>
+                                <span class="stat-change negative">+3</span>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-card support-pending">
+                            <div class="stat-icon">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h3 id="pendingTickets">8</h3>
+                                <p>대기 중</p>
+                                <span class="stat-change neutral">-1</span>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-card support-resolved">
+                            <div class="stat-icon">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h3 id="resolvedTickets">156</h3>
+                                <p>해결됨 (이번 달)</p>
+                                <span class="stat-change positive">+12</span>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-card support-response">
+                            <div class="stat-icon">
+                                <i class="fas fa-stopwatch"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h3 id="avgResponseTime">2.4시간</h3>
+                                <p>평균 응답 시간</p>
+                                <span class="stat-change positive">-0.3시간</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 실시간 지원 활동 -->
+                    <div class="live-support-activity">
+                        <h3>실시간 지원 활동</h3>
+                        <div class="activity-feed" id="supportActivityFeed">
+                            <!-- 실시간 활동이 여기에 표시됩니다 -->
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 지원 채널 관리 -->
+                <div class="support-channels">
+                    <h3>지원 채널</h3>
+                    <div class="channels-grid">
+                        <div class="channel-card">
+                            <div class="channel-header">
+                                <i class="fas fa-envelope"></i>
+                                <h4>이메일 지원</h4>
+                                <span class="channel-status active">활성</span>
+                            </div>
+                            <div class="channel-stats">
+                                <div class="stat">
+                                    <span class="label">이번 주 문의</span>
+                                    <span class="value">47건</span>
+                                </div>
+                                <div class="stat">
+                                    <span class="label">평균 응답 시간</span>
+                                    <span class="value">3.2시간</span>
+                                </div>
+                            </div>
+                            <div class="channel-actions">
+                                <button class="btn btn-sm btn-outline" onclick="configureChannel('email')">설정</button>
+                            </div>
+                        </div>
+                        
+                        <div class="channel-card">
+                            <div class="channel-header">
+                                <i class="fas fa-comments"></i>
+                                <h4>라이브 채팅</h4>
+                                <span class="channel-status active">활성</span>
+                            </div>
+                            <div class="channel-stats">
+                                <div class="stat">
+                                    <span class="label">이번 주 채팅</span>
+                                    <span class="value">89건</span>
+                                </div>
+                                <div class="stat">
+                                    <span class="label">평균 응답 시간</span>
+                                    <span class="value">45초</span>
+                                </div>
+                            </div>
+                            <div class="channel-actions">
+                                <button class="btn btn-sm btn-outline" onclick="configureChannel('chat')">설정</button>
+                            </div>
+                        </div>
+                        
+                        <div class="channel-card">
+                            <div class="channel-header">
+                                <i class="fas fa-phone"></i>
+                                <h4>전화 지원</h4>
+                                <span class="channel-status inactive">비활성</span>
+                            </div>
+                            <div class="channel-stats">
+                                <div class="stat">
+                                    <span class="label">이번 주 통화</span>
+                                    <span class="value">12건</span>
+                                </div>
+                                <div class="stat">
+                                    <span class="label">평균 통화 시간</span>
+                                    <span class="value">8.5분</span>
+                                </div>
+                            </div>
+                            <div class="channel-actions">
+                                <button class="btn btn-sm btn-outline" onclick="configureChannel('phone')">설정</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 티켓 관리 섹션 -->
+            <section id="tickets" class="admin-section">
+                <div class="section-header">
+                    <h2>티켓 관리</h2>
+                    <div class="section-actions">
+                        <button class="btn btn-primary" onclick="createTicket()">
+                            <i class="fas fa-plus"></i> 새 티켓
+                        </button>
+                        <button class="btn btn-secondary" onclick="exportTickets()">
+                            <i class="fas fa-download"></i> 티켓 내보내기
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- 티켓 보드 (칸반 스타일) -->
+                <div class="ticket-board">
+                    <div class="board-column" data-status="new">
+                        <div class="column-header">
+                            <h3>신규</h3>
+                            <span class="ticket-count">8</span>
+                        </div>
+                        <div class="column-content" id="newTickets">
+                            <!-- 신규 티켓들이 여기에 표시됩니다 -->
+                        </div>
+                    </div>
+                    
+                    <div class="board-column" data-status="in-progress">
+                        <div class="column-header">
+                            <h3>진행 중</h3>
+                            <span class="ticket-count">12</span>
+                        </div>
+                        <div class="column-content" id="inProgressTickets">
+                            <!-- 진행 중 티켓들이 여기에 표시됩니다 -->
+                        </div>
+                    </div>
+                    
+                    <div class="board-column" data-status="pending">
+                        <div class="column-header">
+                            <h3>보류</h3>
+                            <span class="ticket-count">3</span>
+                        </div>
+                        <div class="column-content" id="pendingTickets">
+                            <!-- 보류 티켓들이 여기에 표시됩니다 -->
+                        </div>
+                    </div>
+                    
+                    <div class="board-column" data-status="resolved">
+                        <div class="column-header">
+                            <h3>해결됨</h3>
+                            <span class="ticket-count">45</span>
+                        </div>
+                        <div class="column-content" id="resolvedTickets">
+                            <!-- 해결된 티켓들이 여기에 표시됩니다 -->
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 티켓 필터와 검색 -->
+                <div class="ticket-controls">
+                    <div class="ticket-search">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="티켓 번호, 제목, 고객명 검색..." id="ticketSearch">
+                    </div>
+                    <div class="ticket-filters">
+                        <select id="ticketPriorityFilter">
+                            <option value="all">모든 우선순위</option>
+                            <option value="high">높음</option>
+                            <option value="medium">보통</option>
+                            <option value="low">낮음</option>
+                        </select>
+                        <select id="ticketCategoryFilter">
+                            <option value="all">모든 카테고리</option>
+                            <option value="technical">기술 문제</option>
+                            <option value="billing">결제 문의</option>
+                            <option value="course">강의 문의</option>
+                            <option value="account">계정 문제</option>
+                            <option value="other">기타</option>
+                        </select>
+                        <select id="ticketAssigneeFilter">
+                            <option value="all">모든 담당자</option>
+                            <option value="admin1">관리자1</option>
+                            <option value="admin2">관리자2</option>
+                            <option value="unassigned">미할당</option>
+                        </select>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 분석 리포트 섹션 -->
+            <section id="analytics" class="admin-section">
+                <div class="section-header">
+                    <h2>분석 리포트</h2>
+                    <div class="section-actions">
+                        <button class="btn btn-primary" onclick="generateReport()">
+                            <i class="fas fa-chart-bar"></i> 리포트 생성
+                        </button>
+                        <button class="btn btn-secondary" onclick="scheduleReport()">
+                            <i class="fas fa-calendar"></i> 자동 리포트 설정
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- 리포트 대시보드 -->
+                <div class="analytics-dashboard">
+                    <!-- 핵심 지표 요약 -->
+                    <div class="key-metrics">
+                        <h3>핵심 지표 요약</h3>
+                        <div class="metrics-grid">
+                            <div class="metric-card revenue">
+                                <div class="metric-header">
+                                    <div class="metric-icon">
+                                        <i class="fas fa-chart-line"></i>
+                                    </div>
+                                    <div class="metric-trend positive">
+                                        <i class="fas fa-arrow-up"></i>
+                                        <span>+18.5%</span>
+                                    </div>
+                                </div>
+                                <div class="metric-content">
+                                    <h4>₩15,840,000</h4>
+                                    <p>이번 달 매출</p>
+                                    <div class="metric-detail">
+                                        <small>목표: ₩18,000,000 (88%)</small>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="metric-card users">
+                                <div class="metric-header">
+                                    <div class="metric-icon">
+                                        <i class="fas fa-users"></i>
+                                    </div>
+                                    <div class="metric-trend positive">
+                                        <i class="fas fa-arrow-up"></i>
+                                        <span>+12.3%</span>
+                                    </div>
+                                </div>
+                                <div class="metric-content">
+                                    <h4>1,247</h4>
+                                    <p>활성 사용자</p>
+                                    <div class="metric-detail">
+                                        <small>신규: 89명</small>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="metric-card courses">
+                                <div class="metric-header">
+                                    <div class="metric-icon">
+                                        <i class="fas fa-graduation-cap"></i>
+                                    </div>
+                                    <div class="metric-trend positive">
+                                        <i class="fas fa-arrow-up"></i>
+                                        <span>+8.7%</span>
+                                    </div>
+                                </div>
+                                <div class="metric-content">
+                                    <h4>89.2%</h4>
+                                    <p>강의 완료율</p>
+                                    <div class="metric-detail">
+                                        <small>평균 수강 시간: 24.5시간</small>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="metric-card satisfaction">
+                                <div class="metric-header">
+                                    <div class="metric-icon">
+                                        <i class="fas fa-star"></i>
+                                    </div>
+                                    <div class="metric-trend positive">
+                                        <i class="fas fa-arrow-up"></i>
+                                        <span>+0.3</span>
+                                    </div>
+                                </div>
+                                <div class="metric-content">
+                                    <h4>4.7/5.0</h4>
+                                    <p>고객 만족도</p>
+                                    <div class="metric-detail">
+                                        <small>리뷰: 298개</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 고급 분석 차트 -->
+                    <div class="advanced-charts">
+                        <div class="chart-row">
+                            <div class="chart-card full-width">
+                                <div class="chart-header">
+                                    <h3>매출 및 사용자 증가 추이</h3>
+                                    <div class="chart-controls">
+                                        <button class="chart-btn active" data-period="7d">7일</button>
+                                        <button class="chart-btn" data-period="30d">30일</button>
+                                        <button class="chart-btn" data-period="90d">90일</button>
+                                        <button class="chart-btn" data-period="1y">1년</button>
+                                    </div>
+                                </div>
+                                <div class="chart-container">
+                                    <canvas id="revenueUserChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="chart-row">
+                            <div class="chart-card">
+                                <div class="chart-header">
+                                    <h3>강의별 매출 분포</h3>
+                                </div>
+                                <div class="chart-container">
+                                    <canvas id="courseRevenueChart"></canvas>
+                                </div>
+                            </div>
+                            
+                            <div class="chart-card">
+                                <div class="chart-header">
+                                    <h3>사용자 유입 경로</h3>
+                                </div>
+                                <div class="chart-container">
+                                    <canvas id="userAcquisitionChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="chart-row">
+                            <div class="chart-card">
+                                <div class="chart-header">
+                                    <h3>지역별 사용자 분포</h3>
+                                </div>
+                                <div class="chart-container">
+                                    <canvas id="userRegionChart"></canvas>
+                                </div>
+                            </div>
+                            
+                            <div class="chart-card">
+                                <div class="chart-header">
+                                    <h3>시간대별 활동</h3>
+                                </div>
+                                <div class="chart-container">
+                                    <canvas id="hourlyActivityChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 리포트 생성 도구 -->
+                <div class="report-generator">
+                    <h3>사용자 정의 리포트</h3>
+                    <div class="report-config">
+                        <div class="config-section">
+                            <h4>리포트 유형</h4>
+                            <div class="report-types">
+                                <label><input type="checkbox" value="sales"> 매출 분석</label>
+                                <label><input type="checkbox" value="users"> 사용자 분석</label>
+                                <label><input type="checkbox" value="courses"> 강의 성과</label>
+                                <label><input type="checkbox" value="marketing"> 마케팅 효과</label>
+                                <label><input type="checkbox" value="support"> 고객 지원</label>
+                            </div>
+                        </div>
+                        
+                        <div class="config-section">
+                            <h4>기간 설정</h4>
+                            <div class="date-range">
+                                <input type="date" id="reportStartDate">
+                                <span>~</span>
+                                <input type="date" id="reportEndDate">
+                            </div>
+                        </div>
+                        
+                        <div class="config-section">
+                            <h4>출력 형식</h4>
+                            <div class="output-formats">
+                                <label><input type="radio" name="format" value="pdf" checked> PDF</label>
+                                <label><input type="radio" name="format" value="excel"> Excel</label>
+                                <label><input type="radio" name="format" value="csv"> CSV</label>
+                            </div>
+                        </div>
+                        
+                        <div class="config-actions">
+                            <button class="btn btn-primary" onclick="generateCustomReport()">
+                                <i class="fas fa-file-alt"></i> 리포트 생성
+                            </button>
+                            <button class="btn btn-secondary" onclick="saveReportTemplate()">
+                                <i class="fas fa-save"></i> 템플릿 저장
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 콘텐츠 관리 섹션 -->
+            <section id="content" class="admin-section">
+                <div class="section-header">
+                    <h2>콘텐츠 관리</h2>
+                    <div class="section-actions">
+                        <button class="btn btn-primary" onclick="enableBulkEdit()">
+                            <i class="fas fa-edit"></i> 일괄 편집 모드
+                        </button>
+                        <button class="btn btn-secondary" onclick="previewSite()">
+                            <i class="fas fa-eye"></i> 사이트 미리보기
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- 페이지별 콘텐츠 관리 -->
+                <div class="content-pages">
+                    <div class="page-tabs">
+                        <button class="page-tab active" data-page="home">홈 페이지</button>
+                        <button class="page-tab" data-page="courses">강의 페이지</button>
+                        <button class="page-tab" data-page="about">소개 페이지</button>
+                        <button class="page-tab" data-page="contact">연락처 페이지</button>
+                    </div>
+                    
+                    <!-- 홈 페이지 콘텐츠 -->
+                    <div class="page-content active" id="homeContent">
+                        <div class="content-section">
+                            <h3>메인 배너</h3>
+                            <div class="editable-content">
+                                <div class="content-item">
+                                    <label>제목</label>
+                                    <div class="editable-text" data-field="banner_title" ondblclick="enableInlineEdit(this)">
+                                        AI 교육의 새로운 기준, 한국GPT협회
+                                    </div>
+                                </div>
+                                <div class="content-item">
+                                    <label>부제목</label>
+                                    <div class="editable-text" data-field="banner_subtitle" ondblclick="enableInlineEdit(this)">
+                                        전문가와 함께하는 실무 중심 GPT 교육
+                                    </div>
+                                </div>
+                                <div class="content-item">
+                                    <label>배너 이미지</label>
+                                    <div class="editable-image" data-field="banner_image" onclick="openImageUpload(this)">
+                                        <img src="https://via.placeholder.com/1200x600" alt="배너 이미지">
+                                        <div class="image-overlay">
+                                            <i class="fas fa-camera"></i>
+                                            <span>이미지 변경</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="content-section">
+                            <h3>주요 강의 소개</h3>
+                            <div class="editable-content">
+                                <div class="content-item">
+                                    <label>섹션 제목</label>
+                                    <div class="editable-text" data-field="courses_title" ondblclick="enableInlineEdit(this)">
+                                        인기 강의
+                                    </div>
+                                </div>
+                                <div class="content-item">
+                                    <label>섹션 설명</label>
+                                    <div class="editable-text" data-field="courses_description" ondblclick="enableInlineEdit(this)">
+                                        전문가가 직접 제작한 실무 중심의 GPT 활용 강의를 만나보세요
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="content-section">
+                            <h3>기업 교육 안내</h3>
+                            <div class="editable-content">
+                                <div class="content-item">
+                                    <label>제목</label>
+                                    <div class="editable-text" data-field="enterprise_title" ondblclick="enableInlineEdit(this)">
+                                        기업 맞춤형 AI 교육
+                                    </div>
+                                </div>
+                                <div class="content-item">
+                                    <label>설명</label>
+                                    <div class="editable-text" data-field="enterprise_description" ondblclick="enableInlineEdit(this)">
+                                        귀하의 조직에 최적화된 AI 교육 프로그램을 제공합니다
+                                    </div>
+                                </div>
+                                <div class="content-item">
+                                    <label>배경 이미지</label>
+                                    <div class="editable-image" data-field="enterprise_bg" onclick="openImageUpload(this)">
+                                        <img src="https://via.placeholder.com/800x400" alt="기업교육 배경">
+                                        <div class="image-overlay">
+                                            <i class="fas fa-camera"></i>
+                                            <span>이미지 변경</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 다른 페이지 콘텐츠들 -->
+                    <div class="page-content" id="coursesContent">
+                        <div class="content-section">
+                            <h3>강의 페이지 설정</h3>
+                            <p>강의 페이지 콘텐츠 편집 기능이 여기에 표시됩니다.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="page-content" id="aboutContent">
+                        <div class="content-section">
+                            <h3>소개 페이지 설정</h3>
+                            <p>소개 페이지 콘텐츠 편집 기능이 여기에 표시됩니다.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="page-content" id="contactContent">
+                        <div class="content-section">
+                            <h3>연락처 페이지 설정</h3>
+                            <p>연락처 페이지 콘텐츠 편집 기능이 여기에 표시됩니다.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 변경사항 관리 -->
+                <div class="content-changes">
+                    <div class="changes-header">
+                        <h3>변경사항</h3>
+                        <div class="changes-actions">
+                            <button class="btn btn-secondary" onclick="previewChanges()">
+                                <i class="fas fa-eye"></i> 미리보기
+                            </button>
+                            <button class="btn btn-success" onclick="publishChanges()">
+                                <i class="fas fa-check"></i> 변경사항 적용
+                            </button>
+                        </div>
+                    </div>
+                    <div class="changes-list" id="changesList">
+                        <!-- 변경사항 목록이 여기에 표시됩니다 -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- 미디어 라이브러리 섹션 -->
+            <section id="media" class="admin-section">
+                <div class="section-header">
+                    <h2>미디어 라이브러리</h2>
+                    <div class="section-actions">
+                        <button class="btn btn-primary" onclick="openFileUpload()">
+                            <i class="fas fa-upload"></i> 파일 업로드
+                        </button>
+                        <button class="btn btn-secondary" onclick="createFolder()">
+                            <i class="fas fa-folder-plus"></i> 폴더 생성
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- 업로드 영역 -->
+                <div class="media-upload-area">
+                    <div class="upload-dropzone" id="mediaDropzone">
+                        <div class="dropzone-content">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <h3>파일을 드래그하여 업로드하세요</h3>
+                            <p>또는 <button class="link-btn" onclick="selectFiles()">파일 선택</button></p>
+                            <small>지원 형식: JPG, PNG, GIF, MP4, PDF, DOC (최대 10MB)</small>
+                        </div>
+                        <input type="file" id="fileInput" multiple accept="image/*,video/*,.pdf,.doc,.docx" style="display: none;">
+                    </div>
+                </div>
+                
+                <!-- 미디어 브라우저 -->
+                <div class="media-browser">
+                    <div class="media-toolbar">
+                        <div class="media-navigation">
+                            <button class="nav-btn" onclick="goUpFolder()" title="상위 폴더">
+                                <i class="fas fa-level-up-alt"></i>
+                            </button>
+                            <div class="breadcrumb" id="mediaBreadcrumb">
+                                <span class="breadcrumb-item active">미디어 라이브러리</span>
+                            </div>
+                        </div>
+                        
+                        <div class="media-search">
+                            <i class="fas fa-search"></i>
+                            <input type="text" placeholder="파일명 검색..." id="mediaSearch">
+                        </div>
+                        
+                        <div class="media-filters">
+                            <select id="mediaTypeFilter">
+                                <option value="all">모든 파일</option>
+                                <option value="image">이미지</option>
+                                <option value="video">동영상</option>
+                                <option value="document">문서</option>
+                            </select>
+                            
+                            <div class="view-options">
+                                <button class="view-btn active" data-view="grid" title="격자 보기">
+                                    <i class="fas fa-th"></i>
+                                </button>
+                                <button class="view-btn" data-view="list" title="목록 보기">
+                                    <i class="fas fa-list"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 미디어 그리드 -->
+                    <div class="media-grid" id="mediaGrid">
+                        <!-- 미디어 파일들이 여기에 표시됩니다 -->
+                    </div>
+                    
+                    <!-- 업로드 진행률 -->
+                    <div class="upload-progress" id="uploadProgress" style="display: none;">
+                        <div class="progress-header">
+                            <h4>파일 업로드 중...</h4>
+                            <button class="btn btn-sm btn-secondary" onclick="cancelUpload()">
+                                <i class="fas fa-times"></i> 취소
+                            </button>
+                        </div>
+                        <div class="progress-list" id="progressList">
+                            <!-- 업로드 진행률이 여기에 표시됩니다 -->
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 미디어 정보 패널 -->
+                <div class="media-info-panel" id="mediaInfoPanel" style="display: none;">
+                    <div class="info-header">
+                        <h3>파일 정보</h3>
+                        <button class="close-btn" onclick="closeMediaInfo()">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <div class="info-content" id="mediaInfoContent">
+                        <!-- 선택된 미디어 정보가 여기에 표시됩니다 -->
+                    </div>
                 </div>
             </section>
 

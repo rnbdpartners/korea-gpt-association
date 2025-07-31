@@ -150,13 +150,36 @@ function handleLoginSubmit(e) {
     setTimeout(() => {
         hideLoadingState();
         
-        // 사용자 관리자를 통한 로그인 시도
-        if (typeof performLogin !== 'undefined' && performLogin(data.email, data.password)) {
-            const currentUser = userManager.getCurrentUser();
-            alert(`로그인 성공!\n\n환영합니다, ${currentUser.name}님!`);
-            window.location.href = 'index.html';
+        // 데모 계정 체크
+        const demoAccounts = {
+            'admin@koreangpt.org': { password: 'admin123', name: '김관리', role: 'admin' },
+            'user@example.com': { password: 'user123', name: '김회원', role: 'user' },
+            'demo@demo.com': { password: 'demo123', name: '데모사용자', role: 'user' }
+        };
+        
+        const account = demoAccounts[data.email];
+        if (account && account.password === data.password) {
+            // 세션 저장
+            const userData = {
+                email: data.email,
+                name: account.name,
+                role: account.role,
+                loginTime: new Date().toISOString()
+            };
+            
+            localStorage.setItem('currentUser', JSON.stringify(userData));
+            sessionStorage.setItem('isLoggedIn', 'true');
+            
+            alert(`로그인 성공!\n\n환영합니다, ${account.name}님!`);
+            
+            // 관리자면 관리자 선택 페이지로, 일반 사용자면 메인 페이지로
+            if (account.role === 'admin') {
+                window.location.href = 'admin-select.html';
+            } else {
+                window.location.href = 'index.html';
+            }
         } else {
-            alert('이메일 또는 비밀번호가 올바르지 않습니다.\n\n데모 계정:\n- admin@koreangpt.org (관리자)\n- user@example.com (일반 사용자)');
+            alert('이메일 또는 비밀번호가 올바르지 않습니다.\n\n데모 계정:\n- admin@koreangpt.org / admin123 (관리자)\n- user@example.com / user123 (일반 사용자)\n- demo@demo.com / demo123 (데모)');
         }
     }, 1500);
 }

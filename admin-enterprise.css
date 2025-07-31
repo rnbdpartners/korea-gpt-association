@@ -1,0 +1,716 @@
+/* B2B 기업용 관리자 페이지 전용 스타일 */
+
+/* CSS 변수 정의 - 기업용 테마 */
+:root {
+    /* B2B 전용 색상 팔레트 */
+    --b2b-primary: #0066cc;
+    --b2b-secondary: #004499;
+    --b2b-accent: #00cc99;
+    --b2b-bg-primary: #ffffff;
+    --b2b-bg-secondary: #f8fafc;
+    --b2b-bg-dark: #1e293b;
+    --b2b-bg-darker: #0f172a;
+    --b2b-text-primary: #1e293b;
+    --b2b-text-secondary: #64748b;
+    --b2b-text-muted: #94a3b8;
+    --b2b-border: #e2e8f0;
+    --b2b-border-dark: #334155;
+    --b2b-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    --b2b-shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.1);
+    --b2b-success: #10b981;
+    --b2b-warning: #f59e0b;
+    --b2b-error: #ef4444;
+    --b2b-info: #3b82f6;
+}
+
+/* 다크 모드 */
+[data-theme="dark"] {
+    --b2b-bg-primary: #1e293b;
+    --b2b-bg-secondary: #0f172a;
+    --b2b-text-primary: #f1f5f9;
+    --b2b-text-secondary: #94a3b8;
+    --b2b-border: #334155;
+    --b2b-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+    --b2b-shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.3);
+}
+
+/* 기본 스타일 */
+body.b2b-admin-body {
+    margin: 0;
+    background-color: var(--b2b-bg-secondary);
+    color: var(--b2b-text-primary);
+    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* B2B 관리자 헤더 */
+.b2b-admin-header {
+    background: linear-gradient(135deg, var(--b2b-primary) 0%, var(--b2b-secondary) 100%);
+    color: white;
+    padding: 1rem 0;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    box-shadow: var(--b2b-shadow-lg);
+}
+
+.b2b-admin-header-content {
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.b2b-admin-brand h1 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 0;
+}
+
+.b2b-admin-brand h1 a {
+    color: white;
+    text-decoration: none;
+}
+
+.b2b-admin-nav {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+/* B2B 레이아웃 */
+.b2b-admin-layout {
+    display: flex;
+    min-height: 100vh;
+    padding-top: 80px;
+}
+
+.b2b-admin-sidebar {
+    width: 280px;
+    background: var(--b2b-bg-primary);
+    border-right: 1px solid var(--b2b-border);
+    box-shadow: var(--b2b-shadow);
+    position: fixed;
+    height: calc(100vh - 80px);
+    overflow-y: auto;
+    z-index: 100;
+}
+
+.b2b-sidebar-nav {
+    padding: 2rem 0;
+}
+
+.b2b-nav-menu {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.b2b-nav-item {
+    margin: 0;
+}
+
+.b2b-nav-link {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 2rem;
+    color: var(--b2b-text-secondary);
+    text-decoration: none;
+    font-size: 0.95rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    border-left: 3px solid transparent;
+}
+
+.b2b-nav-link:hover {
+    background-color: var(--b2b-bg-secondary);
+    color: var(--b2b-primary);
+    border-left-color: var(--b2b-primary);
+}
+
+.b2b-nav-item.active .b2b-nav-link {
+    background-color: rgba(0, 102, 204, 0.1);
+    color: var(--b2b-primary);
+    border-left-color: var(--b2b-primary);
+    font-weight: 600;
+}
+
+.b2b-nav-link i {
+    font-size: 1.25rem;
+    width: 20px;
+    text-align: center;
+}
+
+/* B2B 메인 콘텐츠 */
+.b2b-admin-main {
+    flex: 1;
+    margin-left: 280px;
+    padding: 2rem;
+    background: var(--b2b-bg-secondary);
+    min-height: calc(100vh - 80px);
+}
+
+.b2b-admin-section {
+    display: none;
+    animation: fadeIn 0.3s ease;
+}
+
+.b2b-admin-section.active {
+    display: block;
+}
+
+/* B2B 섹션 헤더 */
+.b2b-section-header {
+    margin-bottom: 2rem;
+}
+
+.b2b-section-header h2 {
+    font-size: 2rem;
+    color: var(--b2b-text-primary);
+    margin: 0 0 0.5rem 0;
+    font-weight: 700;
+}
+
+.b2b-section-header p {
+    color: var(--b2b-text-secondary);
+    font-size: 1rem;
+    margin: 0;
+}
+
+/* B2B 카드 스타일 */
+.b2b-card {
+    background: var(--b2b-bg-primary);
+    border: 1px solid var(--b2b-border);
+    border-radius: 16px;
+    padding: 2rem;
+    box-shadow: var(--b2b-shadow);
+    transition: all 0.3s ease;
+}
+
+.b2b-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--b2b-shadow-lg);
+}
+
+.b2b-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: between;
+    margin-bottom: 1.5rem;
+}
+
+.b2b-card-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--b2b-text-primary);
+    margin: 0;
+}
+
+/* B2B 통계 카드 */
+.b2b-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.b2b-stat-card {
+    background: var(--b2b-bg-primary);
+    border: 1px solid var(--b2b-border);
+    border-radius: 16px;
+    padding: 2rem;
+    text-align: center;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.b2b-stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(135deg, var(--b2b-primary) 0%, var(--b2b-accent) 100%);
+}
+
+.b2b-stat-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--b2b-shadow-lg);
+}
+
+.b2b-stat-value {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: var(--b2b-primary);
+    margin-bottom: 0.5rem;
+}
+
+.b2b-stat-label {
+    color: var(--b2b-text-secondary);
+    font-size: 0.95rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.b2b-stat-change {
+    font-size: 0.875rem;
+    margin-top: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.25rem;
+}
+
+.b2b-stat-change.positive {
+    color: var(--b2b-success);
+}
+
+.b2b-stat-change.negative {
+    color: var(--b2b-error);
+}
+
+/* B2B 테이블 */
+.b2b-table-container {
+    background: var(--b2b-bg-primary);
+    border: 1px solid var(--b2b-border);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: var(--b2b-shadow);
+}
+
+.b2b-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+}
+
+.b2b-table th {
+    background: var(--b2b-bg-secondary);
+    color: var(--b2b-text-primary);
+    font-weight: 600;
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid var(--b2b-border);
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.b2b-table td {
+    padding: 1rem;
+    border-bottom: 1px solid var(--b2b-border);
+    color: var(--b2b-text-primary);
+    vertical-align: middle;
+}
+
+.b2b-table tbody tr:hover {
+    background-color: var(--b2b-bg-secondary);
+}
+
+/* B2B 버튼 */
+.b2b-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-decoration: none;
+    text-align: center;
+}
+
+.b2b-btn-primary {
+    background: var(--b2b-primary);
+    color: white;
+}
+
+.b2b-btn-primary:hover {
+    background: var(--b2b-secondary);
+    transform: translateY(-1px);
+}
+
+.b2b-btn-secondary {
+    background: var(--b2b-bg-secondary);
+    color: var(--b2b-text-primary);
+    border: 1px solid var(--b2b-border);
+}
+
+.b2b-btn-secondary:hover {
+    background: var(--b2b-border);
+}
+
+.b2b-btn-success {
+    background: var(--b2b-success);
+    color: white;
+}
+
+.b2b-btn-warning {
+    background: var(--b2b-warning);
+    color: white;
+}
+
+.b2b-btn-error {
+    background: var(--b2b-error);
+    color: white;
+}
+
+/* B2B 상태 배지 */
+.b2b-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.75rem;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.b2b-badge-active {
+    background: rgba(16, 185, 129, 0.1);
+    color: var(--b2b-success);
+}
+
+.b2b-badge-pending {
+    background: rgba(245, 158, 11, 0.1);
+    color: var(--b2b-warning);
+}
+
+.b2b-badge-inactive {
+    background: rgba(239, 68, 68, 0.1);
+    color: var(--b2b-error);
+}
+
+.b2b-badge-info {
+    background: rgba(59, 130, 246, 0.1);
+    color: var(--b2b-info);
+}
+
+/* B2B 폼 요소 */
+.b2b-form-group {
+    margin-bottom: 1.5rem;
+}
+
+.b2b-form-label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: var(--b2b-text-primary);
+    font-size: 0.875rem;
+}
+
+.b2b-form-input,
+.b2b-form-select,
+.b2b-form-textarea {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid var(--b2b-border);
+    border-radius: 8px;
+    font-size: 0.875rem;
+    background: var(--b2b-bg-primary);
+    color: var(--b2b-text-primary);
+    transition: all 0.2s ease;
+}
+
+.b2b-form-input:focus,
+.b2b-form-select:focus,
+.b2b-form-textarea:focus {
+    outline: none;
+    border-color: var(--b2b-primary);
+    box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.1);
+}
+
+/* B2B 검색바 */
+.b2b-search-container {
+    position: relative;
+    margin-bottom: 2rem;
+}
+
+.b2b-search-input {
+    width: 100%;
+    padding: 1rem 3rem 1rem 1rem;
+    border: 1px solid var(--b2b-border);
+    border-radius: 12px;
+    font-size: 1rem;
+    background: var(--b2b-bg-primary);
+    color: var(--b2b-text-primary);
+}
+
+.b2b-search-icon {
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--b2b-text-secondary);
+}
+
+/* B2B 탭 */
+.b2b-tabs {
+    display: flex;
+    border-bottom: 1px solid var(--b2b-border);
+    margin-bottom: 2rem;
+}
+
+.b2b-tab {
+    padding: 1rem 2rem;
+    border: none;
+    background: none;
+    color: var(--b2b-text-secondary);
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border-bottom: 2px solid transparent;
+}
+
+.b2b-tab:hover {
+    color: var(--b2b-primary);
+}
+
+.b2b-tab.active {
+    color: var(--b2b-primary);
+    border-bottom-color: var(--b2b-primary);
+}
+
+/* B2B 드롭다운 */
+.b2b-dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.b2b-dropdown-menu {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: var(--b2b-bg-primary);
+    border: 1px solid var(--b2b-border);
+    border-radius: 8px;
+    box-shadow: var(--b2b-shadow-lg);
+    min-width: 200px;
+    padding: 0.5rem 0;
+    display: none;
+    z-index: 1001;
+}
+
+.b2b-dropdown-menu.show {
+    display: block;
+}
+
+.b2b-dropdown-item {
+    display: block;
+    padding: 0.75rem 1rem;
+    color: var(--b2b-text-primary);
+    text-decoration: none;
+    font-size: 0.875rem;
+    transition: background-color 0.2s;
+}
+
+.b2b-dropdown-item:hover {
+    background-color: var(--b2b-bg-secondary);
+}
+
+/* B2B 알림 */
+.b2b-notification {
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.b2b-notification-success {
+    background: rgba(16, 185, 129, 0.1);
+    border: 1px solid rgba(16, 185, 129, 0.2);
+    color: var(--b2b-success);
+}
+
+.b2b-notification-warning {
+    background: rgba(245, 158, 11, 0.1);
+    border: 1px solid rgba(245, 158, 11, 0.2);
+    color: var(--b2b-warning);
+}
+
+.b2b-notification-error {
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    color: var(--b2b-error);
+}
+
+.b2b-notification-info {
+    background: rgba(59, 130, 246, 0.1);
+    border: 1px solid rgba(59, 130, 246, 0.2);
+    color: var(--b2b-info);
+}
+
+/* B2B 모달 */
+.b2b-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+}
+
+.b2b-modal.show {
+    display: flex;
+}
+
+.b2b-modal-content {
+    background: var(--b2b-bg-primary);
+    border-radius: 16px;
+    padding: 2rem;
+    max-width: 600px;
+    width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: var(--b2b-shadow-lg);
+}
+
+.b2b-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: between;
+    margin-bottom: 1.5rem;
+}
+
+.b2b-modal-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--b2b-text-primary);
+    margin: 0;
+    flex: 1;
+}
+
+.b2b-modal-close {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: var(--b2b-text-secondary);
+    cursor: pointer;
+    padding: 0.25rem;
+    line-height: 1;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 1024px) {
+    .b2b-admin-sidebar {
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+    }
+
+    .b2b-admin-sidebar.mobile-open {
+        transform: translateX(0);
+    }
+
+    .b2b-admin-main {
+        margin-left: 0;
+    }
+
+    .b2b-stats-grid {
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    }
+}
+
+@media (max-width: 768px) {
+    .b2b-admin-main {
+        padding: 1rem;
+    }
+
+    .b2b-section-header h2 {
+        font-size: 1.5rem;
+    }
+
+    .b2b-stats-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .b2b-table-container {
+        overflow-x: auto;
+    }
+
+    .b2b-tabs {
+        overflow-x: auto;
+        flex-wrap: nowrap;
+    }
+
+    .b2b-tab {
+        white-space: nowrap;
+        padding: 1rem 1.5rem;
+    }
+}
+
+/* 애니메이션 */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}
+
+/* 로딩 상태 */
+.b2b-loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem;
+    color: var(--b2b-text-secondary);
+}
+
+.b2b-loading::after {
+    content: '';
+    width: 24px;
+    height: 24px;
+    border: 2px solid var(--b2b-border);
+    border-top-color: var(--b2b-primary);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-left: 0.5rem;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}

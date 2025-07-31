@@ -92,6 +92,16 @@ document.addEventListener('DOMContentLoaded', function() {
     // 모달 기능
     setupModals();
     
+    // 새로운 기능들 초기화
+    setupUnifiedSearch();
+    setupInlineEditing();
+    setupFileUpload();
+    setupCustomerManagement();
+    setupSupportSystem();
+    setupTicketManagement();
+    setupContentManagement();
+    setupMediaLibrary();
+    
     console.log('관리자 대시보드 초기화 완료');
 });
 
@@ -3166,8 +3176,71 @@ function viewSystemLogs() {
     `);
 }
 
+// 테마 관리
+const themeManager = {
+    init() {
+        // 저장된 테마 로드
+        const savedTheme = localStorage.getItem('admin-theme') || 'light';
+        this.setTheme(savedTheme);
+        
+        // 테마 토글 버튼 이벤트
+        const themeToggle = document.getElementById('themeToggle');
+        if (themeToggle) {
+            themeToggle.addEventListener('click', () => {
+                const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+                const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+                this.setTheme(newTheme);
+            });
+        }
+    },
+    
+    setTheme(theme) {
+        document.body.setAttribute('data-theme', theme);
+        document.documentElement.setAttribute('data-theme', theme);
+        localStorage.setItem('admin-theme', theme);
+        
+        // 버튼 텍스트와 아이콘 업데이트
+        const themeToggle = document.getElementById('themeToggle');
+        if (themeToggle) {
+            const icon = themeToggle.querySelector('i');
+            const text = themeToggle.querySelector('span');
+            
+            if (theme === 'dark') {
+                icon.className = 'fas fa-sun';
+                text.textContent = '라이트모드';
+            } else {
+                icon.className = 'fas fa-moon';
+                text.textContent = '다크모드';
+            }
+        }
+    }
+};
+
+// 현재 사용자 확인 함수
+function getCurrentUser() {
+    const userData = localStorage.getItem('currentUser');
+    return userData ? JSON.parse(userData) : null;
+}
+
 // 메인 초기화에 추가 기능 포함
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function() {    
+    // 인증 확인
+    const currentUser = getCurrentUser();
+    if (!currentUser || currentUser.role !== 'admin') {
+        alert('관리자 권한이 필요합니다. 로그인 페이지로 이동합니다.');
+        window.location.href = 'login.html';
+        return;
+    }
+
+    // 관리자 정보 표시
+    const adminUserSpan = document.querySelector('.admin-user span');
+    if (adminUserSpan) {
+        adminUserSpan.textContent = `${currentUser.name} 관리자`;
+    }
+    
+    // 테마 관리 초기화
+    themeManager.init();
+    
     // 기존 초기화
     setupNavigation();
     setupDropdown();
@@ -3187,5 +3260,748 @@ document.addEventListener('DOMContentLoaded', function() {
     
     console.log('고급 BI 대시보드 초기화 완료');
 });
+
+// 통합 검색 기능
+function setupUnifiedSearch() {
+    const searchInput = document.getElementById('unifiedSearch');
+    const searchFilters = document.getElementById('searchFilters');
+    const resultsContent = document.getElementById('resultsContent');
+    const resultsCount = document.getElementById('resultsCount');
+    
+    let searchTimeout;
+    
+    if (searchInput) {
+        searchInput.addEventListener('input', function() {
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(() => {
+                performSearch(this.value);
+            }, 300);
+        });
+    }
+    
+    // 필터 토글
+    window.toggleSearchFilters = function() {
+        if (searchFilters) {
+            searchFilters.style.display = searchFilters.style.display === 'none' ? 'block' : 'none';
+        }
+    };
+    
+    // 검색 실행
+    function performSearch(query) {
+        if (!query.trim()) {
+            showNoResults();
+            return;
+        }
+        
+        // 실제 구현에서는 API 호출
+        const mockResults = generateMockSearchResults(query);
+        displaySearchResults(mockResults);
+    }
+    
+    function generateMockSearchResults(query) {
+        const results = [];
+        
+        // 회원 검색 결과
+        if (query.includes('김') || query.includes('이') || query.includes('박')) {
+            results.push({
+                type: 'members',
+                title: `${query}지은`,
+                subtitle: 'VIP 고객 • 가입일: 2023-05-15',
+                data: '총 구매액: ₩450,000 • 구매 강의: 3개'
+            });
+        }
+        
+        // 강의 검색 결과
+        if (query.includes('GPT') || query.includes('AI') || query.includes('프롬프트')) {
+            results.push({
+                type: 'courses',
+                title: 'GPT 프롬프트 마스터 과정',
+                subtitle: '프롬프트 엔지니어링 • 활성',
+                data: '수강생: 342명 • 평점: 4.8/5.0'
+            });
+        }
+        
+        // 주문 검색 결과
+        if (query.includes('주문') || query.includes('결제')) {
+            results.push({
+                type: 'orders',
+                title: '주문 #ORD-001',
+                subtitle: '김지은 • 2024-01-15',
+                data: 'GPT 프롬프트 마스터 과정 • ₩149,000'
+            });
+        }
+        
+        return results;
+    }
+    
+    function displaySearchResults(results) {
+        if (resultsCount) {
+            resultsCount.textContent = results.length;
+        }
+        
+        if (!resultsContent) return;
+        
+        if (results.length === 0) {
+            showNoResults();
+            return;
+        }
+        
+        const html = results.map(result => `
+            <div class="search-result-item" data-type="${result.type}">
+                <div class="result-header">
+                    <h4>${result.title}</h4>
+                    <span class="result-type">${getResultTypeLabel(result.type)}</span>
+                </div>
+                <p class="result-subtitle">${result.subtitle}</p>
+                <p class="result-data">${result.data}</p>
+            </div>
+        `).join('');
+        
+        resultsContent.innerHTML = html;
+    }
+    
+    function showNoResults() {
+        if (resultsContent) {
+            resultsContent.innerHTML = `
+                <div class="no-results">
+                    <i class="fas fa-search"></i>
+                    <p>검색 결과가 없습니다</p>
+                </div>
+            `;
+        }
+        if (resultsCount) {
+            resultsCount.textContent = '0';
+        }
+    }
+    
+    function getResultTypeLabel(type) {
+        const labels = {
+            'members': '회원',
+            'courses': '강의',
+            'orders': '주문',
+            'tickets': '티켓',
+            'reviews': '후기'
+        };
+        return labels[type] || type;
+    }
+    
+    // 검색 기록 지우기
+    window.clearSearchHistory = function() {
+        const historyContainer = document.getElementById('searchHistory');
+        if (historyContainer) {
+            historyContainer.innerHTML = '<p style="color: var(--admin-text-secondary); font-size: 0.875rem;">검색 기록이 없습니다.</p>';
+        }
+    };
+}
+
+// 인라인 편집 기능
+function setupInlineEditing() {
+    // 텍스트 편집
+    window.enableInlineEdit = function(element) {
+        if (element.classList.contains('editing')) return;
+        
+        const originalText = element.textContent.trim();
+        element.classList.add('editing');
+        
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.value = originalText;
+        input.style.width = '100%';
+        input.style.border = 'none';
+        input.style.background = 'transparent';
+        input.style.font = 'inherit';
+        input.style.color = 'inherit';
+        input.style.outline = 'none';
+        
+        element.innerHTML = '';
+        element.appendChild(input);
+        input.focus();
+        input.select();
+        
+        function saveEdit() {
+            const newText = input.value.trim();
+            element.classList.remove('editing');
+            element.textContent = newText || originalText;
+            
+            // 변경사항 저장 (실제 구현에서는 API 호출)
+            saveContentChange(element.dataset.field, newText);
+            addToChangesList(element.dataset.field, originalText, newText);
+        }
+        
+        input.addEventListener('blur', saveEdit);
+        input.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                saveEdit();
+            } else if (e.key === 'Escape') {
+                element.classList.remove('editing');
+                element.textContent = originalText;
+            }
+        });
+    };
+    
+    // 이미지 업로드
+    window.openImageUpload = function(element) {
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.accept = 'image/*';
+        input.style.display = 'none';
+        
+        input.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = element.querySelector('img');
+                    if (img) {
+                        img.src = e.target.result;
+                        saveContentChange(element.dataset.field, e.target.result);
+                        addToChangesList(element.dataset.field, img.src, e.target.result);
+                    }
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+        
+        document.body.appendChild(input);
+        input.click();
+        document.body.removeChild(input);
+    };
+    
+    function saveContentChange(field, value) {
+        // 실제 구현에서는 서버에 저장
+        console.log(`Saving ${field}: ${value}`);
+    }
+    
+    function addToChangesList(field, oldValue, newValue) {
+        const changesList = document.getElementById('changesList');
+        if (!changesList) return;
+        
+        const changeItem = document.createElement('div');
+        changeItem.className = 'change-item';
+        changeItem.innerHTML = `
+            <div class="change-info">
+                <strong>${field}</strong>
+                <div class="change-details">
+                    <span class="old-value">이전: ${oldValue.substring(0, 50)}...</span>
+                    <span class="new-value">새값: ${newValue.substring(0, 50)}...</span>
+                </div>
+            </div>
+            <div class="change-actions">
+                <button class="btn btn-sm btn-secondary" onclick="revertChange(this)">되돌리기</button>
+            </div>
+        `;
+        
+        changesList.appendChild(changeItem);
+    }
+    
+    window.revertChange = function(button) {
+        button.closest('.change-item').remove();
+    };
+    
+    window.previewChanges = function() {
+        alert('변경사항 미리보기 기능이 구현됩니다.');
+    };
+    
+    window.publishChanges = function() {
+        const changesList = document.getElementById('changesList');
+        if (changesList) {
+            changesList.innerHTML = '<p style="color: var(--admin-text-secondary);">적용할 변경사항이 없습니다.</p>';
+        }
+        showNotification('변경사항이 성공적으로 적용되었습니다.', 'success');
+    };
+}
+
+// 파일 업로드 시스템
+function setupFileUpload() {
+    const dropzone = document.getElementById('mediaDropzone');
+    const fileInput = document.getElementById('fileInput');
+    
+    if (dropzone) {
+        // 드래그 앤 드롭 이벤트
+        dropzone.addEventListener('dragover', function(e) {
+            e.preventDefault();
+            this.classList.add('dragover');
+        });
+        
+        dropzone.addEventListener('dragleave', function(e) {
+            e.preventDefault();
+            this.classList.remove('dragover');
+        });
+        
+        dropzone.addEventListener('drop', function(e) {
+            e.preventDefault();
+            this.classList.remove('dragover');
+            
+            const files = Array.from(e.dataTransfer.files);
+            handleFileUpload(files);
+        });
+        
+        dropzone.addEventListener('click', function() {
+            if (fileInput) fileInput.click();
+        });
+    }
+    
+    if (fileInput) {
+        fileInput.addEventListener('change', function(e) {
+            const files = Array.from(e.target.files);
+            handleFileUpload(files);
+        });
+    }
+    
+    function handleFileUpload(files) {
+        const progressContainer = document.getElementById('uploadProgress');
+        const progressList = document.getElementById('progressList');
+        
+        if (progressContainer) progressContainer.style.display = 'block';
+        
+        files.forEach((file, index) => {
+            const progressItem = createProgressItem(file);
+            if (progressList) progressList.appendChild(progressItem);
+            
+            // 실제 업로드 시뮬레이션
+            simulateUpload(file, progressItem);
+        });
+    }
+    
+    function createProgressItem(file) {
+        const item = document.createElement('div');
+        item.className = 'progress-item';
+        item.innerHTML = `
+            <div class="file-info">
+                <div class="file-name">${file.name}</div>
+                <div class="file-size">${formatFileSize(file.size)}</div>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" style="width: 0%"></div>
+            </div>
+            <div class="progress-percentage">0%</div>
+        `;
+        return item;
+    }
+    
+    function simulateUpload(file, progressItem) {
+        let progress = 0;
+        const progressFill = progressItem.querySelector('.progress-fill');
+        const progressPercentage = progressItem.querySelector('.progress-percentage');
+        
+        const interval = setInterval(() => {
+            progress += Math.random() * 10;
+            if (progress >= 100) {
+                progress = 100;
+                clearInterval(interval);
+                
+                // 업로드 완료 후 미디어 그리드에 추가
+                addToMediaGrid(file);
+            }
+            
+            if (progressFill) progressFill.style.width = progress + '%';
+            if (progressPercentage) progressPercentage.textContent = Math.round(progress) + '%';
+        }, 200);
+    }
+    
+    function addToMediaGrid(file) {
+        const mediaGrid = document.getElementById('mediaGrid');
+        if (!mediaGrid) return;
+        
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const mediaItem = document.createElement('div');
+            mediaItem.className = 'media-item';
+            mediaItem.innerHTML = `
+                <div class="media-thumbnail">
+                    <img src="${e.target.result}" alt="${file.name}">
+                </div>
+                <div class="media-info">
+                    <div class="media-name">${file.name}</div>
+                    <div class="media-size">${formatFileSize(file.size)}</div>
+                </div>
+                <div class="media-actions">
+                    <button class="btn btn-sm btn-outline" onclick="showMediaInfo(this)">정보</button>
+                    <button class="btn btn-sm btn-outline" onclick="deleteMedia(this)">삭제</button>
+                </div>
+            `;
+            
+            mediaGrid.appendChild(mediaItem);
+        };
+        
+        reader.readAsDataURL(file);
+    }
+    
+    function formatFileSize(bytes) {
+        if (bytes === 0) return '0 Bytes';
+        const k = 1024;
+        const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    }
+    
+    window.selectFiles = function() {
+        if (fileInput) fileInput.click();
+    };
+    
+    window.cancelUpload = function() {
+        const progressContainer = document.getElementById('uploadProgress');
+        if (progressContainer) progressContainer.style.display = 'none';
+    };
+}
+
+// 고객 관리 시스템
+function setupCustomerManagement() {
+    // 고객 세그먼트 보기
+    window.viewSegment = function(segmentType) {
+        console.log('고객 세그먼트 보기:', segmentType);
+        // 실제 구현에서는 필터링된 고객 목록 표시
+    };
+    
+    // 고객 추가
+    window.addCustomer = function() {
+        console.log('새 고객 추가');
+        // 실제 구현에서는 고객 추가 모달 표시
+    };
+    
+    // 고객 데이터 내보내기
+    window.exportCustomers = function() {
+        console.log('고객 데이터 내보내기');
+        showNotification('고객 데이터를 내보내는 중...', 'info');
+    };
+    
+    // 고객 테이블 데이터 로드
+    loadCustomersData();
+}
+
+function loadCustomersData() {
+    const customersTable = document.getElementById('customersTable');
+    if (!customersTable) return;
+    
+    const tbody = customersTable.querySelector('tbody');
+    if (!tbody) return;
+    
+    // 샘플 고객 데이터
+    const customers = [
+        {
+            name: '김지은',
+            email: 'jieun@example.com',
+            segment: 'VIP',
+            joinDate: '2023-05-15',
+            lastActivity: '2024-01-20',
+            purchaseCount: 3,
+            totalAmount: 450000,
+            status: 'active'
+        },
+        {
+            name: '이준호',
+            email: 'junho@example.com',
+            segment: '단골',
+            joinDate: '2023-08-22',
+            lastActivity: '2024-01-18',
+            purchaseCount: 2,
+            totalAmount: 320000,
+            status: 'active'
+        },
+        {
+            name: '박민정',
+            email: 'minjung@example.com',
+            segment: '일반',
+            joinDate: '2023-11-10',
+            lastActivity: '2024-01-15',
+            purchaseCount: 1,
+            totalAmount: 179000,
+            status: 'inactive'
+        }
+    ];
+    
+    tbody.innerHTML = customers.map(customer => `
+        <tr>
+            <td>
+                <div class="customer-info">
+                    <div class="customer-name">${customer.name}</div>
+                    <div class="customer-email">${customer.email}</div>
+                </div>
+            </td>
+            <td><span class="segment-badge ${customer.segment.toLowerCase()}">${customer.segment}</span></td>
+            <td>${customer.joinDate}</td>
+            <td>${customer.lastActivity}</td>
+            <td>${customer.purchaseCount}회</td>
+            <td>₩${customer.totalAmount.toLocaleString()}</td>
+            <td><span class="status-badge ${customer.status}">${customer.status === 'active' ? '활성' : '비활성'}</span></td>
+            <td>
+                <div class="table-actions">
+                    <button class="action-btn edit" onclick="editCustomer('${customer.email}')">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="action-btn delete" onclick="deleteCustomer('${customer.email}')">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            </td>
+        </tr>
+    `).join('');
+}
+
+// 지원 시스템
+function setupSupportSystem() {
+    // 새 티켓 생성
+    window.createNewTicket = function() {
+        console.log('새 티켓 생성');
+    };
+    
+    // 지식베이스 열기
+    window.openKnowledgeBase = function() {
+        console.log('지식베이스 열기');
+    };
+    
+    // 채널 설정
+    window.configureChannel = function(channelType) {
+        console.log('채널 설정:', channelType);
+    };
+    
+    // 실시간 지원 활동 로드
+    loadSupportActivity();
+}
+
+function loadSupportActivity() {
+    const activityFeed = document.getElementById('supportActivityFeed');
+    if (!activityFeed) return;
+    
+    const activities = [
+        {
+            type: 'ticket_created',
+            user: '김지은',
+            message: '새 티켓을 생성했습니다: "로그인 문제"',
+            time: '5분 전'
+        },
+        {
+            type: 'ticket_resolved',
+            user: '관리자1',
+            message: '티켓 #T-001을 해결했습니다',
+            time: '15분 전'
+        },
+        {
+            type: 'chat_started',
+            user: '이준호',
+            message: '라이브 채팅을 시작했습니다',
+            time: '23분 전'
+        }
+    ];
+    
+    activityFeed.innerHTML = activities.map(activity => `
+        <div class="activity-item">
+            <div class="activity-avatar">${activity.user[0]}</div>
+            <div class="activity-content">
+                <p><strong>${activity.user}</strong> ${activity.message}</p>
+                <div class="activity-time">${activity.time}</div>
+            </div>
+        </div>
+    `).join('');
+}
+
+// 티켓 관리
+function setupTicketManagement() {
+    // 새 티켓 생성
+    window.createTicket = function() {
+        console.log('새 티켓 생성');
+    };
+    
+    // 티켓 내보내기
+    window.exportTickets = function() {
+        console.log('티켓 내보내기');
+    };
+    
+    // 티켓 보드 로드
+    loadTicketBoard();
+}
+
+function loadTicketBoard() {
+    const columns = ['newTickets', 'inProgressTickets', 'pendingTickets', 'resolvedTickets'];
+    const ticketData = {
+        newTickets: [
+            { id: 'T-008', title: '로그인 문제', customer: '김지은', priority: 'high' },
+            { id: 'T-009', title: '결제 오류', customer: '이준호', priority: 'medium' }
+        ],
+        inProgressTickets: [
+            { id: 'T-005', title: '강의 접근 불가', customer: '박민정', priority: 'high' },
+            { id: 'T-006', title: '이메일 수신 문제', customer: '최영수', priority: 'low' }
+        ],
+        pendingTickets: [
+            { id: 'T-007', title: '환불 요청', customer: '정미경', priority: 'medium' }
+        ],
+        resolvedTickets: [
+            { id: 'T-001', title: '비밀번호 재설정', customer: '김지은', priority: 'low' }
+        ]
+    };
+    
+    columns.forEach(columnId => {
+        const column = document.getElementById(columnId);
+        if (!column) return;
+        
+        const tickets = ticketData[columnId] || [];
+        column.innerHTML = tickets.map(ticket => `
+            <div class="ticket-card" data-ticket-id="${ticket.id}">
+                <div class="ticket-header">
+                    <span class="ticket-id">${ticket.id}</span>
+                    <span class="ticket-priority priority-${ticket.priority}">${ticket.priority}</span>
+                </div>
+                <div class="ticket-title">${ticket.title}</div>
+                <div class="ticket-customer">${ticket.customer}</div>
+            </div>
+        `).join('');
+    });
+}
+
+// 콘텐츠 관리
+function setupContentManagement() {
+    // 페이지 탭 전환
+    const pageTabs = document.querySelectorAll('.page-tab');
+    const pageContents = document.querySelectorAll('.page-content');
+    
+    pageTabs.forEach(tab => {
+        tab.addEventListener('click', function() {
+            const targetPage = this.dataset.page;
+            
+            // 탭 활성화
+            pageTabs.forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+            
+            // 콘텐츠 표시
+            pageContents.forEach(content => {
+                content.classList.remove('active');
+                if (content.id === targetPage + 'Content') {
+                    content.classList.add('active');
+                }
+            });
+        });
+    });
+    
+    // 일괄 편집 모드
+    window.enableBulkEdit = function() {
+        console.log('일괄 편집 모드 활성화');
+        document.body.classList.add('bulk-edit-mode');
+    };
+    
+    // 사이트 미리보기
+    window.previewSite = function() {
+        window.open('index.html', '_blank');
+    };
+}
+
+// 미디어 라이브러리
+function setupMediaLibrary() {
+    // 폴더 생성
+    window.createFolder = function() {
+        const folderName = prompt('폴더 이름을 입력하세요:');
+        if (folderName) {
+            console.log('폴더 생성:', folderName);
+        }
+    };
+    
+    window.openFileUpload = function() {
+        const fileInput = document.getElementById('fileInput');
+        if (fileInput) fileInput.click();
+    };
+    
+    // 상위 폴더로 이동
+    window.goUpFolder = function() {
+        console.log('상위 폴더로 이동');
+    };
+    
+    // 미디어 정보 표시
+    window.showMediaInfo = function(button) {
+        const mediaItem = button.closest('.media-item');
+        const mediaName = mediaItem.querySelector('.media-name').textContent;
+        console.log('미디어 정보 표시:', mediaName);
+    };
+    
+    // 미디어 삭제
+    window.deleteMedia = function(button) {
+        if (confirm('이 파일을 삭제하시겠습니까?')) {
+            button.closest('.media-item').remove();
+            showNotification('파일이 삭제되었습니다.', 'success');
+        }
+    };
+    
+    // 미디어 정보 패널 닫기
+    window.closeMediaInfo = function() {
+        const panel = document.getElementById('mediaInfoPanel');
+        if (panel) panel.style.display = 'none';
+    };
+}
+
+// 추가 기능들
+window.generateReport = function() {
+    showNotification('분석 리포트를 생성하는 중...', 'info');
+};
+
+window.scheduleReport = function() {
+    console.log('자동 리포트 설정');
+};
+
+window.generateCustomReport = function() {
+    showNotification('사용자 정의 리포트를 생성하는 중...', 'info');
+};
+
+window.saveReportTemplate = function() {
+    showNotification('리포트 템플릿이 저장되었습니다.', 'success');
+};
+
+// 알림 시스템
+function showNotification(message, type = 'info') {
+    const notification = document.createElement('div');
+    notification.className = `notification ${type}`;
+    notification.innerHTML = `
+        <div class="notification-content">
+            <i class="fas fa-${getNotificationIcon(type)}"></i>
+            <span>${message}</span>
+        </div>
+        <button class="notification-close" onclick="this.parentElement.remove()">
+            <i class="fas fa-times"></i>
+        </button>
+    `;
+    
+    // 스타일 추가
+    notification.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: var(--admin-bg-primary);
+        border: 1px solid var(--admin-border-color);
+        border-radius: 8px;
+        padding: 1rem;
+        box-shadow: var(--admin-shadow-lg);
+        z-index: 10000;
+        min-width: 300px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+    `;
+    
+    document.body.appendChild(notification);
+    
+    // 3초 후 자동 제거
+    setTimeout(() => {
+        if (notification.parentNode) {
+            notification.remove();
+        }
+    }, 3000);
+}
+
+function getNotificationIcon(type) {
+    const icons = {
+        'success': 'check-circle',
+        'error': 'exclamation-circle',
+        'warning': 'exclamation-triangle',
+        'info': 'info-circle'
+    };
+    return icons[type] || 'info-circle';
+}
+
+// 로그아웃 함수 추가
+function logout() {
+    if (confirm('로그아웃 하시겠습니까?')) {
+        localStorage.removeItem('currentUser');
+        sessionStorage.removeItem('isLoggedIn');
+        window.location.href = 'login.html';
+    }
+}
 
 console.log('관리자 대시보드 스크립트 로드 완료');
