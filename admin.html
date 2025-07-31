@@ -7,6 +7,13 @@
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="admin.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- 차트 및 분석 라이브러리 -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/date-fns@2.29.3/index.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@2.0.0/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+    <!-- 드래그앤드롭 라이브러리 -->
+    <script src="https://unpkg.com/dropzone@5/dist/min/dropzone.min.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/dropzone@5/dist/min/dropzone.min.css" type="text/css" />
 </head>
 <body class="admin-body">
     <!-- 관리자 헤더 -->
@@ -94,43 +101,246 @@
 
         <!-- 메인 콘텐츠 -->
         <main class="admin-main">
-            <!-- 대시보드 섹션 -->
+            <!-- 고급 대시보드 섹션 -->
             <section id="dashboard" class="admin-section active">
                 <div class="section-header">
-                    <h2>대시보드</h2>
+                    <h2>비즈니스 인텔리전스 대시보드</h2>
                     <div class="dashboard-controls">
-                        <button class="btn-dashboard-settings" onclick="toggleDashboardSettings()">
-                            <i class="fas fa-cog"></i> 위젯 설정
+                        <select id="dateRange" onchange="updateDashboardData()">
+                            <option value="7">최근 7일</option>
+                            <option value="30" selected>최근 30일</option>
+                            <option value="90">최근 90일</option>
+                            <option value="365">최근 1년</option>
+                        </select>
+                        <button class="btn btn-primary" onclick="exportDashboardData()">
+                            <i class="fas fa-download"></i> 데이터 내보내기
                         </button>
-                        <button class="btn-add-widget" onclick="showAddWidgetPanel()">
-                            <i class="fas fa-plus"></i> 위젯 추가
+                        <button class="btn btn-secondary" onclick="refreshDashboard()">
+                            <i class="fas fa-sync-alt"></i> 새로고침
                         </button>
                     </div>
                 </div>
 
-                <!-- 대시보드 설정 패널 -->
-                <div id="dashboardSettings" class="dashboard-settings hidden">
-                    <div class="settings-header">
-                        <h3>대시보드 위젯 관리</h3>
-                        <button class="settings-close" onclick="toggleDashboardSettings()">×</button>
-                    </div>
-                    <div class="settings-content">
-                        <p>위젯을 드래그하여 순서를 변경하거나 체크박스로 표시/숨김을 설정하세요.</p>
-                        <div class="widget-list" id="widgetSettingsList">
-                            <!-- 동적으로 생성됨 -->
+                <!-- 실시간 알림 영역 -->
+                <div id="realTimeAlerts" class="alerts-container">
+                    <!-- 실시간 알림이 여기에 표시됩니다 -->
+                </div>
+
+                <!-- KPI 카드들 -->
+                <div class="kpi-grid">
+                    <div class="kpi-card revenue">
+                        <div class="kpi-header">
+                            <div class="kpi-icon">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            <div class="kpi-trend" id="revenueTrend">
+                                <i class="fas fa-arrow-up"></i>
+                                <span>+12.5%</span>
+                            </div>
                         </div>
-                        <div class="settings-actions">
-                            <button class="btn btn-secondary" onclick="resetDashboard()">기본값 복원</button>
-                            <button class="btn btn-primary" onclick="saveDashboardSettings()">설정 저장</button>
+                        <div class="kpi-content">
+                            <h3 id="totalRevenue">₩0</h3>
+                            <p>총 매출</p>
+                            <div class="kpi-detail">
+                                <small>목표 대비: <span id="revenueGoal">78%</span></small>
+                            </div>
+                        </div>
+                        <div class="kpi-sparkline">
+                            <canvas id="revenueSparkline" width="100" height="30"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="kpi-card conversion">
+                        <div class="kpi-header">
+                            <div class="kpi-icon">
+                                <i class="fas fa-funnel-dollar"></i>
+                            </div>
+                            <div class="kpi-trend" id="conversionTrend">
+                                <i class="fas fa-arrow-up"></i>
+                                <span>+3.2%</span>
+                            </div>
+                        </div>
+                        <div class="kpi-content">
+                            <h3 id="conversionRate">0%</h3>
+                            <p>전환율</p>
+                            <div class="kpi-detail">
+                                <small>견적요청 → 계약</small>
+                            </div>
+                        </div>
+                        <div class="kpi-sparkline">
+                            <canvas id="conversionSparkline" width="100" height="30"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="kpi-card satisfaction">
+                        <div class="kpi-header">
+                            <div class="kpi-icon">
+                                <i class="fas fa-smile"></i>
+                            </div>
+                            <div class="kpi-trend" id="satisfactionTrend">
+                                <i class="fas fa-arrow-up"></i>
+                                <span>+0.8%</span>
+                            </div>
+                        </div>
+                        <div class="kpi-content">
+                            <h3 id="customerSatisfaction">0</h3>
+                            <p>고객만족도</p>
+                            <div class="kpi-detail">
+                                <small>5점 만점 평균</small>
+                            </div>
+                        </div>
+                        <div class="kpi-sparkline">
+                            <canvas id="satisfactionSparkline" width="100" height="30"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="kpi-card retention">
+                        <div class="kpi-header">
+                            <div class="kpi-icon">
+                                <i class="fas fa-user-check"></i>
+                            </div>
+                            <div class="kpi-trend" id="retentionTrend">
+                                <i class="fas fa-arrow-down"></i>
+                                <span>-1.2%</span>
+                            </div>
+                        </div>
+                        <div class="kpi-content">
+                            <h3 id="customerRetention">0%</h3>
+                            <p>고객 유지율</p>
+                            <div class="kpi-detail">
+                                <small>재구매/재등록률</small>
+                            </div>
+                        </div>
+                        <div class="kpi-sparkline">
+                            <canvas id="retentionSparkline" width="100" height="30"></canvas>
                         </div>
                     </div>
                 </div>
 
-                <!-- 대시보드 위젯 컨테이너 -->
-                <div class="dashboard-widgets" id="dashboardWidgets">
-                    <!-- 위젯들이 동적으로 생성됨 -->
+                <!-- 차트 그리드 -->
+                <div class="charts-grid">
+                    <!-- 매출 추이 차트 -->
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3>매출 추이 분석</h3>
+                            <div class="chart-controls">
+                                <button class="chart-btn active" data-period="daily">일별</button>
+                                <button class="chart-btn" data-period="weekly">주별</button>
+                                <button class="chart-btn" data-period="monthly">월별</button>
+                            </div>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="revenueChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- 고객 유입 경로 -->
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3>고객 유입 경로</h3>
+                            <div class="chart-legend" id="funnelLegend">
+                                <!-- 범례가 동적으로 생성됨 -->
+                            </div>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="funnelChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- 지역별 분석 -->
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3>지역별 고객 분포</h3>
+                            <button class="btn btn-sm" onclick="toggleMapView()">
+                                <i class="fas fa-map"></i> 지도 보기
+                            </button>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="regionChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- 교육 프로그램 성과 -->
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3>교육 프로그램 성과</h3>
+                            <select onchange="updateProgramChart(this.value)">
+                                <option value="enrollment">등록 현황</option>
+                                <option value="completion">완료율</option>
+                                <option value="satisfaction">만족도</option>
+                            </select>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="programChart"></canvas>
+                        </div>
+                    </div>
                 </div>
 
+                <!-- 고객 경험 인사이트 -->
+                <div class="insights-grid">
+                    <div class="insight-card">
+                        <div class="insight-header">
+                            <h3>고객 여정 분석</h3>
+                            <span class="insight-badge new">신규</span>
+                        </div>
+                        <div class="insight-content">
+                            <div class="journey-steps">
+                                <div class="journey-step">
+                                    <div class="step-number">1</div>
+                                    <div class="step-info">
+                                        <h4>사이트 방문</h4>
+                                        <p>1,245명 (100%)</p>
+                                    </div>
+                                </div>
+                                <div class="journey-step">
+                                    <div class="step-number">2</div>
+                                    <div class="step-info">
+                                        <h4>견적 요청</h4>
+                                        <p>298명 (23.9%)</p>
+                                    </div>
+                                </div>
+                                <div class="journey-step">
+                                    <div class="step-number">3</div>
+                                    <div class="step-info">
+                                        <h4>상담 진행</h4>
+                                        <p>156명 (52.3%)</p>
+                                    </div>
+                                </div>
+                                <div class="journey-step">
+                                    <div class="step-number">4</div>
+                                    <div class="step-info">
+                                        <h4>계약 체결</h4>
+                                        <p>89명 (57.1%)</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="insight-card">
+                        <div class="insight-header">
+                            <h3>실시간 활동</h3>
+                            <div class="activity-indicator active"></div>
+                        </div>
+                        <div class="insight-content">
+                            <div class="activity-feed" id="activityFeed">
+                                <!-- 실시간 활동이 여기에 표시됩니다 -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="insight-card">
+                        <div class="insight-header">
+                            <h3>AI 추천 인사이트</h3>
+                            <i class="fas fa-robot insight-icon"></i>
+                        </div>
+                        <div class="insight-content">
+                            <div class="ai-insights" id="aiInsights">
+                                <!-- AI 분석 결과가 여기에 표시됩니다 -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </section>
 
             <!-- 강의 관리 섹션 -->
@@ -394,6 +604,46 @@
                         <div class="settings-card-content">
                             <p>사이트 제목, 연락처, 소셜 미디어 링크를 설정합니다.</p>
                             <button class="btn btn-outline" onclick="editPage('general')">설정하기</button>
+                        </div>
+                    </div>
+                    
+                    <div class="settings-card">
+                        <div class="settings-card-header">
+                            <i class="fas fa-images"></i>
+                            <h3>미디어 관리</h3>
+                        </div>
+                        <div class="settings-card-content">
+                            <p>이미지 및 미디어 파일을 업로드하고 관리합니다.</p>
+                            <button class="btn btn-outline" onclick="openMediaManager()">관리하기</button>
+                        </div>
+                    </div>
+
+                    <div class="settings-card">
+                        <div class="settings-card-header">
+                            <i class="fas fa-chart-bar"></i>
+                            <h3>분석 리포트</h3>
+                        </div>
+                        <div class="settings-card-content">
+                            <p>상세한 분석 리포트를 생성하고 내보냅니다.</p>
+                            <button class="btn btn-outline" onclick="generateAnalyticsReport()">리포트 생성</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 미디어 관리 섹션 -->
+                <div class="content-management" style="margin-top: 3rem;">
+                    <h3>
+                        <i class="fas fa-cloud-upload-alt" style="margin-right: 0.5rem; color: var(--primary-color);"></i>
+                        드래그앤드롭 이미지 업로드
+                    </h3>
+                    <div class="dropzone" id="imageDropzone">
+                        <div class="dz-message" data-dz-message></div>
+                    </div>
+                    
+                    <div style="margin-top: 2rem;">
+                        <h4>업로드된 이미지</h4>
+                        <div id="imageGallery" class="image-gallery" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 1rem; margin-top: 1rem;">
+                            <!-- 업로드된 이미지들이 여기에 표시됩니다 -->
                         </div>
                     </div>
                 </div>

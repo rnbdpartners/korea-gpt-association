@@ -1726,4 +1726,1466 @@ function exportQuotes() {
     link.click();
 }
 
+// 고급 BI 대시보드 기능
+const biDashboard = {
+    charts: {},
+    sparklines: {},
+    realTimeInterval: null,
+    dropzoneInstance: null,
+    
+    // 초기화
+    init() {
+        this.initializeKPIData();
+        this.initializeCharts();
+        this.initializeRealTimeUpdates();
+        this.initializeDropzone();
+        this.generateAIInsights();
+        this.updateActivityFeed();
+        this.setupNotifications();
+    },
+    
+    // KPI 데이터 초기화
+    initializeKPIData() {
+        // 실시간 매출 데이터
+        const completedOrders = ordersData.filter(order => order.status === 'completed');
+        const totalRevenue = completedOrders.reduce((sum, order) => sum + order.amount, 0);
+        
+        // 전환율 계산 (견적 → 계약)
+        const quotes = JSON.parse(localStorage.getItem('quoteHistory') || '[]');
+        const completedQuotes = quotes.filter(q => q.status === 'completed');
+        const conversionRate = quotes.length > 0 ? (completedQuotes.length / quotes.length * 100) : 0;
+        
+        // 고객 만족도 (샘플 데이터)
+        const satisfaction = 4.7;
+        
+        // 고객 유지율 (샘플 데이터)
+        const retention = 87.3;
+        
+        // KPI 업데이트
+        this.updateKPI('totalRevenue', totalRevenue, '매출');
+        this.updateKPI('conversionRate', conversionRate, '전환율', '%');
+        this.updateKPI('customerSatisfaction', satisfaction, '만족도');
+        this.updateKPI('customerRetention', retention, '유지율', '%');
+        
+        // 목표 대비 달성률 계산
+        const revenueGoal = 50000000; // 5천만원 목표
+        const goalPercentage = Math.min((totalRevenue / revenueGoal * 100), 100);
+        document.getElementById('revenueGoal').textContent = Math.round(goalPercentage) + '%';
+    },
+    
+    // KPI 업데이트
+    updateKPI(kpiId, value, label, unit = '') {
+        const element = document.getElementById(kpiId);
+        if (element) {
+            if (label === '매출') {
+                element.textContent = '₩' + value.toLocaleString();
+            } else if (unit === '%') {
+                element.textContent = value.toFixed(1) + '%';
+            } else {
+                element.textContent = value.toFixed(1);
+            }
+        }
+        
+        // 스파크라인 차트 생성
+        this.createSparkline(kpiId + 'Sparkline', this.generateSparklineData());
+    },
+    
+    // 스파크라인 데이터 생성
+    generateSparklineData() {
+        const data = [];
+        for (let i = 0; i < 7; i++) {
+            data.push(Math.random() * 100 + 50);
+        }
+        return data;
+    },
+    
+    // 스파크라인 차트 생성
+    createSparkline(canvasId, data) {
+        const canvas = document.getElementById(canvasId);
+        if (!canvas) return;
+        
+        const ctx = canvas.getContext('2d');
+        
+        if (this.sparklines[canvasId]) {
+            this.sparklines[canvasId].destroy();
+        }
+        
+        this.sparklines[canvasId] = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['', '', '', '', '', '', ''],
+                datasets: [{
+                    data: data,
+                    borderColor: '#04F9BC',
+                    backgroundColor: 'rgba(4, 249, 188, 0.1)',
+                    borderWidth: 2,
+                    fill: true,
+                    pointRadius: 0,
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: { enabled: false }
+                },
+                scales: {
+                    x: { display: false },
+                    y: { display: false }
+                },
+                elements: {
+                    point: { radius: 0 }
+                }
+            }
+        });
+    },
+    
+    // 메인 차트 초기화
+    initializeCharts() {
+        this.createRevenueChart();
+        this.createFunnelChart();
+        this.createRegionChart();
+        this.createProgramChart();
+    },
+    
+    // 매출 추이 차트
+    createRevenueChart() {
+        const ctx = document.getElementById('revenueChart');
+        if (!ctx) return;
+        
+        const labels = [];
+        const data = [];
+        
+        // 최근 30일 데이터 생성
+        for (let i = 29; i >= 0; i--) {
+            const date = new Date();
+            date.setDate(date.getDate() - i);
+            labels.push(date.toLocaleDateString('ko-KR', { month: 'short', day: 'numeric' }));
+            data.push(Math.random() * 2000000 + 500000);
+        }
+        
+        this.charts.revenue = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: '일별 매출',
+                    data: data,
+                    borderColor: '#10b981',
+                    backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                    borderWidth: 3,
+                    fill: true,
+                    tension: 0.4,
+                    pointBackgroundColor: '#10b981',
+                    pointBorderColor: '#ffffff',
+                    pointBorderWidth: 2,
+                    pointRadius: 5,
+                    pointHoverRadius: 8
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                        titleColor: '#ffffff',
+                        bodyColor: '#ffffff',
+                        borderColor: '#04F9BC',
+                        borderWidth: 1,
+                        callbacks: {
+                            label: function(context) {
+                                return '매출: ₩' + context.parsed.y.toLocaleString();
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: { display: false },
+                        ticks: { color: '#6b7280' }
+                    },
+                    y: {
+                        grid: { color: 'rgba(107, 114, 128, 0.1)' },
+                        ticks: { 
+                            color: '#6b7280',
+                            callback: function(value) {
+                                return '₩' + (value / 1000000).toFixed(1) + 'M';
+                            }
+                        }
+                    }
+                },
+                interaction: {
+                    intersect: false,
+                    mode: 'index'
+                }
+            }
+        });
+    },
+    
+    // 고객 유입 경로 차트
+    createFunnelChart() {
+        const ctx = document.getElementById('funnelChart');
+        if (!ctx) return;
+        
+        this.charts.funnel = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: ['사이트 방문', '견적 요청', '상담 진행', '계약 체결'],
+                datasets: [{
+                    data: [1245, 298, 156, 89],
+                    backgroundColor: [
+                        '#04F9BC',
+                        '#3b82f6',
+                        '#f59e0b',
+                        '#10b981'
+                    ],
+                    borderWidth: 0,
+                    hoverOffset: 10
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            padding: 20,
+                            usePointStyle: true,
+                            font: { size: 12 }
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                const label = context.label;
+                                const value = context.parsed;
+                                const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                const percentage = ((value / total) * 100).toFixed(1);
+                                return `${label}: ${value}명 (${percentage}%)`;
+                            }
+                        }
+                    }
+                },
+                cutout: '60%'
+            }
+        });
+    },
+    
+    // 지역별 분포 차트
+    createRegionChart() {
+        const ctx = document.getElementById('regionChart');
+        if (!ctx) return;
+        
+        this.charts.region = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['서울', '경기', '부산', '대구', '인천', '광주', '대전', '기타'],
+                datasets: [{
+                    data: [450, 320, 180, 120, 95, 75, 65, 145],
+                    backgroundColor: [
+                        '#04F9BC',
+                        '#BED7CF',
+                        '#3b82f6',
+                        '#f59e0b',
+                        '#10b981',
+                        '#8b5cf6',
+                        '#ef4444',
+                        '#6b7280'
+                    ],
+                    borderRadius: 8,
+                    borderSkipped: false
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return `${context.label}: ${context.parsed.y}명`;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: { display: false },
+                        ticks: { color: '#6b7280' }
+                    },
+                    y: {
+                        grid: { color: 'rgba(107, 114, 128, 0.1)' },
+                        ticks: { color: '#6b7280' }
+                    }
+                }
+            }
+        });
+    },
+    
+    // 교육 프로그램 성과 차트
+    createProgramChart() {
+        const ctx = document.getElementById('programChart');
+        if (!ctx) return;
+        
+        this.charts.program = new Chart(ctx, {
+            type: 'radar',
+            data: {
+                labels: ['프롬프트 엔지니어링', '비즈니스 AI', 'AI 마케팅', 'AI 리더십', '맞춤형 교육'],
+                datasets: [{
+                    label: '등록 현황',
+                    data: [85, 70, 65, 45, 90],
+                    borderColor: '#04F9BC',
+                    backgroundColor: 'rgba(4, 249, 188, 0.2)',
+                    borderWidth: 2,
+                    pointBackgroundColor: '#04F9BC',
+                    pointBorderColor: '#ffffff',
+                    pointBorderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    r: {
+                        beginAtZero: true,
+                        max: 100,
+                        ticks: {
+                            stepSize: 20,
+                            color: '#6b7280'
+                        },
+                        grid: { color: 'rgba(107, 114, 128, 0.2)' },
+                        pointLabels: {
+                            color: '#374151',
+                            font: { size: 11 }
+                        }
+                    }
+                }
+            }
+        });
+    },
+    
+    // 실시간 업데이트 초기화
+    initializeRealTimeUpdates() {
+        // 30초마다 데이터 업데이트
+        this.realTimeInterval = setInterval(() => {
+            this.updateRealTimeData();
+        }, 30000);
+        
+        // 즉시 첫 업데이트 실행
+        this.updateRealTimeData();
+    },
+    
+    // 실시간 데이터 업데이트
+    updateRealTimeData() {
+        // KPI 데이터 업데이트
+        this.initializeKPIData();
+        
+        // 활동 피드 업데이트
+        this.updateActivityFeed();
+        
+        // 알림 확인
+        this.checkForNewNotifications();
+    },
+    
+    // 활동 피드 업데이트
+    updateActivityFeed() {
+        const activityFeed = document.getElementById('activityFeed');
+        if (!activityFeed) return;
+        
+        const activities = [
+            { user: '김', action: '새로운 견적을 요청했습니다', time: '방금 전', type: 'quote' },
+            { user: '이', action: 'AI 마케팅 과정을 완료했습니다', time: '5분 전', type: 'completion' },
+            { user: '박', action: '프리미엄 회원으로 업그레이드했습니다', time: '12분 전', type: 'upgrade' },
+            { user: '정', action: '새로 가입했습니다', time: '18분 전', type: 'signup' },
+            { user: '최', action: '견적 상담을 완료했습니다', time: '25분 전', type: 'consultation' }
+        ];
+        
+        activityFeed.innerHTML = activities.map(activity => `
+            <div class="activity-item">
+                <div class="activity-avatar">${activity.user}</div>
+                <div class="activity-content">
+                    <p><strong>${activity.user}님이</strong> ${activity.action}</p>
+                    <span class="activity-time">${activity.time}</span>
+                </div>
+            </div>
+        `).join('');
+    },
+    
+    // AI 인사이트 생성
+    generateAIInsights() {
+        const aiInsights = document.getElementById('aiInsights');
+        if (!aiInsights) return;
+        
+        const insights = [
+            {
+                title: '매출 증가 기회',
+                content: '프롬프트 엔지니어링 과정의 수요가 35% 증가했습니다. 추가 과정 개설을 고려해보세요.',
+                type: 'opportunity'
+            },
+            {
+                title: '고객 이탈 위험',
+                content: '최근 7일간 3명의 프리미엄 회원이 활동하지 않았습니다. 맞춤형 리텐션 캠페인이 필요합니다.',
+                type: 'warning'
+            },
+            {
+                title: '마케팅 최적화',
+                content: '네이버 블로그 유입 고객의 전환율이 42%로 가장 높습니다. 해당 채널 투자를 늘려보세요.',
+                type: 'suggestion'
+            }
+        ];
+        
+        aiInsights.innerHTML = insights.map(insight => `
+            <div class="ai-insight-item">
+                <div class="ai-insight-icon">
+                    <i class="fas fa-lightbulb"></i>
+                </div>
+                <div class="ai-insight-content">
+                    <h5>${insight.title}</h5>
+                    <p>${insight.content}</p>
+                </div>
+            </div>
+        `).join('');
+    },
+    
+    // 드래그앤드롭 이미지 업로드 초기화
+    initializeDropzone() {
+        const dropzoneElement = document.querySelector('.dropzone');
+        if (!dropzoneElement) return;
+        
+        // Dropzone 설정이 이미 있다면 제거
+        if (this.dropzoneInstance) {
+            this.dropzoneInstance.destroy();
+        }
+        
+        // Dropzone 초기화
+        this.dropzoneInstance = new Dropzone(dropzoneElement, {
+            url: '/upload', // 실제 업로드 URL (데모용)
+            maxFilesize: 10, // MB
+            acceptedFiles: 'image/*',
+            maxFiles: 5,
+            addRemoveLinks: true,
+            dictDefaultMessage: `
+                <i class="fas fa-cloud-upload-alt" style="font-size: 3rem; color: var(--primary-color); margin-bottom: 1rem;"></i>
+                <div style="font-size: 1rem; font-weight: 500; margin-bottom: 0.5rem;">이미지를 여기에 드래그하거나 클릭하세요</div>
+                <div style="font-size: 0.875rem; color: var(--text-light);">JPG, PNG, GIF 파일만 가능 (최대 10MB)</div>
+            `,
+            dictRemoveFile: '삭제',
+            dictCancelUpload: '취소',
+            dictUploadCanceled: '업로드가 취소되었습니다',
+            dictInvalidFileType: '지원하지 않는 파일 형식입니다',
+            dictFileTooBig: '파일 크기가 너무 큽니다 (최대 {{maxFilesize}}MB)',
+            dictMaxFilesExceeded: '최대 {{maxFiles}}개 파일만 업로드 가능합니다',
+            
+            init: function() {
+                this.on('success', function(file, response) {
+                    console.log('파일 업로드 성공:', file.name);
+                    biDashboard.showNotification('success', `${file.name} 업로드 완료`);
+                });
+                
+                this.on('error', function(file, errorMessage) {
+                    console.error('파일 업로드 실패:', errorMessage);
+                    biDashboard.showNotification('error', `업로드 실패: ${errorMessage}`);
+                });
+                
+                this.on('sending', function(file, xhr, formData) {
+                    // 추가 데이터 전송 시 사용
+                    formData.append('timestamp', Date.now());
+                });
+            }
+        });
+        
+        // 데모용 가짜 업로드 처리
+        this.dropzoneInstance.options.url = 'javascript:void(0)';
+        this.dropzoneInstance.processQueue = function() {
+            const files = this.getQueuedFiles();
+            files.forEach(file => {
+                setTimeout(() => {
+                    this.emit('success', file, { status: 'success' });
+                    this.emit('complete', file);
+                }, 1000 + Math.random() * 2000);
+            });
+        };
+    },
+    
+    // 알림 시스템 설정
+    setupNotifications() {
+        // 페이지 로드 시 환영 알림
+        setTimeout(() => {
+            this.showNotification('info', '비즈니스 인텔리전스 대시보드에 오신 것을 환영합니다!');
+        }, 1000);
+        
+        // 주기적으로 시스템 상태 확인
+        setInterval(() => {
+            if (Math.random() < 0.1) { // 10% 확률
+                this.showRandomNotification();
+            }
+        }, 60000); // 1분마다
+    },
+    
+    // 알림 표시
+    showNotification(type, message) {
+        const alertsContainer = document.getElementById('realTimeAlerts');
+        if (!alertsContainer) return;
+        
+        const alertDiv = document.createElement('div');
+        alertDiv.className = `alert ${type}`;
+        alertDiv.innerHTML = `
+            <i class="fas fa-${this.getNotificationIcon(type)}"></i>
+            <span>${message}</span>
+            <button class="btn-close" onclick="this.parentElement.remove()">×</button>
+        `;
+        
+        alertsContainer.appendChild(alertDiv);
+        
+        // 5초 후 자동 제거
+        setTimeout(() => {
+            if (alertDiv.parentElement) {
+                alertDiv.remove();
+            }
+        }, 5000);
+    },
+    
+    // 랜덤 알림 표시
+    showRandomNotification() {
+        const notifications = [
+            { type: 'success', message: '새로운 견적 요청이 접수되었습니다.' },
+            { type: 'info', message: '시스템 백업이 완료되었습니다.' },
+            { type: 'warning', message: '서버 용량이 85%에 도달했습니다.' }
+        ];
+        
+        const notification = notifications[Math.floor(Math.random() * notifications.length)];
+        this.showNotification(notification.type, notification.message);
+    },
+    
+    // 알림 아이콘 반환
+    getNotificationIcon(type) {
+        const icons = {
+            success: 'check-circle',
+            error: 'exclamation-triangle',
+            warning: 'exclamation-circle',
+            info: 'info-circle'
+        };
+        return icons[type] || 'info-circle';
+    },
+    
+    // 새 알림 확인
+    checkForNewNotifications() {
+        // 실제 구현에서는 서버 API 호출
+        // 여기서는 데모용 랜덤 알림
+        if (Math.random() < 0.05) { // 5% 확률
+            this.showRandomNotification();
+        }
+    },
+    
+    // 차트 새로고침
+    refreshChart(chartType) {
+        if (this.charts[chartType]) {
+            // 새로운 데이터 생성
+            const newData = this.generateChartData(chartType);
+            this.charts[chartType].data = newData;
+            this.charts[chartType].update('none');
+        }
+    },
+    
+    // 차트 데이터 생성
+    generateChartData(chartType) {
+        switch (chartType) {
+            case 'revenue':
+                return {
+                    labels: this.charts.revenue.data.labels,
+                    datasets: [{
+                        ...this.charts.revenue.data.datasets[0],
+                        data: this.charts.revenue.data.datasets[0].data.map(() => 
+                            Math.random() * 2000000 + 500000
+                        )
+                    }]
+                };
+            default:
+                return this.charts[chartType].data;
+        }
+    },
+    
+    // 정리
+    destroy() {
+        if (this.realTimeInterval) {
+            clearInterval(this.realTimeInterval);
+        }
+        
+        if (this.dropzoneInstance) {
+            this.dropzoneInstance.destroy();
+        }
+        
+        Object.values(this.charts).forEach(chart => {
+            if (chart && typeof chart.destroy === 'function') {
+                chart.destroy();
+            }
+        });
+        
+        Object.values(this.sparklines).forEach(chart => {
+            if (chart && typeof chart.destroy === 'function') {
+                chart.destroy();
+            }
+        });
+    }
+};
+
+// 대시보드 관련 유틸리티 함수들
+function updateDashboardData() {
+    const dateRange = document.getElementById('dateRange').value;
+    console.log(`데이터 범위 변경: ${dateRange}일`);
+    
+    // 선택된 기간에 따른 데이터 업데이트
+    biDashboard.initializeKPIData();
+    biDashboard.showNotification('info', `최근 ${dateRange}일 데이터로 업데이트되었습니다.`);
+}
+
+function exportDashboardData() {
+    biDashboard.showNotification('info', '대시보드 데이터를 내보내는 중...');
+    
+    setTimeout(() => {
+        // CSV 데이터 생성
+        const data = {
+            timestamp: new Date().toISOString(),
+            revenue: document.getElementById('totalRevenue').textContent,
+            conversion: document.getElementById('conversionRate').textContent,
+            satisfaction: document.getElementById('customerSatisfaction').textContent,
+            retention: document.getElementById('customerRetention').textContent
+        };
+        
+        const csv = Object.entries(data).map(([key, value]) => `${key},${value}`).join('\n');
+        const blob = new Blob([csv], { type: 'text/csv' });
+        const url = URL.createObjectURL(blob);
+        
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `dashboard_data_${new Date().toISOString().slice(0, 10)}.csv`;
+        a.click();
+        
+        URL.revokeObjectURL(url);
+        biDashboard.showNotification('success', '대시보드 데이터가 내보내졌습니다.');
+    }, 1000);
+}
+
+function refreshDashboard() {
+    biDashboard.showNotification('info', '대시보드를 새로고침하는 중...');
+    
+    setTimeout(() => {
+        biDashboard.updateRealTimeData();
+        biDashboard.generateAIInsights();
+        biDashboard.showNotification('success', '대시보드가 새로고침되었습니다.');
+    }, 500);
+}
+
+function toggleMapView() {
+    biDashboard.showNotification('info', '지도 보기 기능은 곧 제공될 예정입니다.');
+}
+
+function updateProgramChart(metric) {
+    console.log(`프로그램 차트 지표 변경: ${metric}`);
+    
+    const chart = biDashboard.charts.program;
+    if (chart) {
+        let newData;
+        switch (metric) {
+            case 'enrollment':
+                newData = [85, 70, 65, 45, 90];
+                break;
+            case 'completion':
+                newData = [92, 88, 76, 84, 95];
+                break;
+            case 'satisfaction':
+                newData = [4.8, 4.6, 4.7, 4.5, 4.9];
+                break;
+            default:
+                newData = [85, 70, 65, 45, 90];
+        }
+        
+        chart.data.datasets[0].data = newData;
+        chart.update();
+    }
+}
+
+// 차트 컨트롤 함수들
+function setChartPeriod(chartId, period) {
+    console.log(`${chartId} 차트 기간 변경: ${period}`);
+    
+    // 버튼 활성화 상태 변경
+    document.querySelectorAll(`[data-period]`).forEach(btn => {
+        btn.classList.remove('active');
+    });
+    event.target.classList.add('active');
+    
+    // 차트 데이터 업데이트
+    if (biDashboard.charts.revenue) {
+        biDashboard.refreshChart('revenue');
+    }
+}
+
+// 콘텐츠 관리 시스템 강화
+const contentManagement = {
+    templates: {},
+    currentTemplate: null,
+    
+    init() {
+        this.loadTemplates();
+        this.setupAdvancedEditor();
+    },
+    
+    loadTemplates() {
+        // 실제로는 서버에서 로드
+        this.templates = {
+            'main-banner': {
+                name: '메인 배너',
+                content: '<h2>AI 시대를 선도하는 GPT 전문 교육</h2><p>한국GPT협회와 함께 미래를 준비하세요</p>',
+                type: 'hero'
+            },
+            'course-intro': {
+                name: '강의 소개',
+                content: '<h3>전문가가 설계한 실무 중심 커리큘럼</h3>',
+                type: 'content'
+            }
+        };
+    },
+    
+    setupAdvancedEditor() {
+        // 고급 에디터 기능 설정
+        this.setupImageUploader();
+        this.setupContentBlocks();
+    },
+    
+    setupImageUploader() {
+        const uploadArea = document.querySelector('.upload-area');
+        if (!uploadArea) return;
+        
+        uploadArea.addEventListener('click', () => {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = 'image/*';
+            input.multiple = true;
+            
+            input.onchange = (e) => {
+                const files = Array.from(e.target.files);
+                files.forEach(file => this.handleImageUpload(file));
+            };
+            
+            input.click();
+        });
+        
+        // 드래그앤드롭 지원
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.classList.add('drag-over');
+        });
+        
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.classList.remove('drag-over');
+        });
+        
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('drag-over');
+            
+            const files = Array.from(e.dataTransfer.files);
+            files.forEach(file => this.handleImageUpload(file));
+        });
+    },
+    
+    handleImageUpload(file) {
+        if (!file.type.startsWith('image/')) {
+            biDashboard.showNotification('error', '이미지 파일만 업로드 가능합니다.');
+            return;
+        }
+        
+        if (file.size > 10 * 1024 * 1024) {
+            biDashboard.showNotification('error', '파일 크기는 10MB 이하여야 합니다.');
+            return;
+        }
+        
+        // 파일 읽기
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            const imageUrl = e.target.result;
+            this.addImageToGallery(file.name, imageUrl);
+            biDashboard.showNotification('success', `${file.name} 업로드 완료`);
+        };
+        reader.readAsDataURL(file);
+    },
+    
+    addImageToGallery(filename, url) {
+        // 이미지 갤러리에 추가 (실제 구현에서는 서버 저장)
+        const gallery = document.getElementById('imageGallery');
+        if (!gallery) return;
+        
+        const imageItem = document.createElement('div');
+        imageItem.className = 'image-item';
+        imageItem.innerHTML = `
+            <img src="${url}" alt="${filename}" onclick="selectImage('${url}')">
+            <div class="image-info">
+                <span>${filename}</span>
+                <button onclick="deleteImage('${filename}')" class="btn-delete">삭제</button>
+            </div>
+        `;
+        
+        gallery.appendChild(imageItem);
+    },
+    
+    setupContentBlocks() {
+        // 콘텐츠 블록 시스템 설정
+        const blockTypes = ['text', 'image', 'video', 'button', 'gallery'];
+        
+        blockTypes.forEach(type => {
+            const button = document.getElementById(`add-${type}-block`);
+            if (button) {
+                button.addEventListener('click', () => this.addContentBlock(type));
+            }
+        });
+    },
+    
+    addContentBlock(type) {
+        const editor = document.getElementById('editableContent');
+        if (!editor) return;
+        
+        let blockHtml = '';
+        
+        switch (type) {
+            case 'text':
+                blockHtml = '<div class="content-block text-block" contenteditable="true"><p>텍스트를 입력하세요...</p></div>';
+                break;
+            case 'image':
+                blockHtml = '<div class="content-block image-block"><img src="https://via.placeholder.com/400x200" alt="이미지"><div class="block-controls"><button onclick="editImage(this)">편집</button></div></div>';
+                break;
+            case 'button':
+                blockHtml = '<div class="content-block button-block"><button class="btn btn-primary">버튼 텍스트</button><div class="block-controls"><button onclick="editButton(this)">편집</button></div></div>';
+                break;
+            default:
+                blockHtml = `<div class="content-block ${type}-block"><p>${type} 블록</p></div>`;
+        }
+        
+        editor.insertAdjacentHTML('beforeend', blockHtml);
+        biDashboard.showNotification('success', `${type} 블록이 추가되었습니다.`);
+    }
+};
+
+// 사용자 행동 추적 시스템
+const userAnalytics = {
+    sessions: [],
+    events: [],
+    
+    init() {
+        this.trackPageView();
+        this.setupEventTracking();
+        this.startSessionTracking();
+    },
+    
+    trackPageView() {
+        const pageData = {
+            url: window.location.href,
+            title: document.title,
+            timestamp: Date.now(),
+            referrer: document.referrer
+        };
+        
+        this.events.push({
+            type: 'pageview',
+            data: pageData,
+            timestamp: Date.now()
+        });
+    },
+    
+    setupEventTracking() {
+        // 클릭 이벤트 추적
+        document.addEventListener('click', (e) => {
+            if (e.target.matches('.nav-link, .btn, .action-btn')) {
+                this.trackEvent('click', {
+                    element: e.target.tagName,
+                    text: e.target.textContent.trim(),
+                    className: e.target.className
+                });
+            }
+        });
+        
+        // 폼 제출 추적
+        document.addEventListener('submit', (e) => {
+            this.trackEvent('form_submit', {
+                form: e.target.id || 'unknown',
+                action: e.target.action
+            });
+        });
+    },
+    
+    trackEvent(eventType, eventData) {
+        this.events.push({
+            type: eventType,
+            data: eventData,
+            timestamp: Date.now(),
+            sessionId: this.getCurrentSessionId()
+        });
+        
+        // 로컬 스토리지에 저장
+        localStorage.setItem('userEvents', JSON.stringify(this.events.slice(-100))); // 최근 100개만 보관
+    },
+    
+    startSessionTracking() {
+        const sessionId = this.generateSessionId();
+        const session = {
+            id: sessionId,
+            startTime: Date.now(),
+            userAgent: navigator.userAgent,
+            screenResolution: `${screen.width}x${screen.height}`,
+            events: []
+        };
+        
+        this.sessions.push(session);
+        localStorage.setItem('currentSession', sessionId);
+    },
+    
+    getCurrentSessionId() {
+        return localStorage.getItem('currentSession') || this.generateSessionId();
+    },
+    
+    generateSessionId() {
+        return 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+    },
+    
+    getAnalyticsReport() {
+        return {
+            totalSessions: this.sessions.length,
+            totalEvents: this.events.length,
+            topEvents: this.getTopEvents(),
+            sessionDuration: this.getAverageSessionDuration()
+        };
+    },
+    
+    getTopEvents() {
+        const eventCounts = {};
+        this.events.forEach(event => {
+            eventCounts[event.type] = (eventCounts[event.type] || 0) + 1;
+        });
+        
+        return Object.entries(eventCounts)
+            .sort(([,a], [,b]) => b - a)
+            .slice(0, 5);
+    },
+    
+    getAverageSessionDuration() {
+        if (this.sessions.length === 0) return 0;
+        
+        const completedSessions = this.sessions.filter(s => s.endTime);
+        if (completedSessions.length === 0) return 0;
+        
+        const totalDuration = completedSessions.reduce((sum, s) => sum + (s.endTime - s.startTime), 0);
+        return Math.round(totalDuration / completedSessions.length / 1000); // 초 단위
+    }
+};
+
+// 성능 모니터링 시스템
+const performanceMonitor = {
+    metrics: {},
+    
+    init() {
+        this.measurePageLoad();
+        this.monitorRealTimeMetrics();
+        this.setupPerformanceObserver();
+    },
+    
+    measurePageLoad() {
+        window.addEventListener('load', () => {
+            const navigation = performance.getEntriesByType('navigation')[0];
+            
+            this.metrics.pageLoad = {
+                domContentLoaded: navigation.domContentLoadedEventEnd - navigation.domContentLoadedEventStart,
+                loadComplete: navigation.loadEventEnd - navigation.loadEventStart,
+                totalTime: navigation.loadEventEnd - navigation.fetchStart,
+                timestamp: Date.now()
+            };
+            
+            console.log('페이지 로드 성능:', this.metrics.pageLoad);
+        });
+    },
+    
+    monitorRealTimeMetrics() {
+        setInterval(() => {
+            this.metrics.memory = performance.memory ? {
+                used: Math.round(performance.memory.usedJSHeapSize / 1024 / 1024),
+                total: Math.round(performance.memory.totalJSHeapSize / 1024 / 1024),
+                limit: Math.round(performance.memory.jsHeapSizeLimit / 1024 / 1024)
+            } : null;
+            
+            this.metrics.connection = navigator.connection ? {
+                effectiveType: navigator.connection.effectiveType,
+                downlink: navigator.connection.downlink,
+                rtt: navigator.connection.rtt
+            } : null;
+            
+        }, 5000); // 5초마다
+    },
+    
+    setupPerformanceObserver() {
+        if ('PerformanceObserver' in window) {
+            // 최대 콘텐츠 페인트 측정
+            const observer = new PerformanceObserver((list) => {
+                const entries = list.getEntries();
+                entries.forEach(entry => {
+                    if (entry.entryType === 'largest-contentful-paint') {
+                        this.metrics.lcp = entry.startTime;
+                    }
+                });
+            });
+            
+            observer.observe({ entryTypes: ['largest-contentful-paint'] });
+        }
+    },
+    
+    getPerformanceReport() {
+        return {
+            ...this.metrics,
+            timestamp: Date.now(),
+            userAgent: navigator.userAgent
+        };
+    }
+};
+
+// 메인 초기화 함수 수정
+document.addEventListener('DOMContentLoaded', function() {
+    // 기존 초기화
+    setupNavigation();
+    setupDropdown();
+    setupCourseManagement();
+    setupOrderManagement();
+    updateDashboardStats();
+    setupModals();
+    
+    // 새로운 BI 시스템 초기화
+    biDashboard.init();
+    contentManagement.init();
+    userAnalytics.init();
+    performanceMonitor.init();
+    
+    console.log('고급 BI 대시보드 초기화 완료');
+});
+
+// 페이지 언로드 시 정리
+window.addEventListener('beforeunload', () => {
+    biDashboard.destroy();
+    
+    // 세션 종료 시간 기록
+    const sessionId = userAnalytics.getCurrentSessionId();
+    const session = userAnalytics.sessions.find(s => s.id === sessionId);
+    if (session) {
+        session.endTime = Date.now();
+    }
+});
+
+// 미디어 관리 및 추가 유틸리티 함수들
+function openMediaManager() {
+    biDashboard.showNotification('info', '미디어 관리자를 열었습니다.');
+    
+    // 드롭존 초기화 (이미 초기화되지 않은 경우에만)
+    if (!biDashboard.dropzoneInstance) {
+        biDashboard.initializeDropzone();
+    }
+    
+    // 스크롤을 미디어 관리 섹션으로 이동
+    const mediaSection = document.querySelector('.content-management');
+    if (mediaSection) {
+        mediaSection.scrollIntoView({ behavior: 'smooth' });
+    }
+}
+
+function generateAnalyticsReport() {
+    biDashboard.showNotification('info', '분석 리포트를 생성하는 중...');
+    
+    setTimeout(() => {
+        const report = {
+            generatedAt: new Date().toISOString(),
+            period: '최근 30일',
+            summary: {
+                totalRevenue: document.getElementById('totalRevenue')?.textContent || '₩0',
+                totalOrders: ordersData.length,
+                conversionRate: document.getElementById('conversionRate')?.textContent || '0%',
+                customerSatisfaction: document.getElementById('customerSatisfaction')?.textContent || '0',
+                activeUsers: sampleUsers?.length || 0
+            },
+            userAnalytics: userAnalytics.getAnalyticsReport(),
+            performance: performanceMonitor.getPerformanceReport(),
+            recommendations: [
+                '프롬프트 엔지니어링 과정의 수요가 증가하고 있습니다.',
+                '모바일 사용자 비율이 65%로 높아 모바일 최적화가 중요합니다.',
+                '네이버 블로그 마케팅 채널의 ROI가 가장 높습니다.',
+                '고객 만족도 향상을 위해 1:1 상담 서비스 확대를 권장합니다.'
+            ]
+        };
+        
+        // JSON 파일로 다운로드
+        const blob = new Blob([JSON.stringify(report, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `analytics_report_${new Date().toISOString().slice(0, 10)}.json`;
+        a.click();
+        
+        URL.revokeObjectURL(url);
+        biDashboard.showNotification('success', '분석 리포트가 생성되어 다운로드되었습니다.');
+    }, 2000);
+}
+
+function selectImage(imageUrl) {
+    // 이미지 선택 처리
+    const selectedImages = document.querySelectorAll('.image-item.selected');
+    selectedImages.forEach(img => img.classList.remove('selected'));
+    
+    event.target.closest('.image-item').classList.add('selected');
+    biDashboard.showNotification('info', '이미지가 선택되었습니다.');
+}
+
+function deleteImage(filename) {
+    if (confirm(`"${filename}" 이미지를 삭제하시겠습니까?`)) {
+        const imageItem = event.target.closest('.image-item');
+        if (imageItem) {
+            imageItem.remove();
+            biDashboard.showNotification('success', `${filename} 이미지가 삭제되었습니다.`);
+        }
+    }
+}
+
+// 일정 관리 기능 (추가 기능)
+const scheduleManager = {
+    events: [],
+    
+    init() {
+        this.loadSchedule();
+        this.setupEventHandlers();
+    },
+    
+    loadSchedule() {
+        // 샘플 일정 데이터
+        this.events = [
+            {
+                id: 1,
+                title: '기업교육 상담 - 삼성전자',
+                date: new Date(Date.now() + 24 * 60 * 60 * 1000), // 내일
+                type: 'consultation',
+                priority: 'high'
+            },
+            {
+                id: 2,
+                title: '신규 강의 기획 회의',
+                date: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000), // 모레
+                type: 'meeting',
+                priority: 'medium'
+            },
+            {
+                id: 3,
+                title: '월간 매출 리뷰',
+                date: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 일주일 후
+                type: 'review',
+                priority: 'high'
+            }
+        ];
+    },
+    
+    setupEventHandlers() {
+        // 일정 관련 이벤트 처리
+    },
+    
+    getUpcomingEvents(days = 7) {
+        const now = new Date();
+        const future = new Date(now.getTime() + days * 24 * 60 * 60 * 1000);
+        
+        return this.events.filter(event => 
+            event.date >= now && event.date <= future
+        ).sort((a, b) => a.date - b.date);
+    },
+    
+    addEvent(eventData) {
+        const newEvent = {
+            id: Math.max(...this.events.map(e => e.id)) + 1,
+            ...eventData,
+            date: new Date(eventData.date)
+        };
+        
+        this.events.push(newEvent);
+        this.saveSchedule();
+        return newEvent;
+    },
+    
+    saveSchedule() {
+        localStorage.setItem('adminSchedule', JSON.stringify(this.events));
+    }
+};
+
+// 시스템 상태 모니터링
+const systemMonitor = {
+    status: {
+        server: 'healthy',
+        database: 'healthy',
+        storage: 'warning',
+        lastChecked: new Date()
+    },
+    
+    init() {
+        this.checkSystemHealth();
+        setInterval(() => this.checkSystemHealth(), 5 * 60 * 1000); // 5분마다
+    },
+    
+    checkSystemHealth() {
+        // 실제로는 서버 API 호출
+        const statuses = ['healthy', 'warning', 'error'];
+        
+        this.status = {
+            server: statuses[Math.floor(Math.random() * 3)],
+            database: statuses[Math.floor(Math.random() * 3)],
+            storage: Math.random() > 0.8 ? 'warning' : 'healthy',
+            memory: this.getMemoryUsage(),
+            lastChecked: new Date()
+        };
+        
+        this.updateStatusDisplay();
+        this.checkAlerts();
+    },
+    
+    getMemoryUsage() {
+        if (performance.memory) {
+            const used = performance.memory.usedJSHeapSize;
+            const total = performance.memory.totalJSHeapSize;
+            return Math.round((used / total) * 100);
+        }
+        return Math.floor(Math.random() * 100);
+    },
+    
+    updateStatusDisplay() {
+        // 시스템 상태 UI 업데이트
+        const statusElement = document.getElementById('systemStatus');
+        if (statusElement) {
+            const overallStatus = this.getOverallStatus();
+            statusElement.className = `system-status ${overallStatus}`;
+            statusElement.textContent = this.getStatusText(overallStatus);
+        }
+    },
+    
+    getOverallStatus() {
+        const statuses = Object.values(this.status).filter(s => typeof s === 'string');
+        if (statuses.includes('error')) return 'error';
+        if (statuses.includes('warning')) return 'warning';
+        return 'healthy';
+    },
+    
+    getStatusText(status) {
+        const texts = {
+            healthy: '정상',
+            warning: '주의',
+            error: '오류'
+        };
+        return texts[status] || '알 수 없음';
+    },
+    
+    checkAlerts() {
+        if (this.status.storage === 'warning') {
+            biDashboard.showNotification('warning', '저장소 용량이 부족합니다.');
+        }
+        
+        if (this.status.memory > 90) {
+            biDashboard.showNotification('warning', '메모리 사용량이 높습니다.');
+        }
+        
+        if (this.status.server === 'error') {
+            biDashboard.showNotification('error', '서버 연결에 문제가 있습니다.');
+        }
+    }
+};
+
+// 백업 및 복원 시스템
+const backupManager = {
+    lastBackup: null,
+    
+    init() {
+        this.loadBackupInfo();
+        this.scheduleAutoBackup();
+    },
+    
+    loadBackupInfo() {
+        const backupInfo = localStorage.getItem('lastBackup');
+        if (backupInfo) {
+            this.lastBackup = JSON.parse(backupInfo);
+        }
+    },
+    
+    createBackup() {
+        biDashboard.showNotification('info', '백업을 생성하는 중...');
+        
+        const backupData = {
+            timestamp: new Date().toISOString(),
+            courses: coursesData,
+            orders: ordersData,
+            users: sampleUsers || [],
+            quotes: JSON.parse(localStorage.getItem('quoteHistory') || '[]'),
+            settings: {
+                theme: localStorage.getItem('theme'),
+                dashboardWidgets: localStorage.getItem('dashboardWidgets')
+            }
+        };
+        
+        setTimeout(() => {
+            // 백업 파일 생성
+            const blob = new Blob([JSON.stringify(backupData, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `kgpt_backup_${new Date().toISOString().slice(0, 19).replace(/:/g, '-')}.json`;
+            a.click();
+            
+            URL.revokeObjectURL(url);
+            
+            // 백업 정보 저장
+            this.lastBackup = {
+                timestamp: backupData.timestamp,
+                size: blob.size
+            };
+            localStorage.setItem('lastBackup', JSON.stringify(this.lastBackup));
+            
+            biDashboard.showNotification('success', '백업이 성공적으로 생성되었습니다.');
+        }, 1500);
+    },
+    
+    restoreBackup(file) {
+        if (!file) return;
+        
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            try {
+                const backupData = JSON.parse(e.target.result);
+                
+                if (confirm('백업을 복원하시겠습니까? 현재 데이터가 모두 대체됩니다.')) {
+                    // 데이터 복원
+                    if (backupData.courses) coursesData = backupData.courses;
+                    if (backupData.orders) ordersData = backupData.orders;
+                    if (backupData.quotes) localStorage.setItem('quoteHistory', JSON.stringify(backupData.quotes));
+                    if (backupData.settings) {
+                        Object.entries(backupData.settings).forEach(([key, value]) => {
+                            if (value) localStorage.setItem(key, value);
+                        });
+                    }
+                    
+                    biDashboard.showNotification('success', '백업이 성공적으로 복원되었습니다. 페이지를 새로고침하겠습니다.');
+                    
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 2000);
+                }
+            } catch (error) {
+                biDashboard.showNotification('error', '백업 파일이 손상되었거나 올바르지 않습니다.');
+            }
+        };
+        reader.readAsText(file);
+    },
+    
+    scheduleAutoBackup() {
+        // 24시간마다 자동 백업 알림
+        setInterval(() => {
+            if (!this.lastBackup || (Date.now() - new Date(this.lastBackup.timestamp).getTime()) > 24 * 60 * 60 * 1000) {
+                biDashboard.showNotification('info', '자동 백업 시간입니다. 데이터를 백업하시겠습니까?');
+            }
+        }, 60 * 60 * 1000); // 1시간마다 체크
+    }
+};
+
+// 초기화 함수들 추가
+function initializeAdvancedFeatures() {
+    scheduleManager.init();
+    systemMonitor.init();
+    backupManager.init();
+}
+
+// 버튼 핸들러 함수들
+function createSystemBackup() {
+    backupManager.createBackup();
+}
+
+function uploadBackupFile() {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.json';
+    input.onchange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            backupManager.restoreBackup(file);
+        }
+    };
+    input.click();
+}
+
+function viewSystemLogs() {
+    const logs = [
+        { time: '2024-01-15 14:30:25', level: 'INFO', message: '사용자 로그인: admin@koreangpt.org' },
+        { time: '2024-01-15 14:25:12', level: 'INFO', message: '새로운 견적 요청 접수: Q001' },
+        { time: '2024-01-15 14:20:05', level: 'WARNING', message: '저장소 용량 85% 도달' },
+        { time: '2024-01-15 14:15:33', level: 'INFO', message: '대시보드 데이터 업데이트 완료' },
+        { time: '2024-01-15 14:10:18', level: 'ERROR', message: '이메일 발송 실패: SMTP 연결 오류' }
+    ];
+    
+    const logHtml = logs.map(log => 
+        `<div class="log-entry ${log.level.toLowerCase()}">
+            <span class="log-time">${log.time}</span>
+            <span class="log-level">${log.level}</span>
+            <span class="log-message">${log.message}</span>
+        </div>`
+    ).join('');
+    
+    const popup = window.open('', 'logs', 'width=800,height=600');
+    popup.document.write(`
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <title>시스템 로그</title>
+            <style>
+                body { font-family: monospace; margin: 20px; }
+                .log-entry { padding: 8px; border-bottom: 1px solid #eee; }
+                .log-time { color: #666; margin-right: 10px; }
+                .log-level { font-weight: bold; margin-right: 10px; }
+                .info { color: #0066cc; }
+                .warning { color: #ff6600; }
+                .error { color: #cc0000; }
+            </style>
+        </head>
+        <body>
+            <h2>시스템 로그</h2>
+            ${logHtml}
+        </body>
+        </html>
+    `);
+}
+
+// 메인 초기화에 추가 기능 포함
+document.addEventListener('DOMContentLoaded', function() {
+    // 기존 초기화
+    setupNavigation();
+    setupDropdown();
+    setupCourseManagement();
+    setupOrderManagement();
+    updateDashboardStats();
+    setupModals();
+    
+    // 새로운 BI 시스템 초기화
+    biDashboard.init();
+    contentManagement.init();
+    userAnalytics.init();
+    performanceMonitor.init();
+    
+    // 고급 기능 초기화
+    initializeAdvancedFeatures();
+    
+    console.log('고급 BI 대시보드 초기화 완료');
+});
+
 console.log('관리자 대시보드 스크립트 로드 완료');
