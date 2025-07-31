@@ -29,6 +29,20 @@ function initializeAdminFeatures() {
     }
 }
 
+// 기업교육 페이지에서 관리자 로그인 처리
+function handleEnterpriseLogin() {
+    const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
+    const isLoggedIn = sessionStorage.getItem('isLoggedIn') === 'true';
+    
+    if (isLoggedIn && currentUser.role === 'admin') {
+        // 이미 로그인한 관리자는 바로 B2B 관리자 페이지로
+        window.location.href = 'admin-enterprise.html';
+    } else {
+        // 로그인 페이지로 이동 (enterprise.html로 돌아오도록 redirect 파라미터 설정)
+        window.location.href = 'login.html?redirect=enterprise.html';
+    }
+}
+
 // 견적 데이터 저장
 let quoteData = {
     company: '',
