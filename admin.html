@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>관리자 대시보드 | 한국GPT협회</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="admin.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body class="admin-body">
+    <!-- 관리자 헤더 -->
+    <header class="admin-header">
+        <div class="admin-header-content">
+            <div class="admin-brand">
+                <h1><a href="admin.html">한국GPT협회 관리자</a></h1>
+            </div>
+            <div class="admin-nav">
+                <div class="admin-user">
+                    <span>관리자님</span>
+                    <div class="admin-dropdown">
+                        <button class="dropdown-toggle">
+                            <i class="fas fa-user-circle"></i>
+                        </button>
+                        <div class="dropdown-menu">
+                            <a href="#" class="dropdown-item">내 정보</a>
+                            <a href="#" class="dropdown-item">설정</a>
+                            <div class="dropdown-divider"></div>
+                            <a href="index.html" class="dropdown-item">사이트 보기</a>
+                            <a href="#" class="dropdown-item">로그아웃</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="admin-layout">
+        <!-- 사이드바 -->
+        <aside class="admin-sidebar">
+            <nav class="sidebar-nav">
+                <ul class="nav-menu">
+                    <li class="nav-item active">
+                        <a href="#dashboard" class="nav-link" data-section="dashboard">
+                            <i class="fas fa-chart-line"></i>
+                            <span>대시보드</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#courses" class="nav-link" data-section="courses">
+                            <i class="fas fa-graduation-cap"></i>
+                            <span>강의 관리</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#orders" class="nav-link" data-section="orders">
+                            <i class="fas fa-shopping-cart"></i>
+                            <span>주문 관리</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#members" class="nav-link" data-section="members">
+                            <i class="fas fa-users"></i>
+                            <span>회원 관리</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#sales" class="nav-link" data-section="sales">
+                            <i class="fas fa-won-sign"></i>
+                            <span>매출 관리</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#reviews" class="nav-link" data-section="reviews">
+                            <i class="fas fa-star"></i>
+                            <span>후기 관리</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#settings" class="nav-link" data-section="settings">
+                            <i class="fas fa-cog"></i>
+                            <span>사이트 설정</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- 메인 콘텐츠 -->
+        <main class="admin-main">
+            <!-- 대시보드 섹션 -->
+            <section id="dashboard" class="admin-section active">
+                <div class="section-header">
+                    <h2>대시보드</h2>
+                    <p>한국GPT협회 관리 현황을 한눈에 확인하세요</p>
+                </div>
+
+                <!-- 통계 카드 -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon revenue">
+                            <i class="fas fa-won-sign"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 id="totalRevenue">₩12,450,000</h3>
+                            <p>총 매출</p>
+                            <span class="stat-change positive">+15.3%</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon orders">
+                            <i class="fas fa-shopping-cart"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 id="totalOrders">1,247</h3>
+                            <p>총 주문</p>
+                            <span class="stat-change positive">+8.7%</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon members">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 id="totalMembers">3,892</h3>
+                            <p>총 회원</p>
+                            <span class="stat-change positive">+12.1%</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon courses">
+                            <i class="fas fa-graduation-cap"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 id="totalCourses">24</h3>
+                            <p>강의 수</p>
+                            <span class="stat-change neutral">0%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 차트 영역 -->
+                <div class="charts-grid">
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3>월별 매출 현황</h3>
+                            <select class="chart-filter">
+                                <option value="2024">2024년</option>
+                                <option value="2023">2023년</option>
+                            </select>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="revenueChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3>인기 강의 TOP 5</h3>
+                        </div>
+                        <div class="popular-courses">
+                            <div class="course-item">
+                                <span class="rank">1</span>
+                                <span class="course-name">GPT 프롬프트 마스터 과정</span>
+                                <span class="course-sales">342명</span>
+                            </div>
+                            <div class="course-item">
+                                <span class="rank">2</span>
+                                <span class="course-name">AI 비즈니스 전략</span>
+                                <span class="course-sales">298명</span>
+                            </div>
+                            <div class="course-item">
+                                <span class="rank">3</span>
+                                <span class="course-name">GPT 마케팅 자동화</span>
+                                <span class="course-sales">245명</span>
+                            </div>
+                            <div class="course-item">
+                                <span class="rank">4</span>
+                                <span class="course-name">ChatGPT 프롬프트 기초</span>
+                                <span class="course-sales">189명</span>
+                            </div>
+                            <div class="course-item">
+                                <span class="rank">5</span>
+                                <span class="course-name">AI 리더십 과정</span>
+                                <span class="course-sales">156명</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 최근 활동 -->
+                <div class="recent-activities">
+                    <div class="activity-card">
+                        <h3>최근 주문</h3>
+                        <div class="activity-list">
+                            <div class="activity-item">
+                                <div class="activity-info">
+                                    <strong>김지은님</strong>이 <span>GPT 프롬프트 마스터 과정</span>을 주문했습니다.
+                                </div>
+                                <div class="activity-time">5분 전</div>
+                            </div>
+                            <div class="activity-item">
+                                <div class="activity-info">
+                                    <strong>이준호님</strong>이 <span>AI 비즈니스 전략</span>을 주문했습니다.
+                                </div>
+                                <div class="activity-time">12분 전</div>
+                            </div>
+                            <div class="activity-item">
+                                <div class="activity-info">
+                                    <strong>박민정님</strong>이 <span>GPT 마케팅 자동화</span>을 주문했습니다.
+                                </div>
+                                <div class="activity-time">23분 전</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="activity-card">
+                        <h3>최근 가입</h3>
+                        <div class="activity-list">
+                            <div class="activity-item">
+                                <div class="activity-info">
+                                    <strong>정승현님</strong>이 회원가입했습니다.
+                                </div>
+                                <div class="activity-time">8분 전</div>
+                            </div>
+                            <div class="activity-item">
+                                <div class="activity-info">
+                                    <strong>최영희님</strong>이 회원가입했습니다.
+                                </div>
+                                <div class="activity-time">15분 전</div>
+                            </div>
+                            <div class="activity-item">
+                                <div class="activity-info">
+                                    <strong>한동훈님</strong>이 회원가입했습니다.
+                                </div>
+                                <div class="activity-time">28분 전</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 강의 관리 섹션 -->
+            <section id="courses" class="admin-section">
+                <div class="section-header">
+                    <h2>강의 관리</h2>
+                    <button class="btn btn-primary" id="addCourseBtn">
+                        <i class="fas fa-plus"></i> 새 강의 추가
+                    </button>
+                </div>
+
+                <div class="table-container">
+                    <table class="admin-table" id="coursesTable">
+                        <thead>
+                            <tr>
+                                <th>강의명</th>
+                                <th>카테고리</th>
+                                <th>가격</th>
+                                <th>수강생</th>
+                                <th>상태</th>
+                                <th>작업</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- 동적으로 생성됨 -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- 주문 관리 섹션 -->
+            <section id="orders" class="admin-section">
+                <div class="section-header">
+                    <h2>주문 관리</h2>
+                    <div class="section-filters">
+                        <select class="filter-select">
+                            <option value="all">모든 상태</option>
+                            <option value="pending">결제 대기</option>
+                            <option value="completed">결제 완료</option>
+                            <option value="cancelled">취소됨</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="table-container">
+                    <table class="admin-table" id="ordersTable">
+                        <thead>
+                            <tr>
+                                <th>주문번호</th>
+                                <th>고객명</th>
+                                <th>강의명</th>
+                                <th>금액</th>
+                                <th>상태</th>
+                                <th>주문일</th>
+                                <th>작업</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- 동적으로 생성됨 -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- 기타 섹션들은 여기에 추가됨 -->
+            <section id="members" class="admin-section">
+                <div class="section-header">
+                    <h2>회원 관리</h2>
+                </div>
+                <p>회원 관리 기능을 개발 중입니다...</p>
+            </section>
+
+            <section id="sales" class="admin-section">
+                <div class="section-header">
+                    <h2>매출 관리</h2>
+                </div>
+                <p>매출 분석 기능을 개발 중입니다...</p>
+            </section>
+
+            <section id="reviews" class="admin-section">
+                <div class="section-header">
+                    <h2>후기 관리</h2>
+                </div>
+                <p>후기 관리 기능을 개발 중입니다...</p>
+            </section>
+
+            <section id="settings" class="admin-section">
+                <div class="section-header">
+                    <h2>사이트 설정</h2>
+                </div>
+                <p>사이트 설정 기능을 개발 중입니다...</p>
+            </section>
+        </main>
+    </div>
+
+    <!-- 강의 추가/편집 모달 -->
+    <div id="courseModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">새 강의 추가</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <form id="courseForm" class="modal-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="courseName">강의명</label>
+                        <input type="text" id="courseName" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="courseCategory">카테고리</label>
+                        <select id="courseCategory" name="category" required>
+                            <option value="">선택하세요</option>
+                            <option value="프롬프트 엔지니어링">프롬프트 엔지니어링</option>
+                            <option value="비즈니스 AI">비즈니스 AI</option>
+                            <option value="AI 마케팅">AI 마케팅</option>
+                            <option value="AI 리더십">AI 리더십</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="coursePrice">가격 (원)</label>
+                        <input type="number" id="coursePrice" name="price" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="courseDiscount">할인률 (%)</label>
+                        <input type="number" id="courseDiscount" name="discount" min="0" max="100">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="courseDescription">강의 설명</label>
+                    <textarea id="courseDescription" name="description" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="courseImage">강의 이미지 URL</label>
+                    <input type="url" id="courseImage" name="image" placeholder="https://example.com/image.jpg">
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" id="cancelBtn">취소</button>
+                    <button type="submit" class="btn btn-primary">저장</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="admin.js"></script>
+</body>
+</html>

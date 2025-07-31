@@ -536,6 +536,16 @@ body {
     font-size: 0.875rem;
 }
 
+/* 관리자 링크 */
+.admin-link {
+    color: var(--text-secondary) !important;
+}
+
+.admin-link:hover {
+    color: var(--primary-color) !important;
+    background: var(--bg-secondary);
+}
+
 /* 반응형 디자인 */
 @media (max-width: 768px) {
     .mobile-menu-toggle {
