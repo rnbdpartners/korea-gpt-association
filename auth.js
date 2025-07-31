@@ -146,15 +146,18 @@ function handleLoginSubmit(e) {
     
     showLoadingState();
     
-    // 실제 API 호출 시뮬레이션
+    // 실제 로그인 처리
     setTimeout(() => {
         hideLoadingState();
         
-        // 성공 시뮬레이션
-        alert(`로그인 성공!\n\n환영합니다!`);
-        
-        // 메인 페이지로 리다이렉트
-        window.location.href = 'index.html';
+        // 사용자 관리자를 통한 로그인 시도
+        if (typeof performLogin !== 'undefined' && performLogin(data.email, data.password)) {
+            const currentUser = userManager.getCurrentUser();
+            alert(`로그인 성공!\n\n환영합니다, ${currentUser.name}님!`);
+            window.location.href = 'index.html';
+        } else {
+            alert('이메일 또는 비밀번호가 올바르지 않습니다.\n\n데모 계정:\n- admin@koreangpt.org (관리자)\n- user@example.com (일반 사용자)');
+        }
     }, 1500);
 }
 

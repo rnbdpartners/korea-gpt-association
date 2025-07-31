@@ -198,6 +198,10 @@ function loadSectionData(section) {
         case 'orders':
             renderOrdersTable();
             break;
+        case 'members':
+            renderMembersTable();
+            setupMemberFilters();
+            break;
         case 'dashboard':
             updateDashboardStats();
             break;
@@ -335,13 +339,22 @@ function updateDashboardStats() {
 
 // 모달 설정
 function setupModals() {
-    const modal = document.getElementById('courseModal');
-    const closeBtn = modal?.querySelector('.modal-close');
+    // 강의 모달
+    const courseModal = document.getElementById('courseModal');
+    const courseCloseBtn = courseModal?.querySelector('.modal-close');
     const cancelBtn = document.getElementById('cancelBtn');
     const courseForm = document.getElementById('courseForm');
     
-    // 모달 닫기
-    [closeBtn, cancelBtn].forEach(btn => {
+    // 회원 상세 모달
+    const memberModal = document.getElementById('memberDetailModal');
+    const memberCloseBtn = memberModal?.querySelector('.modal-close');
+    
+    // 수강률 모달
+    const progressModal = document.getElementById('courseProgressModal');
+    const progressCloseBtn = progressModal?.querySelector('.modal-close');
+    
+    // 강의 모달 닫기
+    [courseCloseBtn, cancelBtn].forEach(btn => {
         if (btn) {
             btn.addEventListener('click', function() {
                 closeCourseModal();
@@ -349,16 +362,32 @@ function setupModals() {
         }
     });
     
-    // 모달 외부 클릭 시 닫기
-    if (modal) {
-        modal.addEventListener('click', function(e) {
-            if (e.target === modal) {
-                closeCourseModal();
-            }
+    // 회원 모달 닫기
+    if (memberCloseBtn) {
+        memberCloseBtn.addEventListener('click', function() {
+            memberModal.classList.remove('show');
         });
     }
     
-    // 폼 제출
+    // 수강률 모달 닫기
+    if (progressCloseBtn) {
+        progressCloseBtn.addEventListener('click', function() {
+            progressModal.classList.remove('show');
+        });
+    }
+    
+    // 모달 외부 클릭 시 닫기
+    [courseModal, memberModal, progressModal].forEach(modal => {
+        if (modal) {
+            modal.addEventListener('click', function(e) {
+                if (e.target === modal) {
+                    modal.classList.remove('show');
+                }
+            });
+        }
+    });
+    
+    // 강의 폼 제출
     if (courseForm) {
         courseForm.addEventListener('submit', function(e) {
             e.preventDefault();
@@ -472,5 +501,288 @@ window.addEventListener('load', function() {
     // 기본으로 대시보드 섹션 활성화
     loadSectionData('dashboard');
 });
+
+// 회원 관리 기능
+function renderMembersTable(filters = {}) {
+    const tbody = document.querySelector('#membersTable tbody');
+    if (!tbody) return;
+    
+    tbody.innerHTML = '';
+    
+    // sampleUsers 데이터 사용 (user-manager.js에서 가져옴)
+    let filteredMembers = sampleUsers;
+    
+    // 검색 필터 적용
+    if (filters.search) {
+        const searchTerm = filters.search.toLowerCase();
+        filteredMembers = filteredMembers.filter(member => 
+            member.name.toLowerCase().includes(searchTerm) ||
+            member.email.toLowerCase().includes(searchTerm) ||
+            member.company.toLowerCase().includes(searchTerm)
+        );
+    }
+    
+    // 역할 필터 적용
+    if (filters.role && filters.role !== 'all') {
+        filteredMembers = filteredMembers.filter(member => member.role === filters.role);
+    }
+    
+    // 마케팅 채널 필터 적용
+    if (filters.channel && filters.channel !== 'all') {
+        filteredMembers = filteredMembers.filter(member => member.marketingChannel === filters.channel);
+    }
+    
+    filteredMembers.forEach(member => {
+        const row = document.createElement('tr');
+        
+        row.innerHTML = `
+            <td>
+                <div style="display: flex; flex-direction: column; gap: 0.25rem;">
+                    <strong>${member.name}</strong>
+                    <small style="color: var(--text-secondary);">${member.email}</small>
+                    <small style="color: var(--text-light);">${member.company} | ${member.position}</small>
+                </div>
+            </td>
+            <td>${formatDate(member.joinDate)}</td>
+            <td>
+                <div style="display: flex; flex-direction: column; gap: 0.25rem;">
+                    <strong>${member.purchasedCourses.length}개</strong>
+                    ${member.purchasedCourses.slice(0, 2).map(course => 
+                        `<small style="color: var(--text-secondary);">• ${course.name}</small>`
+                    ).join('')}
+                    ${member.purchasedCourses.length > 2 ? 
+                        `<small style="color: var(--primary-color); cursor: pointer;" onclick="viewMemberDetail(${member.id})">+${member.purchasedCourses.length - 2}개 더보기</small>` : ''
+                    }
+                </div>
+            </td>
+            <td><strong style="color: var(--primary-color);">₩${member.totalPurchaseAmount.toLocaleString()}</strong></td>
+            <td>
+                <span class="channel-badge ${member.marketingChannel}">
+                    ${getChannelText(member.marketingChannel)}
+                </span>
+            </td>
+            <td>
+                <span class="status-badge ${member.role}">
+                    ${getRoleText(member.role)}
+                </span>
+            </td>
+            <td>
+                <div class="table-actions">
+                    <button class="action-btn edit" onclick="viewMemberDetail(${member.id})" title="상세보기">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                    <button class="action-btn edit" onclick="editMemberRole(${member.id})" title="권한 변경">
+                        <i class="fas fa-user-cog"></i>
+                    </button>
+                </div>
+            </td>
+        `;
+        
+        tbody.appendChild(row);
+    });
+}
+
+// 회원 필터 설정
+function setupMemberFilters() {
+    const searchInput = document.getElementById('memberSearch');
+    const roleFilter = document.getElementById('memberRoleFilter');
+    const channelFilter = document.getElementById('memberChannelFilter');
+    
+    function applyFilters() {
+        const filters = {
+            search: searchInput?.value || '',
+            role: roleFilter?.value || 'all',
+            channel: channelFilter?.value || 'all'
+        };
+        renderMembersTable(filters);
+    }
+    
+    // 이벤트 리스너 추가
+    if (searchInput) {
+        searchInput.addEventListener('input', debounce(applyFilters, 300));
+    }
+    
+    if (roleFilter) {
+        roleFilter.addEventListener('change', applyFilters);
+    }
+    
+    if (channelFilter) {
+        channelFilter.addEventListener('change', applyFilters);
+    }
+}
+
+// 회원 상세 정보 보기
+function viewMemberDetail(memberId) {
+    const member = sampleUsers.find(m => m.id === memberId);
+    if (!member) return;
+    
+    // 모달 열기
+    const modal = document.getElementById('memberDetailModal');
+    
+    // 기본 정보 채우기
+    document.getElementById('memberName').textContent = member.name;
+    document.getElementById('memberEmail').textContent = member.email;
+    document.getElementById('memberPhone').textContent = member.phone || '-';
+    document.getElementById('memberCompany').textContent = member.company || '-';
+    document.getElementById('memberPosition').textContent = member.position || '-';
+    document.getElementById('memberJoinDate').textContent = formatDate(member.joinDate);
+    document.getElementById('memberChannel').textContent = getChannelText(member.marketingChannel);
+    
+    // 구매 정보 채우기
+    document.getElementById('memberTotalAmount').textContent = `₩${member.totalPurchaseAmount.toLocaleString()}`;
+    document.getElementById('memberCourseCount').textContent = `${member.purchasedCourses.length}개`;
+    
+    // 구매 강의 목록 채우기
+    const coursesList = document.getElementById('memberCoursesList');
+    coursesList.innerHTML = '';
+    
+    if (member.purchasedCourses.length === 0) {
+        coursesList.innerHTML = '<p style="text-align: center; color: var(--text-secondary); padding: 2rem;">구매한 강의가 없습니다.</p>';
+    } else {
+        member.purchasedCourses.forEach(course => {
+            const courseItem = document.createElement('div');
+            courseItem.className = 'course-item-detail';
+            courseItem.onclick = () => showCourseProgress(member.id, course.id);
+            
+            courseItem.innerHTML = `
+                <div class="course-basic">
+                    <div class="course-name">${course.name}</div>
+                    <div class="course-meta">
+                        <span>구매일: ${formatDate(course.purchaseDate)}</span>
+                        <span>결제금액: ₩${course.amount.toLocaleString()}</span>
+                        <span class="payment-badge ${course.paymentMethod}">${getPaymentMethodText(course.paymentMethod)}</span>
+                    </div>
+                </div>
+                <div class="course-progress">
+                    <div class="progress-circle" style="background: conic-gradient(var(--primary-color) ${course.progress * 3.6}deg, var(--border-color) ${course.progress * 3.6}deg);">
+                        <span>${course.progress}%</span>
+                    </div>
+                </div>
+            `;
+            
+            coursesList.appendChild(courseItem);
+        });
+    }
+    
+    modal.classList.add('show');
+}
+
+// 수강률 상세 보기
+function showCourseProgress(memberId, courseId) {
+    const member = sampleUsers.find(m => m.id === memberId);
+    const course = member?.purchasedCourses.find(c => c.id === courseId);
+    
+    if (!course) return;
+    
+    // 모달 열기
+    const modal = document.getElementById('courseProgressModal');
+    
+    // 정보 채우기
+    document.getElementById('progressCourseName').textContent = course.name;
+    document.getElementById('progressPercentage').textContent = `${course.progress}%`;
+    document.getElementById('progressPurchaseDate').textContent = formatDate(course.purchaseDate);
+    document.getElementById('progressAmount').textContent = `₩${course.amount.toLocaleString()}`;
+    document.getElementById('progressPaymentMethod').textContent = getPaymentMethodText(course.paymentMethod);
+    document.getElementById('progressLastAccess').textContent = getLastAccessText(course.progress);
+    
+    // 프로그레스 바 설정
+    const progressFill = document.getElementById('progressFill');
+    progressFill.style.width = `${course.progress}%`;
+    
+    modal.classList.add('show');
+}
+
+// 회원 권한 변경
+function editMemberRole(memberId) {
+    const member = sampleUsers.find(m => m.id === memberId);
+    if (!member) return;
+    
+    const currentRole = getRoleText(member.role);
+    const newRole = prompt(`${member.name}님의 권한을 변경하시겠습니까?\n\n현재 권한: ${currentRole}\n\n1: 일반 회원\n2: 프리미엄 회원\n3: 관리자\n\n숫자를 입력하세요:`);
+    
+    if (newRole) {
+        let roleValue;
+        switch(newRole) {
+            case '1':
+                roleValue = 'user';
+                break;
+            case '2':
+                roleValue = 'premium';
+                break;
+            case '3':
+                roleValue = 'admin';
+                break;
+            default:
+                alert('올바른 숫자를 입력해주세요.');
+                return;
+        }
+        
+        // 실제로는 서버 API 호출
+        member.role = roleValue;
+        alert(`${member.name}님의 권한이 ${getRoleText(roleValue)}(으)로 변경되었습니다.`);
+        renderMembersTable();
+    }
+}
+
+// 마케팅 채널 텍스트 변환
+function getChannelText(channel) {
+    const channelMap = {
+        'direct': '직접 유입',
+        'google_cpc': '구글 광고',
+        'google_organic': '구글 검색',
+        'naver_blog': '네이버 블로그',
+        'facebook': '페이스북',
+        'instagram': '인스타그램',
+        'youtube': '유튜브',
+        'referral': '추천'
+    };
+    return channelMap[channel] || channel;
+}
+
+// 역할 텍스트 변환
+function getRoleText(role) {
+    const roleMap = {
+        'admin': '관리자',
+        'premium': '프리미엄',
+        'user': '일반 회원'
+    };
+    return roleMap[role] || role;
+}
+
+// 결제 방법 텍스트 변환
+function getPaymentMethodText(method) {
+    const methodMap = {
+        'card': '카드결제',
+        'bank_transfer': '계좌이체',
+        'kakaopay': '카카오페이',
+        'naverpay': '네이버페이'
+    };
+    return methodMap[method] || method;
+}
+
+// 마지막 접속일 계산
+function getLastAccessText(progress) {
+    if (progress === 0) return '미접속';
+    if (progress === 100) return '완료';
+    
+    // 진행률에 따른 임의의 접속일 계산
+    const daysAgo = Math.floor((100 - progress) / 10);
+    if (daysAgo === 0) return '오늘';
+    if (daysAgo === 1) return '어제';
+    return `${daysAgo}일 전`;
+}
+
+// 디바운스 함수
+function debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+        const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+    };
+}
 
 console.log('관리자 대시보드 스크립트 로드 완료');

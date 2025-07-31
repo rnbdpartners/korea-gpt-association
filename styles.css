@@ -546,6 +546,77 @@ body {
     background: var(--bg-secondary);
 }
 
+/* 사용자 메뉴 */
+.user-menu {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    position: relative;
+}
+
+.user-name {
+    font-weight: 500;
+    color: var(--text-primary);
+    font-size: 0.875rem;
+}
+
+.user-dropdown {
+    position: relative;
+}
+
+.user-dropdown-toggle {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 50%;
+    transition: all 0.2s;
+}
+
+.user-dropdown-toggle:hover {
+    background: var(--bg-secondary);
+    color: var(--primary-color);
+}
+
+.user-dropdown-menu {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: white;
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-lg);
+    min-width: 180px;
+    padding: 0.5rem 0;
+    display: none;
+    z-index: 1001;
+    border: 1px solid var(--border-color);
+}
+
+.user-dropdown-menu.show {
+    display: block;
+}
+
+.user-dropdown-menu .dropdown-item {
+    display: block;
+    padding: 0.75rem 1rem;
+    color: var(--text-primary);
+    text-decoration: none;
+    font-size: 0.875rem;
+    transition: background-color 0.2s;
+}
+
+.user-dropdown-menu .dropdown-item:hover {
+    background-color: var(--bg-secondary);
+}
+
+.user-dropdown-menu .dropdown-divider {
+    height: 1px;
+    background-color: var(--border-color);
+    margin: 0.5rem 0;
+}
+
 /* 반응형 디자인 */
 @media (max-width: 768px) {
     .mobile-menu-toggle {

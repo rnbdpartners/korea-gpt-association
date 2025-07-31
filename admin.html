@@ -300,12 +300,48 @@
                 </div>
             </section>
 
-            <!-- 기타 섹션들은 여기에 추가됨 -->
+            <!-- 회원 관리 섹션 -->
             <section id="members" class="admin-section">
                 <div class="section-header">
                     <h2>회원 관리</h2>
+                    <div class="section-filters">
+                        <input type="text" class="search-input" placeholder="회원 검색..." id="memberSearch">
+                        <select class="filter-select" id="memberRoleFilter">
+                            <option value="all">모든 등급</option>
+                            <option value="admin">관리자</option>
+                            <option value="premium">프리미엄</option>
+                            <option value="user">일반 회원</option>
+                        </select>
+                        <select class="filter-select" id="memberChannelFilter">
+                            <option value="all">모든 채널</option>
+                            <option value="direct">직접 유입</option>
+                            <option value="google_cpc">구글 광고</option>
+                            <option value="google_organic">구글 검색</option>
+                            <option value="naver_blog">네이버 블로그</option>
+                            <option value="facebook">페이스북</option>
+                            <option value="instagram">인스타그램</option>
+                        </select>
+                    </div>
                 </div>
-                <p>회원 관리 기능을 개발 중입니다...</p>
+
+                <div class="table-container">
+                    <table class="admin-table" id="membersTable">
+                        <thead>
+                            <tr>
+                                <th>회원 정보</th>
+                                <th>가입일</th>
+                                <th>구매 강의</th>
+                                <th>총 결제금액</th>
+                                <th>마케팅 채널</th>
+                                <th>등급</th>
+                                <th>작업</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- 동적으로 생성됨 -->
+                        </tbody>
+                    </table>
+                </div>
             </section>
 
             <section id="sales" class="admin-section">
@@ -381,6 +417,111 @@
         </div>
     </div>
 
+    <!-- 회원 상세 정보 모달 -->
+    <div id="memberDetailModal" class="modal">
+        <div class="modal-content member-modal">
+            <div class="modal-header">
+                <h3 id="memberModalTitle">회원 상세 정보</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="member-info-grid">
+                    <div class="member-basic-info">
+                        <h4>기본 정보</h4>
+                        <div class="info-item">
+                            <label>이름:</label>
+                            <span id="memberName">-</span>
+                        </div>
+                        <div class="info-item">
+                            <label>이메일:</label>
+                            <span id="memberEmail">-</span>
+                        </div>
+                        <div class="info-item">
+                            <label>전화번호:</label>
+                            <span id="memberPhone">-</span>
+                        </div>
+                        <div class="info-item">
+                            <label>회사:</label>
+                            <span id="memberCompany">-</span>
+                        </div>
+                        <div class="info-item">
+                            <label>직책:</label>
+                            <span id="memberPosition">-</span>
+                        </div>
+                        <div class="info-item">
+                            <label>가입일:</label>
+                            <span id="memberJoinDate">-</span>
+                        </div>
+                        <div class="info-item">
+                            <label>마케팅 채널:</label>
+                            <span id="memberChannel">-</span>
+                        </div>
+                    </div>
+                    <div class="member-purchase-info">
+                        <h4>구매 정보</h4>
+                        <div class="info-item">
+                            <label>총 결제금액:</label>
+                            <span id="memberTotalAmount" class="amount">₩0</span>
+                        </div>
+                        <div class="info-item">
+                            <label>구매 강의 수:</label>
+                            <span id="memberCourseCount">0개</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="member-courses-section">
+                    <h4>구매 강의 목록</h4>
+                    <div class="courses-list" id="memberCoursesList">
+                        <!-- 동적으로 생성됨 -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 수강률 상세 모달 -->
+    <div id="courseProgressModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="courseProgressTitle">수강률 상세</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="progress-info">
+                    <div class="progress-header">
+                        <h4 id="progressCourseName">-</h4>
+                        <span id="progressPercentage" class="progress-percent">0%</span>
+                    </div>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progressFill"></div>
+                        </div>
+                    </div>
+                    <div class="progress-details">
+                        <div class="detail-item">
+                            <label>구매일:</label>
+                            <span id="progressPurchaseDate">-</span>
+                        </div>
+                        <div class="detail-item">
+                            <label>결제 금액:</label>
+                            <span id="progressAmount">₩0</span>
+                        </div>
+                        <div class="detail-item">
+                            <label>결제 방법:</label>
+                            <span id="progressPaymentMethod">-</span>
+                        </div>
+                        <div class="detail-item">
+                            <label>마지막 수강일:</label>
+                            <span id="progressLastAccess">-</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="user-manager.js"></script>
     <script src="admin.js"></script>
 </body>
 </html>
