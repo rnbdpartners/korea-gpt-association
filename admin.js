@@ -206,6 +206,10 @@ function loadSectionData(section) {
             updateDashboardStats();
             initializeWidgetSystem();
             break;
+        case 'quotes':
+            renderQuotesTable();
+            setupQuoteFilters();
+            break;
         default:
             break;
     }
@@ -1522,6 +1526,204 @@ function editInline(element) {
         saveBtn.remove();
         cancelBtn.remove();
     };
+}
+
+// 견적 관리 기능
+function renderQuotesTable(statusFilter = 'all') {
+    const tbody = document.querySelector('#quotesTable tbody');
+    if (!tbody) return;
+    
+    // 로컬스토리지에서 견적 데이터 가져오기
+    const quoteHistory = JSON.parse(localStorage.getItem('quoteHistory') || '[]');
+    
+    // 필터링
+    const filteredQuotes = statusFilter === 'all' ? 
+        quoteHistory : quoteHistory.filter(quote => quote.status === statusFilter);
+    
+    // 통계 업데이트
+    updateQuoteStats(quoteHistory);
+    
+    tbody.innerHTML = '';
+    
+    if (filteredQuotes.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="9" style="text-align: center;">견적 요청이 없습니다.</td></tr>';
+        return;
+    }
+    
+    filteredQuotes.forEach(quote => {
+        const row = document.createElement('tr');
+        
+        const programText = {
+            basic: 'AI 입문 과정',
+            intermediate: 'AI 실무 활용',
+            advanced: 'AI 리더십',
+            custom: '맞춤형'
+        };
+        
+        const statusBadge = {
+            pending: '<span class="status-badge pending">대기중</span>',
+            contacted: '<span class="status-badge processing">연락완료</span>',
+            completed: '<span class="status-badge completed">계약완료</span>'
+        };
+        
+        row.innerHTML = `
+            <td><strong>Q${quote.id}</strong></td>
+            <td>${quote.company}</td>
+            <td>${quote.name}<br><small>${quote.phone}</small></td>
+            <td>${programText[quote.program] || '-'}</td>
+            <td>${quote.participants}명</td>
+            <td>${quote.program === 'custom' ? '별도 상담' : '₩' + quote.totalPrice.toLocaleString()}</td>
+            <td>${new Date(quote.timestamp).toLocaleDateString('ko-KR')}</td>
+            <td>${statusBadge[quote.status || 'pending']}</td>
+            <td>
+                <div class="table-actions">
+                    <button class="action-btn view" onclick="viewQuoteDetail('${quote.id}')">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                    <button class="action-btn edit" onclick="updateQuoteStatus('${quote.id}')">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="action-btn delete" onclick="deleteQuote('${quote.id}')">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            </td>
+        `;
+        
+        tbody.appendChild(row);
+    });
+}
+
+// 견적 통계 업데이트
+function updateQuoteStats(quotes) {
+    const totalEl = document.getElementById('totalQuotes');
+    const pendingEl = document.getElementById('pendingQuotes');
+    const completedEl = document.getElementById('completedQuotes');
+    
+    if (totalEl) totalEl.textContent = quotes.length;
+    if (pendingEl) pendingEl.textContent = quotes.filter(q => !q.status || q.status === 'pending').length;
+    if (completedEl) completedEl.textContent = quotes.filter(q => q.status === 'completed').length;
+}
+
+// 견적 필터 설정
+function setupQuoteFilters() {
+    const searchInput = document.getElementById('quoteSearch');
+    const dateFrom = document.getElementById('quoteDateFrom');
+    const dateTo = document.getElementById('quoteDateTo');
+    
+    if (searchInput) {
+        searchInput.addEventListener('input', debounce(function(e) {
+            searchQuotes(e.target.value);
+        }, 300));
+    }
+    
+    if (dateFrom) {
+        dateFrom.addEventListener('change', filterQuotesByDate);
+    }
+    
+    if (dateTo) {
+        dateTo.addEventListener('change', filterQuotesByDate);
+    }
+}
+
+// 견적 검색
+function searchQuotes(searchTerm) {
+    const tbody = document.querySelector('#quotesTable tbody');
+    const rows = tbody.querySelectorAll('tr');
+    
+    rows.forEach(row => {
+        const text = row.textContent.toLowerCase();
+        row.style.display = text.includes(searchTerm.toLowerCase()) ? '' : 'none';
+    });
+}
+
+// 견적 필터
+function filterQuotes(status) {
+    renderQuotesTable(status);
+}
+
+// 견적 상세 보기
+function viewQuoteDetail(quoteId) {
+    const quotes = JSON.parse(localStorage.getItem('quoteHistory') || '[]');
+    const quote = quotes.find(q => q.id === quoteId);
+    
+    if (!quote) return;
+    
+    alert(`견적 상세 정보:\n
+회사: ${quote.company}
+담당자: ${quote.name}
+연락처: ${quote.phone}
+이메일: ${quote.email}
+과정: ${quote.program}
+인원: ${quote.participants}명
+금액: ${quote.program === 'custom' ? '별도 상담' : '₩' + quote.totalPrice.toLocaleString()}
+요청일: ${new Date(quote.timestamp).toLocaleString('ko-KR')}`);
+}
+
+// 견적 상태 업데이트
+function updateQuoteStatus(quoteId) {
+    const quotes = JSON.parse(localStorage.getItem('quoteHistory') || '[]');
+    const quoteIndex = quotes.findIndex(q => q.id === quoteId);
+    
+    if (quoteIndex === -1) return;
+    
+    const newStatus = prompt('상태를 선택하세요:\npending, contacted, completed 중 입력');
+    
+    if (newStatus && ['pending', 'contacted', 'completed'].includes(newStatus)) {
+        quotes[quoteIndex].status = newStatus;
+        localStorage.setItem('quoteHistory', JSON.stringify(quotes));
+        renderQuotesTable();
+        alert('상태가 업데이트되었습니다.');
+    }
+}
+
+// 견적 삭제
+function deleteQuote(quoteId) {
+    if (!confirm('정말 이 견적을 삭제하시겠습니까?')) return;
+    
+    const quotes = JSON.parse(localStorage.getItem('quoteHistory') || '[]');
+    const filtered = quotes.filter(q => q.id !== quoteId);
+    
+    localStorage.setItem('quoteHistory', JSON.stringify(filtered));
+    renderQuotesTable();
+    alert('견적이 삭제되었습니다.');
+}
+
+// 견적 내보내기
+function exportQuotes() {
+    const quotes = JSON.parse(localStorage.getItem('quoteHistory') || '[]');
+    
+    if (quotes.length === 0) {
+        alert('내보낼 견적이 없습니다.');
+        return;
+    }
+    
+    // CSV 형식으로 변환
+    const headers = ['견적번호', '회사명', '담당자', '연락처', '이메일', '과정', '인원', '금액', '요청일', '상태'];
+    const rows = quotes.map(q => [
+        'Q' + q.id,
+        q.company,
+        q.name,
+        q.phone,
+        q.email,
+        q.program,
+        q.participants,
+        q.program === 'custom' ? '별도상담' : q.totalPrice,
+        new Date(q.timestamp).toLocaleDateString('ko-KR'),
+        q.status || 'pending'
+    ]);
+    
+    let csv = headers.join(',') + '\n';
+    rows.forEach(row => {
+        csv += row.map(cell => `"${cell}"`).join(',') + '\n';
+    });
+    
+    // 다운로드
+    const blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = `견적관리_${new Date().toISOString().slice(0,10)}.csv`;
+    link.click();
 }
 
 console.log('관리자 대시보드 스크립트 로드 완료');

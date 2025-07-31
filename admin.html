@@ -77,6 +77,12 @@
                         </a>
                     </li>
                     <li class="nav-item">
+                        <a href="#quotes" class="nav-link" data-section="quotes">
+                            <i class="fas fa-file-invoice"></i>
+                            <span>견적 관리</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
                         <a href="#settings" class="nav-link" data-section="settings">
                             <i class="fas fa-cog"></i>
                             <span>사이트 설정</span>
@@ -245,6 +251,92 @@
                     <h2>후기 관리</h2>
                 </div>
                 <p>후기 관리 기능을 개발 중입니다...</p>
+            </section>
+
+            <!-- 견적 관리 섹션 -->
+            <section id="quotes" class="admin-section">
+                <div class="section-header">
+                    <h2>견적 관리</h2>
+                    <div class="section-actions">
+                        <button class="btn btn-secondary" onclick="exportQuotes()">
+                            <i class="fas fa-download"></i> 내보내기
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 견적 통계 -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon quotes">
+                            <i class="fas fa-file-invoice"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 id="totalQuotes">0</h3>
+                            <p>전체 견적</p>
+                            <span class="stat-change positive">이번 달</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon pending">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 id="pendingQuotes">0</h3>
+                            <p>대기중</p>
+                            <span class="stat-change neutral">처리 필요</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon completed">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 id="completedQuotes">0</h3>
+                            <p>완료</p>
+                            <span class="stat-change positive">계약 성사</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 견적 필터 -->
+                <div class="table-controls">
+                    <div class="table-search">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="회사명, 담당자 검색..." id="quoteSearch">
+                    </div>
+                    <div class="table-filters">
+                        <select id="quoteFilter" onchange="filterQuotes(this.value)">
+                            <option value="all">전체 견적</option>
+                            <option value="pending">대기중</option>
+                            <option value="contacted">연락완료</option>
+                            <option value="completed">계약완료</option>
+                        </select>
+                        <input type="date" id="quoteDateFrom" placeholder="시작일">
+                        <input type="date" id="quoteDateTo" placeholder="종료일">
+                    </div>
+                </div>
+
+                <!-- 견적 테이블 -->
+                <div class="data-table">
+                    <table id="quotesTable">
+                        <thead>
+                            <tr>
+                                <th>견적번호</th>
+                                <th>회사명</th>
+                                <th>담당자</th>
+                                <th>과정</th>
+                                <th>인원</th>
+                                <th>견적금액</th>
+                                <th>요청일</th>
+                                <th>상태</th>
+                                <th>관리</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- 견적 데이터가 여기에 표시됩니다 -->
+                        </tbody>
+                    </table>
+                </div>
             </section>
 
             <section id="settings" class="admin-section">

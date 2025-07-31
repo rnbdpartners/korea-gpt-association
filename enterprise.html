@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>한국GPT협회Business | AI 기업교육 전문 솔루션</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="enterprise.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+    <!-- 헤더 -->
+    <header class="header enterprise-header">
+        <nav class="navbar">
+            <div class="container">
+                <div class="nav-brand">
+                    <h1><a href="index.html" class="logo">한국GPT협회<span class="business">Business</span></a></h1>
+                </div>
+                <div class="nav-menu">
+                    <ul class="nav-links">
+                        <li><a href="#programs">교육 프로그램</a></li>
+                        <li><a href="#success">성공 사례</a></li>
+                        <li><a href="#process">교육 프로세스</a></li>
+                        <li><a href="#faq">FAQ</a></li>
+                    </ul>
+                    <div class="nav-actions">
+                        <button class="btn btn-estimate" onclick="openQuoteModal()">
+                            <i class="fas fa-calculator"></i> 즉시 견적받기
+                        </button>
+                    </div>
+                </div>
+                <button class="mobile-menu-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- 플로팅 견적 버튼 -->
+    <div class="floating-quote-btn" onclick="openQuoteModal()">
+        <i class="fas fa-file-invoice"></i>
+        <span>간편견적<br>확인</span>
+    </div>
+
+    <!-- 히어로 섹션 -->
+    <section class="enterprise-hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <div class="hero-badge">2025년 AI 교육 트렌드</div>
+                    <h2>AI 시대,<br>기업 경쟁력의 핵심은<br><span class="highlight">직원들의 AI 활용 능력</span>입니다</h2>
+                    <p>ChatGPT부터 업무 자동화까지, 맞춤형 AI 교육으로<br>직원들의 생산성을 극대화하세요</p>
+                    <div class="hero-stats">
+                        <div class="stat">
+                            <h3>500+</h3>
+                            <p>기업 교육</p>
+                        </div>
+                        <div class="stat">
+                            <h3>98%</h3>
+                            <p>만족도</p>
+                        </div>
+                        <div class="stat">
+                            <h3>2.5배</h3>
+                            <p>업무 효율성</p>
+                        </div>
+                    </div>
+                    <div class="hero-buttons">
+                        <button class="btn btn-primary btn-lg" onclick="openQuoteModal()">무료 견적 받기</button>
+                        <button class="btn btn-secondary btn-lg" onclick="downloadBrochure()">
+                            <i class="fas fa-download"></i> 소개서 다운로드
+                        </button>
+                    </div>
+                </div>
+                <div class="hero-visual">
+                    <div class="enterprise-illustration">
+                        <div class="illust-card card-1">
+                            <i class="fas fa-building"></i>
+                            <span>대기업</span>
+                        </div>
+                        <div class="illust-card card-2">
+                            <i class="fas fa-store"></i>
+                            <span>중소기업</span>
+                        </div>
+                        <div class="illust-card card-3">
+                            <i class="fas fa-school"></i>
+                            <span>교육기관</span>
+                        </div>
+                        <div class="central-graphic">
+                            <div class="circle-1"></div>
+                            <div class="circle-2"></div>
+                            <i class="fas fa-robot main-icon"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 교육 프로그램 섹션 -->
+    <section id="programs" class="programs-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>맞춤형 AI 교육 프로그램</h2>
+                <p>기업의 니즈에 맞춘 단계별 교육 솔루션</p>
+            </div>
+            
+            <div class="programs-grid">
+                <div class="program-card" data-level="basic">
+                    <div class="program-header">
+                        <div class="program-icon">
+                            <i class="fas fa-seedling"></i>
+                        </div>
+                        <h3>AI 입문 과정</h3>
+                        <span class="program-badge">Basic</span>
+                    </div>
+                    <div class="program-content">
+                        <p>AI의 기본 개념부터 ChatGPT 활용까지</p>
+                        <ul class="program-features">
+                            <li><i class="fas fa-check"></i> ChatGPT 기본 활용법</li>
+                            <li><i class="fas fa-check"></i> 프롬프트 작성 기초</li>
+                            <li><i class="fas fa-check"></i> 업무별 활용 사례</li>
+                            <li><i class="fas fa-check"></i> AI 윤리와 주의사항</li>
+                        </ul>
+                        <div class="program-meta">
+                            <span><i class="fas fa-clock"></i> 8시간</span>
+                            <span><i class="fas fa-users"></i> 20-50명</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="program-card popular" data-level="intermediate">
+                    <div class="popular-badge">인기</div>
+                    <div class="program-header">
+                        <div class="program-icon">
+                            <i class="fas fa-rocket"></i>
+                        </div>
+                        <h3>AI 실무 활용 과정</h3>
+                        <span class="program-badge">Intermediate</span>
+                    </div>
+                    <div class="program-content">
+                        <p>부서별 맞춤 AI 활용 전략과 실습</p>
+                        <ul class="program-features">
+                            <li><i class="fas fa-check"></i> 고급 프롬프트 엔지니어링</li>
+                            <li><i class="fas fa-check"></i> 업무 자동화 실습</li>
+                            <li><i class="fas fa-check"></i> AI 도구 통합 활용</li>
+                            <li><i class="fas fa-check"></i> 성과 측정 방법론</li>
+                        </ul>
+                        <div class="program-meta">
+                            <span><i class="fas fa-clock"></i> 16시간</span>
+                            <span><i class="fas fa-users"></i> 15-30명</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="program-card" data-level="advanced">
+                    <div class="program-header">
+                        <div class="program-icon">
+                            <i class="fas fa-crown"></i>
+                        </div>
+                        <h3>AI 리더십 과정</h3>
+                        <span class="program-badge">Advanced</span>
+                    </div>
+                    <div class="program-content">
+                        <p>경영진을 위한 AI 전략 수립</p>
+                        <ul class="program-features">
+                            <li><i class="fas fa-check"></i> AI 비즈니스 전략</li>
+                            <li><i class="fas fa-check"></i> 조직 문화 혁신</li>
+                            <li><i class="fas fa-check"></i> AI 거버넌스</li>
+                            <li><i class="fas fa-check"></i> ROI 극대화 방안</li>
+                        </ul>
+                        <div class="program-meta">
+                            <span><i class="fas fa-clock"></i> 24시간</span>
+                            <span><i class="fas fa-users"></i> 10-20명</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 성공 사례 섹션 -->
+    <section id="success" class="success-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>AI 교육 성공 사례</h2>
+                <p>한국GPT협회와 함께 AI 혁신을 이룬 기업들</p>
+            </div>
+
+            <div class="success-slider">
+                <div class="success-case">
+                    <div class="case-company">
+                        <img src="https://via.placeholder.com/200x100" alt="A사 로고">
+                    </div>
+                    <div class="case-content">
+                        <h3>대기업 A사</h3>
+                        <p class="case-industry">제조업</p>
+                        <blockquote>
+                            "전 직원 AI 교육 후 업무 효율성이 40% 향상되었습니다. 특히 보고서 작성 시간이 획기적으로 단축되었습니다."
+                        </blockquote>
+                        <div class="case-results">
+                            <div class="result">
+                                <h4>40%</h4>
+                                <p>업무 효율성 향상</p>
+                            </div>
+                            <div class="result">
+                                <h4>2,000명</h4>
+                                <p>교육 인원</p>
+                            </div>
+                            <div class="result">
+                                <h4>3개월</h4>
+                                <p>교육 기간</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 교육 프로세스 섹션 -->
+    <section id="process" class="process-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>체계적인 교육 프로세스</h2>
+                <p>기업 맞춤형 AI 교육의 모든 단계</p>
+            </div>
+
+            <div class="process-timeline">
+                <div class="process-step">
+                    <div class="step-number">01</div>
+                    <div class="step-content">
+                        <h3>니즈 분석</h3>
+                        <p>기업의 현황과 목표를 분석하여 맞춤형 커리큘럼 설계</p>
+                    </div>
+                </div>
+                <div class="process-step">
+                    <div class="step-number">02</div>
+                    <div class="step-content">
+                        <h3>커리큘럼 개발</h3>
+                        <p>업종과 직무 특성에 맞는 실무 중심 교육 과정 개발</p>
+                    </div>
+                </div>
+                <div class="process-step">
+                    <div class="step-number">03</div>
+                    <div class="step-content">
+                        <h3>교육 진행</h3>
+                        <p>전문 강사진의 체계적인 교육과 실습 진행</p>
+                    </div>
+                </div>
+                <div class="process-step">
+                    <div class="step-number">04</div>
+                    <div class="step-content">
+                        <h3>사후 관리</h3>
+                        <p>교육 효과 측정 및 지속적인 팔로우업 지원</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ 섹션 -->
+    <section id="faq" class="faq-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>자주 묻는 질문</h2>
+            </div>
+
+            <div class="faq-list">
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h3>교육 비용은 어떻게 산정되나요?</h3>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>교육 인원, 시간, 커리큘럼 난이도 등을 고려하여 맞춤 견적을 제공합니다. 간편 견적 시스템을 통해 즉시 예상 비용을 확인하실 수 있습니다.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h3>온라인 교육도 가능한가요?</h3>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>네, 온라인/오프라인/하이브리드 형태 모두 가능합니다. 기업의 상황에 맞춰 최적의 교육 방식을 제안드립니다.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h3>교육 후 지원은 어떻게 이루어지나요?</h3>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>교육 종료 후 3개월간 온라인 Q&A 지원, 추가 자료 제공, 심화 교육 안내 등의 사후 관리 서비스를 제공합니다.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA 섹션 -->
+    <section class="cta-section">
+        <div class="container">
+            <div class="cta-content">
+                <h2>지금 바로 AI 교육을 시작하세요</h2>
+                <p>전문 컨설턴트가 귀사에 최적화된 교육 솔루션을 제안합니다</p>
+                <div class="cta-buttons">
+                    <button class="btn btn-primary btn-lg" onclick="openQuoteModal()">
+                        <i class="fas fa-calculator"></i> 무료 견적 받기
+                    </button>
+                    <a href="tel:02-1234-5678" class="btn btn-secondary btn-lg">
+                        <i class="fas fa-phone"></i> 전화 상담하기
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 푸터 -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>한국GPT협회Business</h3>
+                    <p>AI 교육의 미래를 선도하는 기업교육 전문 플랫폼</p>
+                    <div class="contact-info">
+                        <p><i class="fas fa-phone"></i> 02-1234-5678</p>
+                        <p><i class="fas fa-envelope"></i> business@koreangpt.org</p>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>빠른 링크</h4>
+                    <ul>
+                        <li><a href="#programs">교육 프로그램</a></li>
+                        <li><a href="#success">성공 사례</a></li>
+                        <li><a href="#process">교육 프로세스</a></li>
+                        <li><a href="index.html">개인 교육</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>리소스</h4>
+                    <ul>
+                        <li><a href="#">AI 트렌드 리포트</a></li>
+                        <li><a href="#">교육 자료 다운로드</a></li>
+                        <li><a href="#">웨비나 신청</a></li>
+                        <li><a href="#">뉴스레터 구독</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 한국GPT협회. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 견적 모달 -->
+    <div id="quoteModal" class="modal">
+        <div class="modal-content quote-modal">
+            <div class="modal-header">
+                <h3>간편 견적 확인</h3>
+                <button class="modal-close" onclick="closeQuoteModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="quoteForm">
+                    <div class="quote-steps">
+                        <!-- Step 1: 기본 정보 -->
+                        <div class="quote-step active" data-step="1">
+                            <h4>기본 정보</h4>
+                            <div class="form-group">
+                                <label>회사명 <span class="required">*</span></label>
+                                <input type="text" name="company" required>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>담당자명 <span class="required">*</span></label>
+                                    <input type="text" name="name" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>연락처 <span class="required">*</span></label>
+                                    <input type="tel" name="phone" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>이메일 <span class="required">*</span></label>
+                                <input type="email" name="email" required>
+                            </div>
+                            <div class="step-buttons">
+                                <button type="button" class="btn btn-primary" onclick="nextStep(1)">다음</button>
+                            </div>
+                        </div>
+
+                        <!-- Step 2: 교육 정보 -->
+                        <div class="quote-step" data-step="2">
+                            <h4>교육 정보</h4>
+                            <div class="form-group">
+                                <label>교육 과정 <span class="required">*</span></label>
+                                <select name="program" required onchange="updateQuote()">
+                                    <option value="">선택하세요</option>
+                                    <option value="basic">AI 입문 과정 (8시간)</option>
+                                    <option value="intermediate">AI 실무 활용 과정 (16시간)</option>
+                                    <option value="advanced">AI 리더십 과정 (24시간)</option>
+                                    <option value="custom">맞춤형 과정</option>
+                                </select>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>예상 인원 <span class="required">*</span></label>
+                                    <input type="number" name="participants" min="1" required onchange="updateQuote()">
+                                </div>
+                                <div class="form-group">
+                                    <label>교육 형태 <span class="required">*</span></label>
+                                    <select name="type" required onchange="updateQuote()">
+                                        <option value="">선택하세요</option>
+                                        <option value="offline">오프라인</option>
+                                        <option value="online">온라인</option>
+                                        <option value="hybrid">하이브리드</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>희망 교육 시기</label>
+                                <input type="month" name="schedule">
+                            </div>
+                            <div class="step-buttons">
+                                <button type="button" class="btn btn-secondary" onclick="prevStep(2)">이전</button>
+                                <button type="button" class="btn btn-primary" onclick="nextStep(2)">다음</button>
+                            </div>
+                        </div>
+
+                        <!-- Step 3: 견적 확인 -->
+                        <div class="quote-step" data-step="3">
+                            <h4>예상 견적</h4>
+                            <div class="quote-summary">
+                                <div class="quote-item">
+                                    <span>선택 과정:</span>
+                                    <span id="selectedProgram">-</span>
+                                </div>
+                                <div class="quote-item">
+                                    <span>교육 인원:</span>
+                                    <span id="selectedParticipants">-</span>
+                                </div>
+                                <div class="quote-item">
+                                    <span>교육 형태:</span>
+                                    <span id="selectedType">-</span>
+                                </div>
+                                <div class="quote-divider"></div>
+                                <div class="quote-total">
+                                    <span>예상 견적:</span>
+                                    <span id="totalQuote">₩0</span>
+                                </div>
+                            </div>
+                            <div class="quote-notice">
+                                <i class="fas fa-info-circle"></i>
+                                <p>상기 금액은 예상 견적이며, 정확한 금액은 상담 후 확정됩니다.</p>
+                            </div>
+                            <div class="step-buttons">
+                                <button type="button" class="btn btn-secondary" onclick="prevStep(3)">이전</button>
+                                <button type="button" class="btn btn-primary" onclick="submitQuote()">견적서 다운로드</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="user-manager.js"></script>
+    <script src="enterprise.js"></script>
+</body>
+</html>
