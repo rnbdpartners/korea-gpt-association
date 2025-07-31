@@ -16,9 +16,15 @@ function checkAdminAccess() {
     const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
     const isLoggedIn = sessionStorage.getItem('isLoggedIn') === 'true';
     
-    if (!isLoggedIn || currentUser.role !== 'admin') {
-        alert('관리자 권한이 필요합니다.');
+    if (!isLoggedIn) {
+        alert('로그인이 필요합니다.');
         window.location.href = 'login.html';
+        return;
+    }
+    
+    if (currentUser.role !== 'admin') {
+        alert('관리자 권한이 필요합니다.');
+        window.location.href = 'index.html';
         return;
     }
 }

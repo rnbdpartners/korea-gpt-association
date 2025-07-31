@@ -1,33 +1,9 @@
 // 기업교육 페이지 JavaScript
 
-// 관리자 모드 체크 및 초기화
+// 페이지 초기화
 document.addEventListener('DOMContentLoaded', function() {
-    checkAdminMode();
-    initializeAdminFeatures();
+    // 기업교육 페이지 기능만 초기화
 });
-
-// 관리자 모드 확인
-function checkAdminMode() {
-    const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
-    const isLoggedIn = sessionStorage.getItem('isLoggedIn') === 'true';
-    
-    if (isLoggedIn && currentUser.role === 'admin') {
-        // 관리자인 경우 기업교육 관리자 페이지로 리다이렉트
-        if (!window.location.pathname.includes('admin-enterprise.html')) {
-            // 관리자가 기업교육 페이지에서 접근한 것을 표시
-            sessionStorage.setItem('adminSource', 'enterprise');
-            window.location.href = 'admin-enterprise.html';
-        }
-    }
-}
-
-// 관리자 기능 초기화
-function initializeAdminFeatures() {
-    const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
-    if (currentUser.role === 'admin' && window.location.pathname.includes('admin-enterprise.html')) {
-        enableAdminMode();
-    }
-}
 
 // 기업교육 페이지에서 관리자 로그인 처리
 function handleEnterpriseLogin() {
@@ -35,11 +11,11 @@ function handleEnterpriseLogin() {
     const isLoggedIn = sessionStorage.getItem('isLoggedIn') === 'true';
     
     if (isLoggedIn && currentUser.role === 'admin') {
-        // 이미 로그인한 관리자는 바로 B2B 관리자 페이지로
-        window.location.href = 'admin-enterprise.html';
+        // 이미 로그인한 관리자는 관리자 선택 페이지로
+        window.location.href = 'admin-select.html';
     } else {
-        // 로그인 페이지로 이동 (enterprise.html로 돌아오도록 redirect 파라미터 설정)
-        window.location.href = 'login.html?redirect=enterprise.html';
+        // 로그인 페이지로 이동
+        window.location.href = 'login.html';
     }
 }
 

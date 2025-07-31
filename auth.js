@@ -176,19 +176,16 @@ function handleLoginSubmit(e) {
             
             alert(`로그인 성공!\n\n환영합니다, ${account.name}님!`);
             
-            // redirect 파라미터가 있는 경우 처리
-            if (redirectTo === 'enterprise.html' && account.role === 'admin') {
-                // 기업교육 페이지에서 온 관리자는 바로 기업교육 관리자 페이지로
-                window.location.href = 'admin-enterprise.html';
-            } else if (redirectTo && redirectTo !== 'login.html') {
-                // 다른 redirect 요청이 있으면 해당 페이지로
-                window.location.href = redirectTo;
-            } else if (account.role === 'admin') {
-                // redirect 파라미터가 없는 관리자는 선택 페이지로
+            // 관리자는 항상 선택 페이지로
+            if (account.role === 'admin') {
                 window.location.href = 'admin-select.html';
             } else {
-                // 일반 사용자는 메인 페이지로
-                window.location.href = 'index.html';
+                // 일반 사용자는 redirect 파라미터가 있으면 해당 페이지로, 없으면 메인으로
+                if (redirectTo && redirectTo !== 'login.html') {
+                    window.location.href = redirectTo;
+                } else {
+                    window.location.href = 'index.html';
+                }
             }
         } else {
             alert('이메일 또는 비밀번호가 올바르지 않습니다.\n\n데모 계정:\n- admin@koreangpt.org / admin123 (관리자)\n- user@example.com / user123 (일반 사용자)\n- demo@demo.com / demo123 (데모)');
@@ -386,24 +383,6 @@ function initKakaoAuth() {
 
 // 데모 계정 로그인
 function loginDemo(type) {
-    const demoCredentials = {
-        admin: {
-            email: 'admin@koreangpt.org',
-            password: 'admin123!'
-        },
-        enterprise: {
-            email: 'manager@samsung.com',
-            password: 'samsung123!'
-        },
-        startup: {
-            email: 'ceo@startup.kr',
-            password: 'startup123!'
-        }
-    };
-    
-    const credentials = demoCredentials[type];
-    if (!credentials) return;
-    
     // URL 파라미터에서 redirect 확인
     const urlParams = new URLSearchParams(window.location.search);
     const redirectTo = urlParams.get('redirect');
@@ -413,34 +392,50 @@ function loginDemo(type) {
     demoBtn.style.opacity = '0.7';
     demoBtn.style.pointerEvents = 'none';
     
-    setTimeout(() => {
-        // 데모 계정 정보로 로그인 처리
-        const userData = {
-            email: credentials.email,
-            name: type === 'admin' ? '김관리' : type === 'enterprise' ? '이매니저' : '박대표',
-            role: type === 'admin' ? 'admin' : 'user',
+    // 데모 계정 정보 설정
+    let userData;
+    if (type === 'admin') {
+        userData = {
+            email: 'admin@koreangpt.org',
+            name: '김관리',
+            role: 'admin',
             loginTime: new Date().toISOString()
         };
-        
+    } else if (type === 'enterprise') {
+        userData = {
+            email: 'manager@samsung.com',
+            name: '이매니저',
+            role: 'user',
+            company: '삼성전자',
+            loginTime: new Date().toISOString()
+        };
+    } else if (type === 'startup') {
+        userData = {
+            email: 'ceo@startup.kr',
+            name: '박대표',
+            role: 'user',
+            company: '스타트업코리아',
+            loginTime: new Date().toISOString()
+        };
+    }
+    
+    setTimeout(() => {
         // 세션 저장
         localStorage.setItem('currentUser', JSON.stringify(userData));
         sessionStorage.setItem('isLoggedIn', 'true');
         
         alert(`데모 계정 로그인 성공!\n\n환영합니다, ${userData.name}님!`);
         
-        // redirect 파라미터가 있는 경우 처리
-        if (redirectTo === 'enterprise.html' && userData.role === 'admin') {
-            // 기업교육 페이지에서 온 관리자는 바로 기업교육 관리자 페이지로
-            window.location.href = 'admin-enterprise.html';
-        } else if (redirectTo && redirectTo !== 'login.html') {
-            // 다른 redirect 요청이 있으면 해당 페이지로
-            window.location.href = redirectTo;
-        } else if (userData.role === 'admin') {
-            // redirect 파라미터가 없는 관리자는 선택 페이지로
+        // 관리자는 항상 선택 페이지로
+        if (userData.role === 'admin') {
             window.location.href = 'admin-select.html';
         } else {
-            // 일반 사용자는 메인 페이지로
-            window.location.href = 'index.html';
+            // 일반 사용자는 redirect 파라미터가 있으면 해당 페이지로, 없으면 메인으로
+            if (redirectTo && redirectTo !== 'login.html') {
+                window.location.href = redirectTo;
+            } else {
+                window.location.href = 'index.html';
+            }
         }
     }, 1000);
 }
