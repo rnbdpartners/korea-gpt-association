@@ -204,6 +204,7 @@ function loadSectionData(section) {
             break;
         case 'dashboard':
             updateDashboardStats();
+            initializeWidgetSystem();
             break;
         default:
             break;
@@ -500,6 +501,7 @@ function viewOrder(orderId) {
 window.addEventListener('load', function() {
     // 기본으로 대시보드 섹션 활성화
     loadSectionData('dashboard');
+    initializeWidgetSystem();
 });
 
 // 회원 관리 기능
@@ -782,6 +784,743 @@ function debounce(func, wait) {
         };
         clearTimeout(timeout);
         timeout = setTimeout(later, wait);
+    };
+}
+
+// 위젯 시스템
+const widgetManager = {
+    availableWidgets: [
+        {
+            id: 'stats-overview',
+            name: '통계 개요',
+            description: '주요 지표 한눈에 보기',
+            type: 'stats',
+            active: true,
+            order: 1
+        },
+        {
+            id: 'revenue-chart',
+            name: '매출 차트',
+            description: '월별 매출 현황',
+            type: 'chart',
+            active: true,
+            order: 2
+        },
+        {
+            id: 'popular-courses',
+            name: '인기 강의',
+            description: 'TOP 5 인기 강의',
+            type: 'list',
+            active: true,
+            order: 3
+        },
+        {
+            id: 'recent-orders',
+            name: '최근 주문',
+            description: '최근 주문 현황',
+            type: 'activity',
+            active: true,
+            order: 4
+        },
+        {
+            id: 'new-members',
+            name: '신규 회원',
+            description: '최근 가입한 회원',
+            type: 'activity',
+            active: false,
+            order: 5
+        },
+        {
+            id: 'completion-rates',
+            name: '수강 완료율',
+            description: '강의별 완료율 통계',
+            type: 'chart',
+            active: false,
+            order: 6
+        }
+    ],
+
+    renderWidgets() {
+        const container = document.getElementById('dashboardWidgets');
+        if (!container) return;
+
+        container.innerHTML = '';
+
+        const activeWidgets = this.availableWidgets
+            .filter(widget => widget.active)
+            .sort((a, b) => a.order - b.order);
+
+        activeWidgets.forEach(widget => {
+            const widgetElement = this.createWidget(widget);
+            container.appendChild(widgetElement);
+        });
+    },
+
+    createWidget(widget) {
+        const widgetDiv = document.createElement('div');
+        widgetDiv.className = 'widget';
+        widgetDiv.dataset.widgetId = widget.id;
+
+        switch (widget.type) {
+            case 'stats':
+                widgetDiv.innerHTML = this.createStatsWidget();
+                break;
+            case 'chart':
+                if (widget.id === 'revenue-chart') {
+                    widgetDiv.innerHTML = this.createRevenueChartWidget();
+                } else {
+                    widgetDiv.innerHTML = this.createCompletionRatesWidget();
+                }
+                break;
+            case 'list':
+                widgetDiv.innerHTML = this.createPopularCoursesWidget();
+                break;
+            case 'activity':
+                if (widget.id === 'recent-orders') {
+                    widgetDiv.innerHTML = this.createRecentOrdersWidget();
+                } else {
+                    widgetDiv.innerHTML = this.createNewMembersWidget();
+                }
+                break;
+        }
+
+        return widgetDiv;
+    },
+
+    createStatsWidget() {
+        const totalRevenue = ordersData
+            .filter(order => order.status === 'completed')
+            .reduce((sum, order) => sum + order.amount, 0);
+
+        return `
+            <div class="widget-header">
+                <h3>통계 개요</h3>
+                <div class="widget-actions">
+                    <button class="widget-action" onclick="refreshWidget('stats-overview')">
+                        <i class="fas fa-sync-alt"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="widget-content">
+                <div class="widget-stats">
+                    <div class="widget-stat">
+                        <h3 class="widget-stat-value">₩${totalRevenue.toLocaleString()}</h3>
+                        <p class="widget-stat-label">총 매출</p>
+                    </div>
+                    <div class="widget-stat">
+                        <h3 class="widget-stat-value">${ordersData.length}</h3>
+                        <p class="widget-stat-label">총 주문</p>
+                    </div>
+                    <div class="widget-stat">
+                        <h3 class="widget-stat-value">3,892</h3>
+                        <p class="widget-stat-label">총 회원</p>
+                    </div>
+                    <div class="widget-stat">
+                        <h3 class="widget-stat-value">${coursesData.length}</h3>
+                        <p class="widget-stat-label">총 강의</p>
+                    </div>
+                </div>
+            </div>
+        `;
+    },
+
+    createRevenueChartWidget() {
+        return `
+            <div class="widget-header">
+                <h3>월별 매출 현황</h3>
+                <div class="widget-actions">
+                    <button class="widget-action" onclick="refreshWidget('revenue-chart')">
+                        <i class="fas fa-sync-alt"></i>
+                    </button>
+                    <button class="widget-action" onclick="configureWidget('revenue-chart')">
+                        <i class="fas fa-cog"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="widget-content">
+                <div class="widget-chart">
+                    <p>매출 차트 (개발 중)</p>
+                </div>
+            </div>
+        `;
+    },
+
+    createPopularCoursesWidget() {
+        const popularCourses = coursesData
+            .sort((a, b) => b.students - a.students)
+            .slice(0, 5);
+
+        const coursesList = popularCourses.map((course, index) => `
+            <div class="widget-list-item">
+                <div class="widget-item-info">
+                    <h4>${index + 1}. ${course.name}</h4>
+                    <p>${course.category}</p>
+                </div>
+                <div class="widget-item-value">${course.students}명</div>
+            </div>
+        `).join('');
+
+        return `
+            <div class="widget-header">
+                <h3>인기 강의 TOP 5</h3>
+                <div class="widget-actions">
+                    <button class="widget-action" onclick="refreshWidget('popular-courses')">
+                        <i class="fas fa-sync-alt"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="widget-content">
+                ${coursesList}
+            </div>
+        `;
+    },
+
+    createRecentOrdersWidget() {
+        const recentOrders = ordersData.slice(0, 5);
+
+        const ordersList = recentOrders.map(order => `
+            <div class="widget-list-item">
+                <div class="widget-item-info">
+                    <h4>${order.customerName}님</h4>
+                    <p>${order.courseName}</p>
+                </div>
+                <div class="widget-item-value">₩${order.amount.toLocaleString()}</div>
+            </div>
+        `).join('');
+
+        return `
+            <div class="widget-header">
+                <h3>최근 주문</h3>
+                <div class="widget-actions">
+                    <button class="widget-action" onclick="refreshWidget('recent-orders')">
+                        <i class="fas fa-sync-alt"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="widget-content">
+                ${ordersList}
+            </div>
+        `;
+    },
+
+    createNewMembersWidget() {
+        return `
+            <div class="widget-header">
+                <h3>신규 회원</h3>
+                <div class="widget-actions">
+                    <button class="widget-action" onclick="refreshWidget('new-members')">
+                        <i class="fas fa-sync-alt"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="widget-content">
+                <div class="widget-list-item">
+                    <div class="widget-item-info">
+                        <h4>정승현님</h4>
+                        <p>8분 전 가입</p>
+                    </div>
+                </div>
+                <div class="widget-list-item">
+                    <div class="widget-item-info">
+                        <h4>최영희님</h4>
+                        <p>15분 전 가입</p>
+                    </div>
+                </div>
+                <div class="widget-list-item">
+                    <div class="widget-item-info">
+                        <h4>한동훈님</h4>
+                        <p>28분 전 가입</p>
+                    </div>
+                </div>
+            </div>
+        `;
+    },
+
+    createCompletionRatesWidget() {
+        return `
+            <div class="widget-header">
+                <h3>수강 완료율</h3>
+                <div class="widget-actions">
+                    <button class="widget-action" onclick="refreshWidget('completion-rates')">
+                        <i class="fas fa-sync-alt"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="widget-content">
+                <div class="widget-chart">
+                    <p>완료율 차트 (개발 중)</p>
+                </div>
+            </div>
+        `;
+    },
+
+    renderWidgetSettings() {
+        const settingsList = document.getElementById('widgetSettingsList');
+        if (!settingsList) return;
+
+        settingsList.innerHTML = '';
+
+        this.availableWidgets
+            .sort((a, b) => a.order - b.order)
+            .forEach(widget => {
+                const widgetItem = document.createElement('div');
+                widgetItem.className = 'widget-item';
+                widgetItem.dataset.widgetId = widget.id;
+                widgetItem.draggable = true;
+                widgetItem.style.cursor = 'move';
+
+                widgetItem.innerHTML = `
+                    <div class="widget-info">
+                        <i class="fas fa-grip-vertical widget-drag-handle"></i>
+                        <div>
+                            <h4>${widget.name}</h4>
+                            <p>${widget.description}</p>
+                        </div>
+                    </div>
+                    <div class="widget-controls">
+                        <div class="widget-toggle ${widget.active ? 'active' : ''}" 
+                             onclick="toggleWidget('${widget.id}')"></div>
+                    </div>
+                `;
+
+                settingsList.appendChild(widgetItem);
+            });
+    }
+};
+
+// 위젯 관리 함수들
+function toggleDashboardSettings() {
+    const settingsPanel = document.getElementById('dashboardSettings');
+    if (settingsPanel.classList.contains('hidden')) {
+        settingsPanel.classList.remove('hidden');
+        widgetManager.renderWidgetSettings();
+    } else {
+        settingsPanel.classList.add('hidden');
+    }
+}
+
+function showAddWidgetPanel() {
+    alert('위젯 추가 기능은 곧 제공될 예정입니다.');
+}
+
+function toggleWidget(widgetId) {
+    const widget = widgetManager.availableWidgets.find(w => w.id === widgetId);
+    if (widget) {
+        widget.active = !widget.active;
+        widgetManager.renderWidgets();
+        widgetManager.renderWidgetSettings();
+        
+        // 로컬 스토리지에 설정 저장
+        localStorage.setItem('dashboardWidgets', JSON.stringify(widgetManager.availableWidgets));
+    }
+}
+
+function refreshWidget(widgetId) {
+    console.log(`위젯 새로고침: ${widgetId}`);
+    widgetManager.renderWidgets();
+}
+
+function configureWidget(widgetId) {
+    alert(`${widgetId} 위젯 설정 기능은 곧 제공될 예정입니다.`);
+}
+
+function resetDashboard() {
+    if (confirm('대시보드를 기본 설정으로 복원하시겠습니까?')) {
+        // 기본 설정으로 복원
+        widgetManager.availableWidgets.forEach(widget => {
+            if (['stats-overview', 'revenue-chart', 'popular-courses', 'recent-orders'].includes(widget.id)) {
+                widget.active = true;
+            } else {
+                widget.active = false;
+            }
+        });
+        
+        widgetManager.renderWidgets();
+        widgetManager.renderWidgetSettings();
+        localStorage.removeItem('dashboardWidgets');
+        alert('대시보드가 기본 설정으로 복원되었습니다.');
+    }
+}
+
+function saveDashboardSettings() {
+    localStorage.setItem('dashboardWidgets', JSON.stringify(widgetManager.availableWidgets));
+    alert('대시보드 설정이 저장되었습니다.');
+    toggleDashboardSettings();
+}
+
+// 위젯 시스템 초기화
+function initializeWidgetSystem() {
+    // 로컬 스토리지에서 설정 불러오기
+    const savedWidgets = localStorage.getItem('dashboardWidgets');
+    if (savedWidgets) {
+        try {
+            const parsedWidgets = JSON.parse(savedWidgets);
+            widgetManager.availableWidgets = parsedWidgets;
+        } catch (e) {
+            console.error('위젯 설정 로드 실패:', e);
+        }
+    }
+    
+    // 위젯 렌더링
+    widgetManager.renderWidgets();
+    
+    // 드래그 앤 드롭 초기화
+    initializeDragAndDrop();
+}
+
+// 드래그 앤 드롭 기능
+function initializeDragAndDrop() {
+    const widgetSettingsList = document.getElementById('widgetSettingsList');
+    if (!widgetSettingsList) return;
+
+    let draggedElement = null;
+    let draggedIndex = null;
+
+    // 드래그 이벤트 리스너 추가
+    widgetSettingsList.addEventListener('dragstart', function(e) {
+        if (e.target.classList.contains('widget-item') || e.target.closest('.widget-item')) {
+            draggedElement = e.target.closest('.widget-item');
+            draggedIndex = Array.from(widgetSettingsList.children).indexOf(draggedElement);
+            draggedElement.style.opacity = '0.5';
+            e.dataTransfer.effectAllowed = 'move';
+        }
+    });
+
+    widgetSettingsList.addEventListener('dragend', function(e) {
+        if (draggedElement) {
+            draggedElement.style.opacity = '';
+            draggedElement = null;
+            draggedIndex = null;
+        }
+    });
+
+    widgetSettingsList.addEventListener('dragover', function(e) {
+        e.preventDefault();
+        e.dataTransfer.dropEffect = 'move';
+    });
+
+    widgetSettingsList.addEventListener('drop', function(e) {
+        e.preventDefault();
+        
+        if (!draggedElement) return;
+
+        const dropTarget = e.target.closest('.widget-item');
+        if (!dropTarget || dropTarget === draggedElement) return;
+
+        const dropIndex = Array.from(widgetSettingsList.children).indexOf(dropTarget);
+        
+        // 위젯 순서 변경
+        reorderWidgets(draggedIndex, dropIndex);
+        
+        // DOM 업데이트
+        if (draggedIndex < dropIndex) {
+            dropTarget.parentNode.insertBefore(draggedElement, dropTarget.nextSibling);
+        } else {
+            dropTarget.parentNode.insertBefore(draggedElement, dropTarget);
+        }
+    });
+
+    // 모든 위젯 아이템에 draggable 속성 추가
+    function makeDraggable(element) {
+        element.draggable = true;
+        element.style.cursor = 'move';
+    }
+
+    // MutationObserver로 동적 추가된 위젯 아이템 감지
+    const observer = new MutationObserver(function(mutations) {
+        mutations.forEach(function(mutation) {
+            mutation.addedNodes.forEach(function(node) {
+                if (node.nodeType === 1 && node.classList.contains('widget-item')) {
+                    makeDraggable(node);
+                }
+            });
+        });
+    });
+
+    observer.observe(widgetSettingsList, { childList: true });
+}
+
+// 위젯 순서 변경
+function reorderWidgets(fromIndex, toIndex) {
+    const widgets = [...widgetManager.availableWidgets];
+    const [movedWidget] = widgets.splice(fromIndex, 1);
+    widgets.splice(toIndex, 0, movedWidget);
+
+    // order 속성 업데이트
+    widgets.forEach((widget, index) => {
+        widget.order = index + 1;
+    });
+
+    widgetManager.availableWidgets = widgets;
+    
+    // 위젯 다시 렌더링
+    widgetManager.renderWidgets();
+    
+    // 로컬 스토리지에 저장
+    localStorage.setItem('dashboardWidgets', JSON.stringify(widgetManager.availableWidgets));
+}
+
+// 콘텐츠 편집 시스템
+const contentEditor = {
+    currentPage: null,
+    currentElement: null,
+    
+    pageTemplates: {
+        home: {
+            title: '메인 페이지',
+            sections: [
+                { id: 'hero', name: '메인 배너', content: '<h2>AI 시대를 선도하는 GPT 전문 교육</h2><p>한국GPT협회와 함께 미래를 준비하세요</p>' },
+                { id: 'about', name: '소개', content: '<h3>한국GPT협회 소개</h3><p>AI 교육의 미래를 선도하는 전문 교육 플랫폼입니다.</p>' },
+                { id: 'features', name: '특징', content: '<ul><li>전문가 강의진</li><li>실무 중심 커리큘럼</li><li>1:1 멘토링</li></ul>' }
+            ]
+        },
+        courses: {
+            title: '강의 관리',
+            sections: [
+                { id: 'categories', name: '카테고리', content: '<h3>강의 카테고리</h3><p>프롬프트 엔지니어링, 비즈니스 AI, AI 마케팅, AI 리더십</p>' },
+                { id: 'pricing', name: '가격 정책', content: '<h3>가격 정책</h3><p>합리적인 가격으로 최고의 교육을 제공합니다.</p>' }
+            ]
+        },
+        enterprise: {
+            title: '기업교육',
+            sections: [
+                { id: 'programs', name: '프로그램', content: '<h3>기업교육 프로그램</h3><p>맞춤형 기업교육 솔루션을 제공합니다.</p>' },
+                { id: 'contact', name: '문의', content: '<h3>문의하기</h3><p>기업교육 문의: contact@koreangpt.org</p>' }
+            ]
+        },
+        general: {
+            title: '일반 설정',
+            sections: [
+                { id: 'siteinfo', name: '사이트 정보', content: '<h3>한국GPT협회</h3><p>이메일: info@koreangpt.org<br>전화: 02-1234-5678</p>' },
+                { id: 'social', name: '소셜 미디어', content: '<h3>소셜 미디어</h3><p>Facebook, Instagram, YouTube에서 만나보세요.</p>' }
+            ]
+        }
+    }
+};
+
+// 콘텐츠 편집 함수들
+function openContentEditor() {
+    const modal = document.getElementById('contentEditorModal');
+    modal.classList.add('show');
+    
+    // 편집기 탭 이벤트 설정
+    setupEditorTabs();
+    
+    // 모달 닫기 이벤트 설정
+    setupEditorModal();
+}
+
+function editPage(pageId) {
+    contentEditor.currentPage = pageId;
+    const pageData = contentEditor.pageTemplates[pageId];
+    
+    if (!pageData) {
+        alert('페이지 데이터를 찾을 수 없습니다.');
+        return;
+    }
+    
+    // 모달 제목 설정
+    document.getElementById('editorModalTitle').textContent = `${pageData.title} 편집`;
+    
+    // 첫 번째 섹션 로드
+    if (pageData.sections.length > 0) {
+        loadSectionContent(pageData.sections[0]);
+    }
+    
+    openContentEditor();
+}
+
+function loadSectionContent(section) {
+    const visualEditor = document.getElementById('editableContent');
+    const htmlEditor = document.getElementById('htmlEditor');
+    
+    visualEditor.innerHTML = section.content;
+    htmlEditor.value = section.content;
+    
+    contentEditor.currentElement = section;
+}
+
+function setupEditorTabs() {
+    const tabs = document.querySelectorAll('.editor-tab');
+    const panels = document.querySelectorAll('.editor-panel');
+    
+    tabs.forEach(tab => {
+        tab.addEventListener('click', function() {
+            const targetTab = this.dataset.tab;
+            
+            // 탭 활성화 상태 변경
+            tabs.forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+            
+            // 패널 표시/숨김
+            panels.forEach(panel => {
+                panel.classList.remove('active');
+                if (panel.id === targetTab + 'Editor') {
+                    panel.classList.add('active');
+                }
+            });
+            
+            // HTML 편집기와 시각적 편집기 동기화
+            syncEditorContent(targetTab);
+        });
+    });
+}
+
+function syncEditorContent(activeTab) {
+    const visualEditor = document.getElementById('editableContent');
+    const htmlEditor = document.getElementById('htmlEditor');
+    
+    if (activeTab === 'code') {
+        // 시각적 편집기 → HTML 편집기
+        htmlEditor.value = visualEditor.innerHTML;
+    } else {
+        // HTML 편집기 → 시각적 편집기
+        visualEditor.innerHTML = htmlEditor.value;
+    }
+}
+
+function setupEditorModal() {
+    const modal = document.getElementById('contentEditorModal');
+    const closeBtn = modal.querySelector('.modal-close');
+    
+    // 닫기 버튼
+    closeBtn.addEventListener('click', closeContentEditor);
+    
+    // 모달 외부 클릭
+    modal.addEventListener('click', function(e) {
+        if (e.target === modal) {
+            closeContentEditor();
+        }
+    });
+}
+
+function closeContentEditor() {
+    const modal = document.getElementById('contentEditorModal');
+    modal.classList.remove('show');
+}
+
+function formatText(command) {
+    document.execCommand(command, false, null);
+    document.getElementById('editableContent').focus();
+}
+
+function insertImage() {
+    const url = prompt('이미지 URL을 입력하세요:');
+    if (url) {
+        document.execCommand('insertImage', false, url);
+    }
+}
+
+function insertLink() {
+    const url = prompt('링크 URL을 입력하세요:');
+    if (url) {
+        document.execCommand('createLink', false, url);
+    }
+}
+
+function previewContent() {
+    const content = document.getElementById('editableContent').innerHTML;
+    const previewWindow = window.open('', '_blank', 'width=800,height=600');
+    previewWindow.document.write(`
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <title>미리보기</title>
+            <link rel="stylesheet" href="styles.css">
+        </head>
+        <body>
+            <div class="container" style="padding: 2rem;">
+                ${content}
+            </div>
+        </body>
+        </html>
+    `);
+}
+
+function saveContent() {
+    if (!contentEditor.currentElement) {
+        alert('저장할 콘텐츠가 없습니다.');
+        return;
+    }
+    
+    const visualEditor = document.getElementById('editableContent');
+    const newContent = visualEditor.innerHTML;
+    
+    // 로컬 스토리지에 저장
+    const storageKey = `content_${contentEditor.currentPage}_${contentEditor.currentElement.id}`;
+    localStorage.setItem(storageKey, newContent);
+    
+    // 템플릿 업데이트
+    contentEditor.currentElement.content = newContent;
+    
+    alert('콘텐츠가 저장되었습니다.');
+    closeContentEditor();
+}
+
+function openThemeSettings() {
+    alert('테마 설정 기능은 곧 제공될 예정입니다.');
+}
+
+// 드래그 앤 드롭 편집 기능 (실제 사이트에서 사용)
+function enableInlineEditing() {
+    const editableElements = document.querySelectorAll('[data-editable]');
+    
+    editableElements.forEach(element => {
+        element.classList.add('editable-element');
+        
+        // 편집 오버레이 추가
+        const overlay = document.createElement('div');
+        overlay.className = 'edit-overlay';
+        overlay.textContent = '편집';
+        overlay.onclick = () => editInline(element);
+        
+        element.appendChild(overlay);
+    });
+}
+
+function editInline(element) {
+    const originalContent = element.innerHTML;
+    element.classList.add('editing');
+    element.contentEditable = true;
+    element.focus();
+    
+    const saveBtn = document.createElement('button');
+    saveBtn.textContent = '저장';
+    saveBtn.className = 'btn btn-primary';
+    saveBtn.style.position = 'absolute';
+    saveBtn.style.top = '100%';
+    saveBtn.style.right = '0';
+    saveBtn.style.zIndex = '1000';
+    
+    const cancelBtn = document.createElement('button');
+    cancelBtn.textContent = '취소';
+    cancelBtn.className = 'btn btn-secondary';
+    cancelBtn.style.position = 'absolute';
+    cancelBtn.style.top = '100%';
+    cancelBtn.style.right = '70px';
+    cancelBtn.style.zIndex = '1000';
+    
+    element.appendChild(saveBtn);
+    element.appendChild(cancelBtn);
+    
+    saveBtn.onclick = () => {
+        element.classList.remove('editing');
+        element.contentEditable = false;
+        saveBtn.remove();
+        cancelBtn.remove();
+        
+        // 실제로는 서버에 저장
+        const elementId = element.dataset.editable;
+        localStorage.setItem(`inline_${elementId}`, element.innerHTML);
+        alert('변경사항이 저장되었습니다.');
+    };
+    
+    cancelBtn.onclick = () => {
+        element.innerHTML = originalContent;
+        element.classList.remove('editing');
+        element.contentEditable = false;
+        saveBtn.remove();
+        cancelBtn.remove();
     };
 }
 
