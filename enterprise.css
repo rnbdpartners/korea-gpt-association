@@ -1,5 +1,29 @@
 /* 기업교육 페이지 전용 스타일 */
 
+/* 공통 섹션 스타일 */
+.section-header {
+    text-align: center;
+    margin-bottom: 4rem;
+}
+
+.section-header h2 {
+    font-size: 2.5rem;
+    color: #0f172a;
+    font-weight: 800;
+    margin-bottom: 1rem;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+}
+
+.section-header p {
+    font-size: 1.125rem;
+    color: #64748b;
+    font-weight: 400;
+    line-height: 1.6;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
 /* 헤더 수정 */
 .enterprise-header .logo .business {
     color: var(--primary-color);
@@ -44,7 +68,7 @@
 /* 엔터프라이즈 히어로 섹션 */
 .enterprise-hero {
     padding: 120px 0 80px;
-    background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+    background: linear-gradient(135deg, #ffffff 0%, #f8fffe 100%);
     position: relative;
     overflow: hidden;
 }
@@ -56,7 +80,7 @@
     right: -10%;
     width: 60%;
     height: 200%;
-    background: radial-gradient(circle, rgba(4, 249, 188, 0.1) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(4, 249, 188, 0.05) 0%, transparent 70%);
     animation: pulse 4s ease-in-out infinite;
 }
 
@@ -71,57 +95,100 @@
 
 .hero-badge {
     display: inline-block;
-    background: var(--primary-color);
-    color: var(--accent-color);
-    padding: 0.5rem 1rem;
+    background: linear-gradient(135deg, var(--primary-color) 0%, #03e6a8 100%);
+    color: #ffffff;
+    padding: 0.5rem 1.25rem;
     border-radius: 9999px;
     font-size: 0.875rem;
-    font-weight: 600;
+    font-weight: 700;
     margin-bottom: 1.5rem;
+    box-shadow: 0 4px 15px rgba(4, 249, 188, 0.3);
 }
 
 .enterprise-hero h2 {
-    font-size: 3rem;
-    line-height: 1.2;
+    font-size: 3.25rem;
+    line-height: 1.15;
     margin-bottom: 1.5rem;
-    color: var(--text-primary);
+    color: #0f172a;
+    font-weight: 800;
+    letter-spacing: -0.02em;
 }
 
 .enterprise-hero h2 .highlight {
-    color: var(--primary-color);
+    background: linear-gradient(135deg, var(--primary-color) 0%, #03e6a8 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
     position: relative;
+    font-weight: 900;
 }
 
 .enterprise-hero h2 .highlight::after {
     content: '';
     position: absolute;
-    bottom: -5px;
+    bottom: -8px;
     left: 0;
     width: 100%;
-    height: 3px;
-    background: var(--primary-color);
+    height: 4px;
+    background: linear-gradient(135deg, var(--primary-color) 0%, #03e6a8 100%);
+    border-radius: 2px;
+    opacity: 0.8;
+}
+
+.enterprise-hero p {
+    font-size: 1.125rem;
+    line-height: 1.7;
+    color: #475569;
+    margin-bottom: 2.5rem;
+    font-weight: 400;
 }
 
 .hero-stats {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 2rem;
-    margin: 2rem 0;
+    gap: 2.5rem;
+    margin: 2.5rem 0;
+    padding: 2rem 0;
+    border-top: 1px solid #e2e8f0;
+    border-bottom: 1px solid #e2e8f0;
 }
 
 .hero-stats .stat {
     text-align: center;
+    position: relative;
+}
+
+.hero-stats .stat::after {
+    content: '';
+    position: absolute;
+    right: -1.25rem;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 1px;
+    height: 40px;
+    background: #e2e8f0;
+}
+
+.hero-stats .stat:last-child::after {
+    display: none;
 }
 
 .hero-stats h3 {
-    font-size: 2.5rem;
-    color: var(--primary-color);
-    margin: 0;
+    font-size: 2.75rem;
+    background: linear-gradient(135deg, var(--primary-color) 0%, #03e6a8 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin: 0 0 0.5rem 0;
+    font-weight: 800;
+    letter-spacing: -0.02em;
 }
 
 .hero-stats p {
-    color: var(--text-secondary);
-    font-size: 0.875rem;
+    color: #64748b;
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin: 0;
 }
 
 .hero-buttons {
@@ -216,8 +283,25 @@
 
 /* 프로그램 섹션 */
 .programs-section {
-    padding: 80px 0;
-    background: var(--bg-primary);
+    padding: 100px 0;
+    background: #ffffff;
+}
+
+.programs-section .section-header h2 {
+    font-size: 2.5rem;
+    color: #0f172a;
+    font-weight: 800;
+    text-align: center;
+    margin-bottom: 1rem;
+    letter-spacing: -0.02em;
+}
+
+.programs-section .section-header p {
+    font-size: 1.125rem;
+    color: #64748b;
+    text-align: center;
+    margin-bottom: 3rem;
+    font-weight: 400;
 }
 
 .programs-grid {
@@ -228,18 +312,19 @@
 }
 
 .program-card {
-    background: white;
-    border-radius: var(--radius-lg);
-    padding: 2rem;
-    border: 2px solid var(--border-color);
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 2.5rem;
+    border: 1px solid #e2e8f0;
     transition: all 0.3s ease;
     position: relative;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
 }
 
 .program-card:hover {
-    transform: translateY(-5px);
+    transform: translateY(-8px);
     border-color: var(--primary-color);
-    box-shadow: 0 10px 30px rgba(4, 249, 188, 0.2);
+    box-shadow: 0 20px 50px rgba(4, 249, 188, 0.15), 0 10px 25px rgba(0, 0, 0, 0.1);
 }
 
 .program-card.popular {
@@ -282,16 +367,29 @@
 
 .program-header h3 {
     flex: 1;
-    font-size: 1.25rem;
+    font-size: 1.5rem;
     margin: 0;
+    color: #0f172a;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+}
+
+.program-card .program-content p {
+    color: #64748b;
+    font-size: 1rem;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+    font-weight: 400;
 }
 
 .program-badge {
-    background: var(--bg-accent);
-    color: var(--text-secondary);
-    padding: 0.25rem 0.75rem;
+    background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
+    color: #475569;
+    padding: 0.4rem 1rem;
     border-radius: 9999px;
     font-size: 0.75rem;
+    font-weight: 600;
+    border: 1px solid #e2e8f0;
 }
 
 .program-features {
@@ -301,16 +399,20 @@
 }
 
 .program-features li {
-    padding: 0.5rem 0;
+    padding: 0.75rem 0;
     display: flex;
     align-items: center;
-    gap: 0.75rem;
-    color: var(--text-secondary);
+    gap: 1rem;
+    color: #374151;
+    font-size: 0.95rem;
+    font-weight: 500;
 }
 
 .program-features i {
     color: var(--primary-color);
-    font-size: 0.875rem;
+    font-size: 1rem;
+    width: 20px;
+    text-align: center;
 }
 
 .program-meta {
@@ -329,39 +431,72 @@
 
 /* 성공 사례 섹션 */
 .success-section {
-    padding: 80px 0;
-    background: var(--bg-secondary);
+    padding: 100px 0;
+    background: #f8fafc;
+}
+
+.success-section .section-header h2 {
+    font-size: 2.5rem;
+    color: #0f172a;
+    font-weight: 800;
+    text-align: center;
+    margin-bottom: 1rem;
+    letter-spacing: -0.02em;
+}
+
+.success-section .section-header p {
+    font-size: 1.125rem;
+    color: #64748b;
+    text-align: center;
+    margin-bottom: 3rem;
+    font-weight: 400;
 }
 
 .success-case {
-    background: white;
-    border-radius: var(--radius-lg);
+    background: #ffffff;
+    border-radius: 20px;
     padding: 3rem;
     display: grid;
     grid-template-columns: 200px 1fr;
     gap: 3rem;
     align-items: start;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    border: 1px solid #e2e8f0;
+}
+
+.success-case h3 {
+    font-size: 1.5rem;
+    color: #0f172a;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    letter-spacing: -0.01em;
 }
 
 .case-company img {
     width: 100%;
     height: auto;
-    border-radius: var(--radius-md);
+    border-radius: 12px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
 }
 
 .case-industry {
     color: var(--primary-color);
-    font-weight: 600;
+    font-weight: 700;
     margin-bottom: 1rem;
+    font-size: 0.95rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
 }
 
 .success-case blockquote {
-    font-size: 1.125rem;
-    line-height: 1.8;
-    color: var(--text-secondary);
-    border-left: 3px solid var(--primary-color);
-    padding-left: 1.5rem;
+    font-size: 1.25rem;
+    line-height: 1.7;
+    color: #374151;
+    border-left: 4px solid var(--primary-color);
+    padding-left: 2rem;
     margin: 1.5rem 0;
+    font-weight: 400;
+    font-style: italic;
 }
 
 .case-results {
@@ -388,7 +523,25 @@
 
 /* 프로세스 섹션 */
 .process-section {
-    padding: 80px 0;
+    padding: 100px 0;
+    background: #ffffff;
+}
+
+.process-section .section-header h2 {
+    font-size: 2.5rem;
+    color: #0f172a;
+    font-weight: 800;
+    text-align: center;
+    margin-bottom: 1rem;
+    letter-spacing: -0.02em;
+}
+
+.process-section .section-header p {
+    font-size: 1.125rem;
+    color: #64748b;
+    text-align: center;
+    margin-bottom: 3rem;
+    font-weight: 400;
 }
 
 .process-timeline {
@@ -431,19 +584,34 @@
 
 .step-content h3 {
     text-align: center;
-    margin-bottom: 0.5rem;
+    margin-bottom: 1rem;
+    font-size: 1.25rem;
+    color: #0f172a;
+    font-weight: 700;
+    letter-spacing: -0.01em;
 }
 
 .step-content p {
     text-align: center;
-    color: var(--text-secondary);
-    font-size: 0.875rem;
+    color: #64748b;
+    font-size: 1rem;
+    line-height: 1.6;
+    font-weight: 400;
 }
 
 /* FAQ 섹션 */
 .faq-section {
-    padding: 80px 0;
-    background: var(--bg-secondary);
+    padding: 100px 0;
+    background: #f8fafc;
+}
+
+.faq-section .section-header h2 {
+    font-size: 2.5rem;
+    color: #0f172a;
+    font-weight: 800;
+    text-align: center;
+    margin-bottom: 3rem;
+    letter-spacing: -0.02em;
 }
 
 .faq-list {
@@ -452,15 +620,21 @@
 }
 
 .faq-item {
-    background: white;
-    border-radius: var(--radius-md);
+    background: #ffffff;
+    border-radius: 16px;
     margin-bottom: 1rem;
     overflow: hidden;
-    border: 1px solid var(--border-color);
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+    transition: all 0.3s ease;
+}
+
+.faq-item:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
 .faq-question {
-    padding: 1.5rem 2rem;
+    padding: 2rem 2rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -469,12 +643,15 @@
 }
 
 .faq-question:hover {
-    background: var(--bg-accent);
+    background: #f8fafc;
 }
 
 .faq-question h3 {
     margin: 0;
-    font-size: 1.125rem;
+    font-size: 1.25rem;
+    color: #0f172a;
+    font-weight: 600;
+    letter-spacing: -0.01em;
 }
 
 .faq-question i {
@@ -493,51 +670,97 @@
     transition: max-height 0.3s ease, padding 0.3s ease;
 }
 
+.faq-answer p {
+    color: #64748b;
+    font-size: 1rem;
+    line-height: 1.7;
+    font-weight: 400;
+    margin: 0;
+}
+
 .faq-item.active .faq-answer {
-    padding: 0 2rem 1.5rem;
+    padding: 0 2rem 2rem;
     max-height: 500px;
 }
 
 /* CTA 섹션 */
 .cta-section {
-    padding: 80px 0;
-    background: linear-gradient(135deg, var(--primary-color) 0%, #03e6a8 100%);
+    padding: 100px 0;
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
     text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.cta-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at 30% 20%, rgba(4, 249, 188, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 70% 80%, rgba(4, 249, 188, 0.05) 0%, transparent 50%);
+}
+
+.cta-content {
+    position: relative;
+    z-index: 1;
 }
 
 .cta-content h2 {
-    color: var(--accent-color);
-    font-size: 2.5rem;
-    margin-bottom: 1rem;
+    color: #ffffff;
+    font-size: 3rem;
+    margin-bottom: 1.5rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
 }
 
 .cta-content p {
-    color: var(--accent-color);
-    font-size: 1.125rem;
-    margin-bottom: 2rem;
-    opacity: 0.9;
+    color: #94a3b8;
+    font-size: 1.25rem;
+    margin-bottom: 3rem;
+    font-weight: 400;
+    line-height: 1.6;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .cta-buttons {
     display: flex;
-    gap: 1rem;
+    gap: 1.5rem;
     justify-content: center;
+    flex-wrap: wrap;
 }
 
 .cta-section .btn {
-    background: var(--accent-color);
-    color: white;
+    background: linear-gradient(135deg, var(--primary-color) 0%, #03e6a8 100%);
+    color: #0f172a;
+    border: none;
+    font-weight: 700;
+    padding: 1rem 2rem;
+    font-size: 1rem;
+    box-shadow: 0 4px 15px rgba(4, 249, 188, 0.3);
 }
 
 .cta-section .btn-secondary {
     background: transparent;
-    border: 2px solid var(--accent-color);
-    color: var(--accent-color);
+    border: 2px solid #ffffff;
+    color: #ffffff;
+    box-shadow: none;
 }
 
 .cta-section .btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 30px rgba(4, 249, 188, 0.4);
+}
+
+.cta-section .btn-secondary:hover {
+    background: #ffffff;
+    color: #0f172a;
+    box-shadow: 0 8px 30px rgba(255, 255, 255, 0.2);
 }
 
 /* 견적 모달 */
