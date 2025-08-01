@@ -20,6 +20,22 @@ const users = [
         managerName: '김담당',
         companyName: '데모기업',
         role: 'enterprise'
+    },
+    {
+        id: 2,
+        email: 'manager@samsung.com',
+        password: '$2a$10$/vVvn3vEF5436ceqnLDeAO2Ox99F93ybc.yx8rSu28/yvUlvZZbSC', // samsung123
+        managerName: '이과장',
+        companyName: '삼성전자',
+        role: 'enterprise'
+    },
+    {
+        id: 3,
+        email: 'ceo@startup.kr',
+        password: '$2a$10$l54/wpj3RGCn3nvwvai08.0TGbhpv7bZlXHMx2ZnN/O8ZFpc6PO/2', // startup123
+        managerName: '박대표',
+        companyName: 'AI 스타트업',
+        role: 'enterprise'
     }
 ];
 

@@ -99,10 +99,12 @@ router.post('/login', [
     }
 
     const { email, password } = req.body;
+    console.log('Login attempt for:', email);
 
     // Find member
     const member = await EnterpriseMember.findOne({ where: { email } });
     if (!member) {
+      console.log('User not found:', email);
       return res.status(400).json({ message: 'Invalid credentials' });
     }
 

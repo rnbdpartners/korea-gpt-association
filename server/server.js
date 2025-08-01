@@ -18,14 +18,20 @@ const PORT = process.env.PORT || 3001;
 // Security middleware
 app.use(helmet());
 
-// CORS configuration
+// CORS configuration - 개발 환경에서는 모든 origin 허용
 const corsOptions = {
   origin: function (origin, callback) {
-    const allowedOrigins = process.env.CORS_ORIGIN.split(',');
-    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+    if (process.env.NODE_ENV === 'development') {
+      // 개발 환경에서는 모든 origin 허용
       callback(null, true);
     } else {
-      callback(new Error('Not allowed by CORS'));
+      // 프로덕션에서는 환경변수의 origin만 허용
+      const allowedOrigins = process.env.CORS_ORIGIN.split(',');
+      if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+        callback(null, true);
+      } else {
+        callback(new Error('Not allowed by CORS'));
+      }
     }
   },
   credentials: true,

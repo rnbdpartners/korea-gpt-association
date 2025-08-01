@@ -1,5 +1,7 @@
 // API Configuration
-const API_BASE_URL = 'http://localhost:3001/api';
+const API_BASE_URL = window.location.hostname === 'localhost' 
+    ? 'http://localhost:3001/api'
+    : '/api'; // 프로덕션에서는 같은 도메인 사용
 
 // API Headers
 const getHeaders = () => {
@@ -18,6 +20,8 @@ const getHeaders = () => {
 // API Helper Functions
 const apiRequest = async (endpoint, options = {}) => {
     try {
+        console.log(`API Request: ${options.method || 'GET'} ${endpoint}`);
+        
         const response = await fetch(`${API_BASE_URL}${endpoint}`, {
             ...options,
             headers: {
@@ -27,6 +31,7 @@ const apiRequest = async (endpoint, options = {}) => {
         });
         
         const data = await response.json();
+        console.log('API Response:', data);
         
         if (!response.ok) {
             throw new Error(data.message || 'API request failed');
@@ -97,6 +102,8 @@ window.API = {
     
     // File upload
     uploadFile: async (endpoint, file, additionalData = {}) => {
+        console.log(`File Upload: ${endpoint}`);
+        
         const formData = new FormData();
         formData.append('file', file);
         
@@ -114,6 +121,7 @@ window.API = {
         });
         
         const data = await response.json();
+        console.log('Upload Response:', data);
         
         if (!response.ok) {
             throw new Error(data.message || 'Upload failed');

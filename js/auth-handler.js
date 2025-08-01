@@ -133,55 +133,54 @@ async function handleAdminLogin(e) {
 }
 
 // 데모 로그인 처리
-async function handleDemoLogin(e) {
-    const demoType = e.currentTarget.dataset.demoType;
-    console.log('Demo login type:', demoType);
+window.loginDemo = async function(type) {
+    console.log('Demo login type:', type);
     
     const demoAccounts = {
-        student: {
-            email: 'student@demo.com',
-            password: 'demo123'
-        },
-        enterprise: {
-            email: 'enterprise@demo.com',
-            password: 'demo123'
-        },
         admin: {
             email: 'admin@koreagpt.org',
             password: 'admin123!@#'
+        },
+        enterprise: {
+            email: 'manager@samsung.com',
+            password: 'samsung123'
+        },
+        startup: {
+            email: 'ceo@startup.kr',
+            password: 'startup123'
+        },
+        student: {
+            email: 'student@demo.com',
+            password: 'demo123'
         }
     };
     
-    const account = demoAccounts[demoType];
-    if (!account) return;
-    
-    try {
-        let response;
-        if (demoType === 'admin') {
-            console.log('Admin login attempt:', account);
-            response = await API.adminLogin(account);
-            localStorage.setItem('adminUser', JSON.stringify(response.user));
-            localStorage.setItem('authToken', response.token);
-            alert('관리자 로그인 성공');
-            window.location.href = 'admin-select.html';
-        } else {
-            console.log('User login attempt:', account);
-            response = await API.login(account);
-            localStorage.setItem('user', JSON.stringify(response.user));
-            localStorage.setItem('authToken', response.token);
-            
-            if (demoType === 'enterprise') {
-                alert('기업 회원 로그인 성공');
-                window.location.href = 'enterprise-request.html';
-            } else {
-                alert('로그인 성공');
-                window.location.href = 'index.html';
-            }
-        }
-    } catch (error) {
-        console.error('Demo login error:', error);
-        alert('데모 계정 로그인 실패: ' + (error.message || '서버 연결 오류'));
+    const account = demoAccounts[type];
+    if (!account) {
+        alert('잘못된 데모 계정 타입입니다.');
+        return;
     }
+    
+    // 폼에 값 입력
+    const emailInput = document.getElementById('email');
+    const passwordInput = document.getElementById('password');
+    
+    if (emailInput && passwordInput) {
+        emailInput.value = account.email;
+        passwordInput.value = account.password;
+        
+        // 폼 제출
+        const loginForm = document.getElementById('loginForm');
+        if (loginForm) {
+            loginForm.dispatchEvent(new Event('submit'));
+        }
+    }
+}
+
+// 기존 데모 로그인 핸들러 (data-demo-type 속성을 사용하는 버튼용)
+async function handleDemoLogin(e) {
+    const demoType = e.currentTarget.dataset.demoType;
+    window.loginDemo(demoType);
 }
 
 // 로그아웃 처리
