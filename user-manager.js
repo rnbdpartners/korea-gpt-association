@@ -4,8 +4,8 @@ const DEMO_ACCOUNTS = [
     {
         id: 'admin001',
         email: 'admin@koreangpt.org',
-        password: 'admin123!',
-        name: '관리자',
+        password: 'admin123',
+        name: '김관리',
         role: 'admin',
         company: '한국GPT협회',
         phone: '02-1234-5678',
@@ -13,20 +13,20 @@ const DEMO_ACCOUNTS = [
     },
     // 일반 사용자 계정들
     {
-        id: 'demo001',
-        email: 'demo@test.com',
-        password: 'demo123!',
-        name: '김데모',
+        id: 'user001',
+        email: 'user@example.com',
+        password: 'user123',
+        name: '김회원',
         role: 'user',
-        company: '테스트 회사',
+        company: '일반 회사',
         phone: '010-1234-5678',
         createdAt: '2024-01-15T09:00:00Z'
     },
     {
         id: 'enterprise001',
         email: 'manager@samsung.com',
-        password: 'samsung123!',
-        name: '이기업',
+        password: 'samsung123',
+        name: '이매니저',
         role: 'user',
         company: '삼성전자',
         phone: '010-2345-6789',
@@ -35,22 +35,12 @@ const DEMO_ACCOUNTS = [
     {
         id: 'startup001',
         email: 'ceo@startup.kr',
-        password: 'startup123!',
-        name: '박스타트',
+        password: 'startup123',
+        name: '박대표',
         role: 'user',
         company: '스타트업코리아',
         phone: '010-3456-7890',
         createdAt: '2024-02-10T14:20:00Z'
-    },
-    {
-        id: 'edu001',
-        email: 'prof@university.ac.kr',
-        password: 'edu123!',
-        name: '최교수',
-        role: 'user',
-        company: '한국대학교',
-        phone: '010-4567-8901',
-        createdAt: '2024-02-15T16:45:00Z'
     }
 ];
 
@@ -59,9 +49,9 @@ const DEMO_QUOTES = [
     {
         id: '1708123456789',
         userId: 'enterprise001',
-        userName: '이기업',
+        userName: '이매니저',
         company: '삼성전자',
-        name: '이기업',
+        name: '이매니저',
         phone: '010-2345-6789',
         email: 'manager@samsung.com',
         program: 'intermediate',
@@ -75,9 +65,9 @@ const DEMO_QUOTES = [
     {
         id: '1708123456790',
         userId: 'startup001',
-        userName: '박스타트',
+        userName: '박대표',
         company: '스타트업코리아',
-        name: '박스타트',
+        name: '박대표',
         phone: '010-3456-7890',
         email: 'ceo@startup.kr',
         program: 'basic',
@@ -90,12 +80,12 @@ const DEMO_QUOTES = [
     },
     {
         id: '1708123456791',
-        userId: 'edu001',
-        userName: '최교수',
-        company: '한국대학교',
-        name: '최교수',
-        phone: '010-4567-8901',
-        email: 'prof@university.ac.kr',
+        userId: 'user001',
+        userName: '김회원',
+        company: '일반 회사',
+        name: '김회원',
+        phone: '010-1234-5678',
+        email: 'user@example.com',
         program: 'advanced',
         participants: 25,
         type: 'offline',
@@ -311,10 +301,10 @@ const sampleUsers = [
     {
         id: 1,
         email: 'admin@koreangpt.org',
-        name: '관리자',
+        name: '김관리',
         role: 'admin',
         joinDate: '2024-01-01',
-        phone: '010-1234-5678',
+        phone: '02-1234-5678',
         company: '한국GPT협회',
         position: 'CEO',
         marketingChannel: 'direct',
@@ -324,12 +314,12 @@ const sampleUsers = [
     {
         id: 2,
         email: 'user@example.com',
-        name: '김지은',
-        role: 'premium',
+        name: '김회원',
+        role: 'user',
         joinDate: '2024-01-10',
         phone: '010-2345-6789',
-        company: '테크 스타트업',
-        position: '마케팅 매니저',
+        company: '일반 회사',
+        position: '매니저',
         marketingChannel: 'google_cpc',
         totalPurchaseAmount: 448000,
         purchasedCourses: [
@@ -353,13 +343,13 @@ const sampleUsers = [
     },
     {
         id: 3,
-        email: 'test@test.com',
-        name: '이준호',
+        email: 'manager@samsung.com',
+        name: '이매니저',
         role: 'user',
         joinDate: '2024-01-12',
-        phone: '010-3456-7890',
-        company: 'AI 개발회사',
-        position: '개발자',
+        phone: '010-2345-6789',
+        company: '삼성전자',
+        position: '교육담당자',
         marketingChannel: 'naver_blog',
         totalPurchaseAmount: 299000,
         purchasedCourses: [
@@ -372,6 +362,19 @@ const sampleUsers = [
                 paymentMethod: 'bank_transfer'
             }
         ]
+    },
+    {
+        id: 4,
+        email: 'ceo@startup.kr',
+        name: '박대표',
+        role: 'user',
+        joinDate: '2024-02-10',
+        phone: '010-3456-7890',
+        company: '스타트업코리아',
+        position: 'CEO',
+        marketingChannel: 'direct',
+        totalPurchaseAmount: 0,
+        purchasedCourses: []
     }
 ];
 

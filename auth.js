@@ -158,7 +158,8 @@ function handleLoginSubmit(e) {
         const demoAccounts = {
             'admin@koreangpt.org': { password: 'admin123', name: '김관리', role: 'admin' },
             'user@example.com': { password: 'user123', name: '김회원', role: 'user' },
-            'demo@demo.com': { password: 'demo123', name: '데모사용자', role: 'user' }
+            'manager@samsung.com': { password: 'samsung123', name: '이매니저', role: 'user' },
+            'ceo@startup.kr': { password: 'startup123', name: '박대표', role: 'user' }
         };
         
         const account = demoAccounts[data.email];
@@ -188,7 +189,7 @@ function handleLoginSubmit(e) {
                 }
             }
         } else {
-            alert('이메일 또는 비밀번호가 올바르지 않습니다.\n\n데모 계정:\n- admin@koreangpt.org / admin123 (관리자)\n- user@example.com / user123 (일반 사용자)\n- demo@demo.com / demo123 (데모)');
+            alert('이메일 또는 비밀번호가 올바르지 않습니다.\n\n데모 계정:\n- admin@koreangpt.org / admin123 (관리자)\n- user@example.com / user123 (일반 사용자)\n- manager@samsung.com / samsung123 (기업 담당자)\n- ceo@startup.kr / startup123 (스타트업 CEO)');
         }
     }, 1500);
 }
@@ -394,27 +395,17 @@ function loginDemo(type) {
     
     // 데모 계정 정보 설정
     let userData;
-    if (type === 'admin') {
+    // 해당 버튼에 맞는 데모 계정으로 자동 로그인
+    const demoAccounts = {
+        'admin': { email: 'admin@koreangpt.org', password: 'admin123', name: '김관리', role: 'admin' },
+        'enterprise': { email: 'manager@samsung.com', password: 'samsung123', name: '이매니저', role: 'user', company: '삼성전자' },
+        'startup': { email: 'ceo@startup.kr', password: 'startup123', name: '박대표', role: 'user', company: '스타트업코리아' }
+    };
+    
+    const selectedAccount = demoAccounts[type];
+    if (selectedAccount) {
         userData = {
-            email: 'admin@koreangpt.org',
-            name: '김관리',
-            role: 'admin',
-            loginTime: new Date().toISOString()
-        };
-    } else if (type === 'enterprise') {
-        userData = {
-            email: 'manager@samsung.com',
-            name: '이매니저',
-            role: 'user',
-            company: '삼성전자',
-            loginTime: new Date().toISOString()
-        };
-    } else if (type === 'startup') {
-        userData = {
-            email: 'ceo@startup.kr',
-            name: '박대표',
-            role: 'user',
-            company: '스타트업코리아',
+            ...selectedAccount,
             loginTime: new Date().toISOString()
         };
     }

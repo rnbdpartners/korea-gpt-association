@@ -96,22 +96,42 @@ async function seed() {
       });
     }
 
-    // Seed test enterprise member
-    const hashedPassword = await bcrypt.hash('test123!', 10);
-    await EnterpriseMember.findOrCreate({
-      where: { email: 'test@company.com' },
-      defaults: {
-        email: 'test@company.com',
-        password: hashedPassword,
-        managerName: '홍길동',
+    // Seed test enterprise members
+    const demoEnterprise = [
+      {
+        email: 'manager@samsung.com',
+        password: 'samsung123',
+        managerName: '이매니저',
         position: '교육담당자',
-        phone: '02-1234-5678',
-        companyName: '테스트기업',
+        phone: '02-2345-6789',
+        companyName: '삼성전자',
         businessNumber: '123-45-67890',
         industry: 'it',
-        employeeCount: '51-200'
+        employeeCount: '1000+'
+      },
+      {
+        email: 'ceo@startup.kr',
+        password: 'startup123',
+        managerName: '박대표',
+        position: 'CEO',
+        phone: '010-3456-7890',
+        companyName: '스타트업코리아',
+        businessNumber: '234-56-78901',
+        industry: 'it',
+        employeeCount: '11-50'
       }
-    });
+    ];
+
+    for (const enterprise of demoEnterprise) {
+      const hashedPassword = await bcrypt.hash(enterprise.password, 10);
+      await EnterpriseMember.findOrCreate({
+        where: { email: enterprise.email },
+        defaults: {
+          ...enterprise,
+          password: hashedPassword
+        }
+      });
+    }
 
     console.log('Database seeding completed successfully!');
     process.exit(0);
