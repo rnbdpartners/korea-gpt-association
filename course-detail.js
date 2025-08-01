@@ -193,6 +193,12 @@ document.addEventListener('DOMContentLoaded', function() {
     // 할인 타이머 (데모용)
     updateDiscountTimer();
     
+    // 실시간 활동 업데이트
+    updateLiveActivity();
+    
+    // 실시간 구매 알림
+    startPurchaseAlerts();
+    
     // 장바구니 수 업데이트
     updateCartCount();
 });
@@ -284,4 +290,58 @@ function updateDiscountTimer() {
     
     updateTimer();
     setInterval(updateTimer, 60000); // 1분마다 업데이트
+}
+
+// 실시간 활동 업데이트
+function updateLiveActivity() {
+    const liveViewersElement = document.getElementById('liveViewers');
+    const todayEnrolledElement = document.getElementById('todayEnrolled');
+    
+    if (!liveViewersElement || !todayEnrolledElement) return;
+    
+    function updateNumbers() {
+        // 현재 수강생 수 (15-35명 사이에서 랜덤)
+        const currentViewers = Math.floor(Math.random() * 20) + 15;
+        liveViewersElement.textContent = currentViewers + '명';
+        
+        // 오늘 등록 수 (100-150명 사이에서 천천히 증가)
+        const currentEnrolled = parseInt(todayEnrolledElement.textContent) || 127;
+        if (Math.random() > 0.7) { // 30% 확률로 증가
+            todayEnrolledElement.textContent = (currentEnrolled + 1) + '명';
+        }
+    }
+    
+    // 초기 업데이트
+    updateNumbers();
+    
+    // 10초마다 업데이트
+    setInterval(updateNumbers, 10000);
+}
+
+// 실시간 구매 알림
+function startPurchaseAlerts() {
+    const alertElement = document.getElementById('purchaseAlert');
+    if (!alertElement) return;
+    
+    const names = ['김**', '박**', '이**', '최**', '정**', '강**', '조**', '윤**', '장**', '임**'];
+    const timeUnits = ['방금', '1분 전', '2분 전', '3분 전', '5분 전'];
+    
+    function showNewAlert() {
+        const randomName = names[Math.floor(Math.random() * names.length)];
+        const randomTime = timeUnits[Math.floor(Math.random() * timeUnits.length)];
+        
+        // 페이드 아웃
+        alertElement.style.opacity = '0';
+        
+        setTimeout(() => {
+            alertElement.querySelector('span').textContent = `${randomTime === '방금' ? '방금' : randomTime} ${randomName}님이 구매했습니다`;
+            alertElement.querySelector('small').textContent = randomTime;
+            
+            // 페이드 인
+            alertElement.style.opacity = '1';
+        }, 500);
+    }
+    
+    // 20-40초마다 새로운 알림 표시
+    setInterval(showNewAlert, Math.random() * 20000 + 20000);
 }
