@@ -1,0 +1,210 @@
+/* Progressive Enhancement CSS */
+
+/* 기본 스타일 (JavaScript 없이도 작동) */
+.no-js .requires-js {
+    display: none;
+}
+
+.no-js .no-js-fallback {
+    display: block;
+}
+
+.js .no-js-fallback {
+    display: none;
+}
+
+/* 키보드 네비게이션 향상 */
+.keyboard-nav *:focus {
+    outline: 3px solid #2196F3;
+    outline-offset: 2px;
+}
+
+/* Skip to content 링크 */
+.skip-to-content {
+    position: absolute;
+    top: -40px;
+    left: 0;
+    background: #000;
+    color: #fff;
+    padding: 8px 16px;
+    text-decoration: none;
+    z-index: 100000;
+    transition: top 0.3s;
+}
+
+.skip-to-content:focus {
+    top: 0;
+}
+
+/* 오프라인 모드 */
+.offline .requires-online {
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+.offline .online-only {
+    display: none;
+}
+
+.offline .offline-message {
+    display: block;
+    background: #f44336;
+    color: white;
+    padding: 10px;
+    text-align: center;
+}
+
+/* 드래그 앤 드롭 폴백 */
+.no-drag-drop .upload-area {
+    cursor: pointer;
+}
+
+.no-drag-drop .upload-area .drag-text {
+    display: none;
+}
+
+/* 애니메이션 감소 */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+/* CSS Grid 폴백 */
+.no-grid .form-grid {
+    display: block;
+}
+
+.no-grid .form-grid .form-group {
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+/* Flexbox 폴백 */
+.no-flexbox .flex-container {
+    display: table;
+    width: 100%;
+}
+
+.no-flexbox .flex-item {
+    display: table-cell;
+    vertical-align: top;
+}
+
+/* 로딩 상태 */
+[aria-busy="true"] {
+    position: relative;
+    pointer-events: none;
+}
+
+[aria-busy="true"]::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* 포커스 표시 개선 */
+:focus-visible {
+    outline: 3px solid #2196F3;
+    outline-offset: 2px;
+}
+
+:focus:not(:focus-visible) {
+    outline: none;
+}
+
+/* 에러 상태 */
+[aria-invalid="true"] {
+    border-color: #f44336;
+    background-color: #ffebee;
+}
+
+/* 필수 필드 표시 */
+[aria-required="true"]::after {
+    content: " *";
+    color: #f44336;
+}
+
+/* 고대비 모드 지원 */
+@media (prefers-contrast: high) {
+    * {
+        border-width: 2px !important;
+    }
+    
+    button,
+    input,
+    select,
+    textarea {
+        border: 2px solid currentColor !important;
+    }
+    
+    .btn-primary {
+        background: #000 !important;
+        color: #fff !important;
+        border: 2px solid #fff !important;
+    }
+}
+
+/* 다크 모드 지원 */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg-color: #121212;
+        --text-color: #e0e0e0;
+        --border-color: #333;
+        --primary-color: #90caf9;
+    }
+    
+    body {
+        background-color: var(--bg-color);
+        color: var(--text-color);
+    }
+    
+    input,
+    select,
+    textarea {
+        background-color: #1e1e1e;
+        color: var(--text-color);
+        border-color: var(--border-color);
+    }
+}
+
+/* 인쇄 스타일 */
+@media print {
+    .no-print,
+    .navigation,
+    .floating-buttons,
+    button[type="button"] {
+        display: none !important;
+    }
+    
+    body {
+        font-size: 12pt;
+        line-height: 1.5;
+        color: #000;
+        background: #fff;
+    }
+    
+    a {
+        color: #000;
+        text-decoration: underline;
+    }
+    
+    .container {
+        width: 100%;
+        max-width: none;
+        margin: 0;
+        padding: 0;
+    }
+}

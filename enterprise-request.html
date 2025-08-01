@@ -1,15 +1,25 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" class="no-js">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://fonts.googleapis.com; font-src 'self' https://cdnjs.cloudflare.com https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self';">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-Frame-Options" content="SAMEORIGIN">
     <title>기업 교육 신청 | 한국GPT협회</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="enterprise.css">
     <link rel="stylesheet" href="enterprise-request.css">
+    <link rel="stylesheet" href="css/progressive-enhancement.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <!-- FullCalendar CSS -->
     <link href='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css' rel='stylesheet' />
+    <script>document.documentElement.classList.remove('no-js');document.documentElement.classList.add('js');</script>
+    <script src="js/global-security.js"></script>
+    <script src="js/security-config.js"></script>
+    <script src="js/progressive-enhancement.js"></script>
+    <script src="js/error-handling.js"></script>
 </head>
 <body class="enterprise-body">
     <!-- 헤더 -->
@@ -477,6 +487,9 @@
 
     <!-- Scripts -->
     <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js'></script>
-    <script src="enterprise-request.js"></script>
+    <script src="js/secure-enterprise-request.js"></script>
+    <script src="enterprise-request-enhanced.js"></script>
+    <script src="js/enhanced-security-handlers.js"></script>
+    <script src="js/service-worker-register.js"></script>
 </body>
 </html>

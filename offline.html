@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>오프라인 - 한국GPT협회</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f5f5f5;
+            color: #333;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .offline-container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            padding: 40px;
+            text-align: center;
+            max-width: 500px;
+            width: 100%;
+        }
+        
+        .offline-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+            background: #f5f5f5;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            color: #999;
+        }
+        
+        h1 {
+            font-size: 24px;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        
+        p {
+            font-size: 16px;
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+        
+        .offline-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary {
+            background: #2196F3;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #1976D2;
+        }
+        
+        .btn-secondary {
+            background: #f5f5f5;
+            color: #333;
+        }
+        
+        .btn-secondary:hover {
+            background: #e0e0e0;
+        }
+        
+        .cached-pages {
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 1px solid #e0e0e0;
+        }
+        
+        .cached-pages h2 {
+            font-size: 18px;
+            margin-bottom: 15px;
+            color: #333;
+        }
+        
+        .cached-pages ul {
+            list-style: none;
+            text-align: left;
+        }
+        
+        .cached-pages li {
+            margin-bottom: 10px;
+        }
+        
+        .cached-pages a {
+            color: #2196F3;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .cached-pages a:hover {
+            text-decoration: underline;
+        }
+        
+        @media (max-width: 480px) {
+            .offline-container {
+                padding: 30px 20px;
+            }
+            
+            h1 {
+                font-size: 20px;
+            }
+            
+            p {
+                font-size: 14px;
+            }
+            
+            button {
+                font-size: 14px;
+                padding: 10px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="offline-container">
+        <div class="offline-icon">📡</div>
+        <h1>인터넷 연결이 끊어졌습니다</h1>
+        <p>
+            현재 오프라인 상태입니다.<br>
+            인터넷 연결을 확인하시고 다시 시도해주세요.
+        </p>
+        
+        <div class="offline-actions">
+            <button class="btn-primary" onclick="retry()">
+                다시 시도
+            </button>
+            <button class="btn-secondary" onclick="goBack()">
+                이전 페이지
+            </button>
+        </div>
+        
+        <div class="cached-pages">
+            <h2>오프라인에서 이용 가능한 페이지</h2>
+            <ul id="cachedPagesList">
+                <li><a href="/">🏠 홈페이지</a></li>
+                <li><a href="/enterprise.html">🏢 기업교육</a></li>
+            </ul>
+        </div>
+    </div>
+    
+    <script>
+        // 다시 시도
+        function retry() {
+            window.location.reload();
+        }
+        
+        // 이전 페이지
+        function goBack() {
+            if (window.history.length > 1) {
+                window.history.back();
+            } else {
+                window.location.href = '/';
+            }
+        }
+        
+        // 온라인 상태 감지
+        window.addEventListener('online', () => {
+            window.location.reload();
+        });
+        
+        // 캐시된 페이지 목록 업데이트
+        if ('caches' in window) {
+            caches.keys().then(cacheNames => {
+                if (cacheNames.length > 0) {
+                    caches.open(cacheNames[0]).then(cache => {
+                        cache.keys().then(requests => {
+                            const pages = requests
+                                .filter(req => req.url.endsWith('.html'))
+                                .map(req => {
+                                    const url = new URL(req.url);
+                                    return {
+                                        path: url.pathname,
+                                        name: getPageName(url.pathname)
+                                    };
+                                });
+                            
+                            updateCachedPagesList(pages);
+                        });
+                    });
+                }
+            });
+        }
+        
+        function getPageName(path) {
+            const names = {
+                '/': '홈페이지',
+                '/index.html': '홈페이지',
+                '/enterprise.html': '기업교육',
+                '/enterprise-request.html': '교육 신청',
+                '/online-class.html': '온라인 클래스',
+                '/offline-class.html': '오프라인 클래스'
+            };
+            return names[path] || path;
+        }
+        
+        function updateCachedPagesList(pages) {
+            const list = document.getElementById('cachedPagesList');
+            if (pages.length > 2) {
+                list.innerHTML = pages.map(page => 
+                    `<li><a href="${page.path}">📄 ${page.name}</a></li>`
+                ).join('');
+            }
+        }
+    </script>
+</body>
+</html>

@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; font-src 'self' https://cdnjs.cloudflare.com;">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
     <title>로그인 | 한국GPT협회</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="auth.css">
@@ -160,8 +162,55 @@
         </div>
     </footer>
 
+    <script src="js/security-config.js"></script>
+    <script src="js/secure-auth.js"></script>
     <script src="user-manager.js"></script>
     <script src="script.js"></script>
     <script src="auth.js"></script>
+    <script>
+        // 보안 강화된 로그인 초기화
+        document.addEventListener('DOMContentLoaded', function() {
+            const loginForm = document.getElementById('loginForm');
+            if (loginForm) {
+                // 기존 이벤트 리스너 제거
+                loginForm.removeEventListener('submit', handleLoginSubmit);
+                // 보안 강화된 핸들러 추가
+                loginForm.addEventListener('submit', handleLoginFormSubmit);
+            }
+            
+            // 비밀번호 입력 필드에 강도 표시기 추가
+            const passwordInput = document.querySelector('input[type="password"]');
+            if (passwordInput) {
+                passwordInput.addEventListener('input', function() {
+                    updatePasswordStrengthIndicator(this.value);
+                });
+            }
+            
+            // HTTPS 강제 (프로덕션 환경)
+            if (window.location.protocol !== 'https:' && 
+                window.location.hostname !== 'localhost' && 
+                window.location.hostname !== '127.0.0.1') {
+                window.location.protocol = 'https:';
+            }
+        });
+        
+        // 데모 로그인 함수 수정
+        function loginDemo(type) {
+            const credentials = {
+                'admin': { email: 'admin@koreangpt.org', password: 'admin123' },
+                'user': { email: 'user@example.com', password: 'user123' },
+                'enterprise': { email: 'manager@samsung.com', password: 'samsung123' },
+                'startup': { email: 'ceo@startup.kr', password: 'startup123' }
+            };
+            
+            const cred = credentials[type];
+            if (cred) {
+                document.getElementById('email').value = cred.email;
+                document.getElementById('password').value = cred.password;
+                // 자동 로그인
+                document.getElementById('loginForm').dispatchEvent(new Event('submit'));
+            }
+        }
+    </script>
 </body>
 </html>
