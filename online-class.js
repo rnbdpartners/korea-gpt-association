@@ -3,6 +3,9 @@
 document.addEventListener('DOMContentLoaded', function() {
     // 페이지 로드시 장바구니 수 업데이트
     updateCartCount();
+    
+    // 히어로 섹션 초기화
+    initHeroSection();
     // 필터 탭 기능
     const filterTabs = document.querySelectorAll('.filter-tab');
     const courseCards = document.querySelectorAll('.course-card');
@@ -230,6 +233,144 @@ document.addEventListener('DOMContentLoaded', function() {
     updateLiveStats();
 });
 
+// 히어로 섹션 초기화
+function initHeroSection() {
+    // 라이브 대시보드 업데이트
+    updateDashboard();
+    setInterval(updateDashboard, 5000); // 5초마다 업데이트
+    
+    // 실시간 피드 업데이트
+    updateLiveFeed();
+    setInterval(updateLiveFeed, 15000); // 15초마다 새로운 피드
+    
+    // 인기 강좌 캐러셀 초기화
+    initCarousel();
+}
+
+// 라이브 대시보드 업데이트
+function updateDashboard() {
+    const metrics = {
+        totalStudents: document.getElementById('totalStudents'),
+        activeNow: document.getElementById('activeNow'),
+        completionRate: document.getElementById('completionRate'),
+        satisfaction: document.getElementById('satisfaction')
+    };
+    
+    if (metrics.totalStudents) {
+        const current = parseInt(metrics.totalStudents.textContent.replace(/[^0-9]/g, '')) || 3880;
+        const newValue = current + Math.floor(Math.random() * 3);
+        metrics.totalStudents.textContent = newValue.toLocaleString() + '명';
+    }
+    
+    if (metrics.activeNow) {
+        const activeCount = Math.floor(Math.random() * 50) + 120;
+        metrics.activeNow.textContent = activeCount + '명';
+    }
+    
+    if (metrics.completionRate) {
+        const rate = Math.floor(Math.random() * 5) + 94;
+        metrics.completionRate.textContent = rate + '%';
+    }
+    
+    if (metrics.satisfaction) {
+        const satisfaction = (Math.random() * 0.2 + 4.7).toFixed(1);
+        metrics.satisfaction.textContent = satisfaction + '점';
+    }
+}
+
+// 실시간 피드 업데이트
+function updateLiveFeed() {
+    const feedContainer = document.querySelector('.live-feed');
+    if (!feedContainer) return;
+    
+    const names = ['김**', '박**', '이**', '최**', '정**', '강**', '조**', '윤**', '장**', '임**'];
+    const courses = [
+        'ChatGPT 첫걸음',
+        'GPT 프롬프트 마스터',
+        'AI 업무 자동화',
+        '생성AI 비즈니스 활용'
+    ];
+    const actions = ['수강 신청', '학습 완료', '수료증 발급', '후기 작성'];
+    
+    const feedItems = feedContainer.querySelectorAll('.feed-item');
+    
+    // 첨 피드 아이템 업데이트
+    if (feedItems.length > 0) {
+        const randomName = names[Math.floor(Math.random() * names.length)];
+        const randomCourse = courses[Math.floor(Math.random() * courses.length)];
+        const randomAction = actions[Math.floor(Math.random() * actions.length)];
+        
+        const newFeedItem = document.createElement('div');
+        newFeedItem.className = 'feed-item';
+        newFeedItem.innerHTML = `
+            <i class="fas fa-user-circle"></i>
+            <span>${randomName}님이 ${randomCourse} ${randomAction}</span>
+            <span class="feed-time">방금 전</span>
+        `;
+        
+        // 기존 아이템들의 시간 업데이트
+        feedItems.forEach((item, index) => {
+            const timeSpan = item.querySelector('.feed-time');
+            if (timeSpan) {
+                const times = ['방금 전', '1분 전', '3분 전', '5분 전', '10분 전'];
+                if (index < times.length - 1) {
+                    timeSpan.textContent = times[index + 1];
+                }
+            }
+        });
+        
+        // 마지막 아이템 제거
+        if (feedItems.length >= 4) {
+            feedItems[feedItems.length - 1].remove();
+        }
+        
+        // 새 아이템 추가
+        const feedList = feedContainer.querySelector('.feed-list') || feedContainer;
+        feedList.insertBefore(newFeedItem, feedList.firstChild);
+    }
+}
+
+// 인기 강좌 캐러셀 초기화
+function initCarousel() {
+    const track = document.querySelector('.carousel-track');
+    const prevBtn = document.querySelector('.carousel-btn.prev');
+    const nextBtn = document.querySelector('.carousel-btn.next');
+    
+    if (!track || !prevBtn || !nextBtn) return;
+    
+    let currentIndex = 0;
+    const cards = track.querySelectorAll('.mini-course-card');
+    const totalCards = cards.length;
+    
+    prevBtn.addEventListener('click', () => {
+        currentIndex = (currentIndex - 1 + totalCards) % totalCards;
+        updateCarousel();
+    });
+    
+    nextBtn.addEventListener('click', () => {
+        currentIndex = (currentIndex + 1) % totalCards;
+        updateCarousel();
+    });
+    
+    function updateCarousel() {
+        const offset = -currentIndex * 100;
+        track.style.transform = `translateX(${offset}%)`;
+    }
+    
+    // 자동 슬라이드
+    setInterval(() => {
+        currentIndex = (currentIndex + 1) % totalCards;
+        updateCarousel();
+    }, 5000);
+    
+    // 카드 클릭 시 상세 페이지로 이동
+    cards.forEach(card => {
+        card.addEventListener('click', () => {
+            window.location.href = 'course-detail.html';
+        });
+    });
+}
+
 // 로그인 상태 확인 함수
 function checkLoginStatus() {
     // 실제로는 세션이나 토큰 확인
@@ -278,8 +419,11 @@ function updateLiveStats() {
 
 // CTA 버튼 클릭
 document.querySelector('.btn-cta-large')?.addEventListener('click', function() {
-    window.scrollTo({
-        top: document.querySelector('.courses-section').offsetTop - 100,
-        behavior: 'smooth'
-    });
+    const coursesSection = document.querySelector('.courses-section');
+    if (coursesSection) {
+        window.scrollTo({
+            top: coursesSection.offsetTop - 100,
+            behavior: 'smooth'
+        });
+    }
 });
