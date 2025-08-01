@@ -12,26 +12,33 @@ let instructorsData = [];
 
 // 페이지 로드 시 초기화
 document.addEventListener('DOMContentLoaded', function() {
-    checkAdminAccess();
-    loadDashboardData();
-    initializeEditMode();
-    makeElementsEditable();
-    setupTabNavigation();
+    // API 스크립트 로드
+    const script = document.createElement('script');
+    script.src = '/js/api-config.js';
+    document.head.appendChild(script);
+    
+    script.onload = () => {
+        checkAdminAccess();
+        loadDashboardData();
+        initializeEditMode();
+        makeElementsEditable();
+        setupTabNavigation();
+    };
 });
 
 // 관리자 접근 권한 확인
 function checkAdminAccess() {
-    // GitHub Pages에서는 로컬 스토리지 기반 인증 사용
-    const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
-    const isLoggedIn = sessionStorage.getItem('isLoggedIn') === 'true';
+    const token = localStorage.getItem('authToken');
+    const adminUser = localStorage.getItem('adminUser');
     
-    if (!isLoggedIn) {
+    if (!token || !adminUser) {
         alert('로그인이 필요합니다.');
         window.location.href = 'login.html';
         return;
     }
     
-    if (currentUser.role !== 'admin') {
+    const user = JSON.parse(adminUser);
+    if (user.role !== 'admin') {
         alert('관리자 권한이 필요합니다.');
         window.location.href = 'index.html';
         return;
@@ -40,14 +47,36 @@ function checkAdminAccess() {
 
 // 대시보드 데이터 로드
 async function loadDashboardData() {
-    // GitHub Pages에서는 정적 데이터 사용
-    dashboardData = {
-        totalRequests: 156,
-        pendingRequests: 23,
-        completedRequests: 98,
-        totalMembers: 42,
-        totalInstructors: 8
-    };
+    try {
+        // API에서 대시보드 데이터 가져오기
+        const response = await fetch(`${API_BASE_URL}/admin/dashboard`, {
+            headers: getHeaders()
+        });
+        
+        if (response.ok) {
+            dashboardData = await response.json();
+        } else {
+            // 로컬 데이터 사용 (폴백)
+            dashboardData = {
+                totalRequests: 156,
+                pendingRequests: 23,
+                completedRequests: 98,
+                totalMembers: 42,
+                totalInstructors: 8
+            };
+        }
+    } catch (error) {
+        console.error('Dashboard data load error:', error);
+        // 로컬 데이터 사용 (폴백)
+        dashboardData = {
+            totalRequests: 156,
+            pendingRequests: 23,
+            completedRequests: 98,
+            totalMembers: 42,
+            totalInstructors: 8
+        };
+    }
+    
     updateDashboardStats();
     loadRequestsData();
     loadMembersData();
@@ -73,18 +102,24 @@ function updateDashboardStats() {
 }
 
 // 교육 신청 데이터 로드
-function loadRequestsData() {
-    // GitHub Pages에서는 정적 데이터 사용
-    requestsData = [
-        {
-            id: 1,
-            requestNumber: 'REQ-2024-0001',
-            enterpriseMember: { companyName: '삼성전자', managerName: '이매니저' },
-            program: { programName: 'ChatGPT 기초 과정' },
-            participantsCount: 30,
-            status: 'pending',
-            createdAt: new Date('2024-01-15')
-        },
+async function loadRequestsData(status = null) {
+    try {
+        const requests = await API.getAdminRequests(status);
+        requestsData = requests.requests || [];
+        displayRequests(status);
+    } catch (error) {
+        console.error('Requests load error:', error);
+        // 로컬 데이터 사용 (폴백)
+        requestsData = [
+            {
+                id: 1,
+                requestNumber: 'REQ-2024-0001',
+                enterpriseMember: { companyName: '삼성전자', managerName: '이매니저' },
+                program: { programName: 'ChatGPT 기초 과정' },
+                participantsCount: 30,
+                status: 'pending',
+                createdAt: new Date('2024-01-15')
+            },
         {
             id: 2,
             requestNumber: 'REQ-2024-0002',
@@ -2008,3 +2043,23 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 console.log('B2B 관리자 스크립트 로드 완료');
+
+// API 헤더 가져오기
+function getHeaders() {
+    const token = localStorage.getItem('authToken');
+    return {
+        'Content-Type': 'application/json',
+        'Authorization': token ? `Bearer ${token}` : ''
+    };
+}
+
+// 상태 변경 (API 연동)
+async function updateRequestStatus(requestId, newStatus) {
+    try {
+        await API.updateRequestStatus(requestId, newStatus);
+        showNotification('상태가 업데이트되었습니다.');
+        await loadRequestsData(); // 데이터 다시 로드
+    } catch (error) {
+        showNotification(error.message || '상태 업데이트에 실패했습니다.', 'error');
+    }
+}

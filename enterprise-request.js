@@ -10,8 +10,12 @@ let requestData = {
     quote: {},
     dates: [],
     confirmedDate: null,
-    documents: {}
+    documents: {},
+    requestId: null
 };
+
+// 교육 프로그램 정보
+let educationPrograms = [];
 
 // 관리자가 설정한 가능/불가능 날짜 (예시 데이터)
 const availableDates = [
@@ -21,7 +25,23 @@ const availableDates = [
 ];
 
 // 페이지 로드 시 초기화
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', async function() {
+    // API 스크립트 로드 확인
+    const script = document.createElement('script');
+    script.src = '/js/api-config.js';
+    document.head.appendChild(script);
+    
+    script.onload = async () => {
+        // 교육 프로그램 로드
+        try {
+            const programs = await API.getPrograms();
+            educationPrograms = programs;
+            loadProgramOptions();
+        } catch (error) {
+            console.error('Failed to load programs:', error);
+        }
+    };
+    
     // 폼 이벤트 리스너
     const signupForm = document.getElementById('enterpriseSignupForm');
     if (signupForm) {
@@ -47,7 +67,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 // Step 1: 회원가입 처리
-function handleSignup(e) {
+async function handleSignup(e) {
     e.preventDefault();
     const formData = new FormData(e.target);
     
@@ -57,47 +77,84 @@ function handleSignup(e) {
         return;
     }
     
-    // 데이터 저장
-    requestData.manager = {
-        name: formData.get('managerName'),
-        position: formData.get('position'),
+    // 데이터 준비
+    const signupData = {
         email: formData.get('email'),
-        phone: formData.get('phone')
-    };
-    
-    requestData.company = {
-        name: formData.get('companyName'),
+        password: formData.get('password'),
+        managerName: formData.get('managerName'),
+        position: formData.get('position'),
+        phone: formData.get('phone'),
+        companyName: formData.get('companyName'),
         businessNumber: formData.get('businessNumber'),
         industry: formData.get('industry'),
         employeeCount: formData.get('employeeCount')
     };
     
-    // 가상의 회원가입 처리
-    localStorage.setItem('enterpriseUser', JSON.stringify({
-        ...requestData.manager,
-        company: requestData.company.name,
-        role: 'enterprise'
-    }));
-    
-    alert('회원가입이 완료되었습니다.');
-    nextStep(1);
+    try {
+        // API 호출
+        const response = await API.register(signupData);
+        
+        // 토큰 저장
+        localStorage.setItem('authToken', response.token);
+        localStorage.setItem('enterpriseUser', JSON.stringify(response.user));
+        
+        // 데이터 저장
+        requestData.manager = {
+            name: signupData.managerName,
+            position: signupData.position,
+            email: signupData.email,
+            phone: signupData.phone
+        };
+        
+        requestData.company = {
+            name: signupData.companyName,
+            businessNumber: signupData.businessNumber,
+            industry: signupData.industry,
+            employeeCount: signupData.employeeCount
+        };
+        
+        alert('회원가입이 완료되었습니다.');
+        nextStep(1);
+    } catch (error) {
+        alert(error.message || '회원가입 중 오류가 발생했습니다.');
+    }
 }
 
 // Step 2: 견적 처리
-function handleQuote(e) {
+async function handleQuote(e) {
     e.preventDefault();
     const formData = new FormData(e.target);
     
+    const programId = formData.get('program');
+    const program = educationPrograms.find(p => p.id == programId);
+    
     requestData.quote = {
-        program: formData.get('program'),
-        participants: formData.get('participants'),
+        programId: parseInt(programId),
+        program: program?.programName,
+        participants: parseInt(formData.get('participants')),
         educationType: formData.get('educationType'),
         duration: formData.get('duration'),
         specialRequest: formData.get('specialRequest'),
         totalAmount: calculateTotal(formData)
     };
     
-    nextStep(2);
+    try {
+        // 교육 신청 API 호출
+        const response = await API.submitRequest({
+            programId: requestData.quote.programId,
+            participantsCount: requestData.quote.participants,
+            educationType: requestData.quote.educationType,
+            duration: requestData.quote.duration,
+            specialRequest: requestData.quote.specialRequest
+        });
+        
+        requestData.requestId = response.request.id;
+        requestData.requestNumber = response.request.requestNumber;
+        
+        nextStep(2);
+    } catch (error) {
+        alert(error.message || '견적 요청 중 오류가 발생했습니다.');
+    }
     initializeCalendar();
 }
 
@@ -106,19 +163,14 @@ function updateQuoteSummary() {
     const form = document.getElementById('enterpriseQuoteForm');
     const formData = new FormData(form);
     
-    const program = formData.get('program');
+    const programId = formData.get('program');
     const participants = formData.get('participants');
     const type = formData.get('educationType');
     
     // 프로그램명 표시
-    const programNames = {
-        basic: 'ChatGPT 기초 과정',
-        intermediate: '업무 자동화 과정',
-        advanced: 'AI 전문가 과정',
-        custom: '맞춤형 교육'
-    };
+    const program = educationPrograms.find(p => p.id == programId);
     
-    document.getElementById('selectedProgram').textContent = programNames[program] || '-';
+    document.getElementById('selectedProgram').textContent = program ? program.programName : '-';
     document.getElementById('selectedParticipants').textContent = participants ? `${participants}명` : '-';
     document.getElementById('selectedType').textContent = type || '-';
     
@@ -129,21 +181,15 @@ function updateQuoteSummary() {
 
 // 총액 계산
 function calculateTotal(formData) {
-    const prices = {
-        basic: 200000,
-        intermediate: 350000,
-        advanced: 500000,
-        custom: 0
-    };
-    
-    const program = formData.get('program');
+    const programId = formData.get('program');
     const participants = parseInt(formData.get('participants')) || 0;
     
-    if (program === 'custom') {
+    const program = educationPrograms.find(p => p.id == programId);
+    if (!program || !program.pricePerPerson) {
         return 0; // 별도 협의
     }
     
-    return prices[program] * participants;
+    return program.pricePerPerson * participants;
 }
 
 // Step 3: 캘린더 초기화
@@ -198,7 +244,11 @@ function handleDateClick(dateStr) {
     }
     
     if (selectedDates.includes(dateStr)) {
-        alert('이미 선택된 날짜입니다.');
+        // 선택 취소
+        const index = selectedDates.indexOf(dateStr);
+        selectedDates.splice(index, 1);
+        updateSelectedDatesDisplay();
+        updateCalendarDates();
         return;
     }
     
@@ -213,7 +263,7 @@ function handleDateClick(dateStr) {
 }
 
 // 선택된 날짜 표시 업데이트
-function updateSelectedDates() {
+function updateSelectedDatesDisplay() {
     selectedDates.forEach((date, index) => {
         const input = document.getElementById(`date${index + 1}`);
         if (input) {
@@ -227,6 +277,33 @@ function updateSelectedDates() {
     const submitBtn = document.getElementById('submitDatesBtn');
     if (submitBtn) {
         submitBtn.disabled = selectedDates.length === 0;
+    }
+}
+
+// 확정 상태 확인
+async function checkConfirmationStatus() {
+    try {
+        const request = await API.getRequest(requestData.requestId);
+        
+        if (request.status === 'confirmed' && request.confirmedSchedule) {
+            const confirmedDate = new Date(request.confirmedSchedule.confirmedDate);
+            document.getElementById('confirmedDate').textContent = 
+                confirmedDate.toLocaleDateString('ko-KR', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                    weekday: 'long'
+                });
+            requestData.confirmedDate = request.confirmedSchedule.confirmedDate;
+            
+            // 확정 버튼 표시
+            document.getElementById('acceptBtn').style.display = 'inline-block';
+        } else {
+            // 5초 후 다시 확인
+            setTimeout(checkConfirmationStatus, 5000);
+        }
+    } catch (error) {
+        console.error('Status check error:', error);
     }
 }
 
@@ -250,33 +327,44 @@ function removeDate(priority) {
 }
 
 // 날짜 제출
-function submitDates() {
+async function submitDates() {
     if (selectedDates.length === 0) {
         alert('최소 1개 이상의 날짜를 선택해주세요.');
         return;
     }
     
     requestData.dates = selectedDates;
-    nextStep(3);
     
-    // 가상의 확정 날짜 설정 (첫 번째 선택 날짜)
-    setTimeout(() => {
-        const confirmedDate = new Date(selectedDates[0]);
-        document.getElementById('confirmedDate').textContent = 
-            confirmedDate.toLocaleDateString('ko-KR', {
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric',
-                weekday: 'long'
-            });
-        requestData.confirmedDate = selectedDates[0];
-    }, 500);
+    try {
+        // 선호 날짜 제출
+        const datesData = selectedDates.map((date, index) => ({
+            date: date,
+            priority: index + 1
+        }));
+        
+        await API.submitDates(requestData.requestId, datesData);
+        
+        nextStep(3);
+        
+        // 관리자가 확정할 때까지 대기
+        document.getElementById('confirmedDate').textContent = '관리자 확정 대기 중...';
+        
+        // 주기적으로 확정 상태 확인
+        checkConfirmationStatus();
+    } catch (error) {
+        alert(error.message || '날짜 제출 중 오류가 발생했습니다.');
+    }
 }
 
 // Step 4: 일정 수락
-function acceptSchedule() {
-    alert('교육 일정이 확정되었습니다.');
-    nextStep(4);
+async function acceptSchedule() {
+    try {
+        await API.acceptSchedule(requestData.requestId);
+        alert('교육 일정이 확정되었습니다.');
+        nextStep(4);
+    } catch (error) {
+        alert(error.message || '일정 확정 중 오류가 발생했습니다.');
+    }
 }
 
 // 일정 변경 요청
@@ -310,7 +398,7 @@ function handleFileSelect(e) {
     }
 }
 
-function handleFile(file) {
+async function handleFile(file) {
     // 파일 크기 체크 (10MB)
     if (file.size > 10 * 1024 * 1024) {
         alert('파일 크기는 10MB 이하여야 합니다.');
@@ -348,6 +436,23 @@ function handleFile(file) {
     
     reader.readAsDataURL(file);
     requestData.documents.businessLicense = file;
+    
+    // 파일 즉시 업로드
+    try {
+        const taxEmail = document.getElementById('taxEmail')?.value || '';
+        const notes = document.getElementById('notes')?.value || '';
+        
+        const response = await API.uploadFile(
+            `/upload/business-license/${requestData.requestId}`,
+            file,
+            { taxEmail, notes }
+        );
+        
+        requestData.documents.uploadedId = response.document.id;
+    } catch (error) {
+        console.error('File upload error:', error);
+        alert('파일 업로드 중 오류가 발생했습니다.');
+    }
 }
 
 function removeFile() {
@@ -365,7 +470,7 @@ function removeFile() {
 }
 
 // Step 6: 신청 완료
-function completeRequest() {
+async function completeRequest() {
     const additionalForm = document.getElementById('additionalInfoForm');
     const formData = new FormData(additionalForm);
     
@@ -374,31 +479,45 @@ function completeRequest() {
     
     // 요약 정보 표시
     document.getElementById('summaryCompany').textContent = requestData.company.name;
-    document.getElementById('summaryProgram').textContent = getKoreanProgramName(requestData.quote.program);
-    document.getElementById('summaryDate').textContent = new Date(requestData.confirmedDate).toLocaleDateString('ko-KR');
+    document.getElementById('summaryProgram').textContent = requestData.quote.program || getKoreanProgramName(requestData.quote.programId);
+    document.getElementById('summaryDate').textContent = requestData.confirmedDate ? 
+        new Date(requestData.confirmedDate).toLocaleDateString('ko-KR') : '확정 대기';
     document.getElementById('summaryManager').textContent = requestData.manager.name;
+    document.getElementById('summaryRequestNumber').textContent = requestData.requestNumber || '-';
     
-    // 데이터를 로컬 스토리지에 저장 (실제로는 서버로 전송)
-    const allRequests = JSON.parse(localStorage.getItem('enterpriseRequests') || '[]');
-    allRequests.push({
-        ...requestData,
-        requestId: `REQ-2024-${String(allRequests.length + 1).padStart(4, '0')}`,
-        submittedAt: new Date().toISOString()
-    });
-    localStorage.setItem('enterpriseRequests', JSON.stringify(allRequests));
-    
-    nextStep(5);
+    try {
+        // 상태를 '문서 제출 완료'로 업데이트
+        if (requestData.requestId) {
+            await API.updateRequestStatus(requestData.requestId, 'completed');
+        }
+        
+        nextStep(5);
+    } catch (error) {
+        console.error('Complete request error:', error);
+        alert('신청 완료 처리 중 오류가 발생했습니다.');
+    }
 }
 
 // 프로그램명 한글 변환
-function getKoreanProgramName(program) {
-    const names = {
-        basic: 'ChatGPT 기초 과정',
-        intermediate: '업무 자동화 과정',
-        advanced: 'AI 전문가 과정',
-        custom: '맞춤형 교육'
-    };
-    return names[program] || program;
+function getKoreanProgramName(programId) {
+    const program = educationPrograms.find(p => p.id == programId);
+    return program ? program.programName : '-';
+}
+
+// 프로그램 옵션 로드
+function loadProgramOptions() {
+    const programSelect = document.getElementById('program');
+    if (!programSelect) return;
+    
+    programSelect.innerHTML = '<option value="">프로그램을 선택하세요</option>';
+    
+    educationPrograms.forEach(program => {
+        const option = document.createElement('option');
+        option.value = program.id;
+        option.textContent = program.programName;
+        option.dataset.price = program.pricePerPerson || 0;
+        programSelect.appendChild(option);
+    });
 }
 
 // 단계 이동
