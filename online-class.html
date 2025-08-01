@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>온라인 클래스 | 한국GPT협회 - 비개발자를 위한 AI 교육</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="online-class.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- 헤더 -->
+    <header class="header">
+        <nav class="navbar">
+            <div class="container">
+                <div class="nav-brand">
+                    <h1><a href="index.html" class="logo">한국GPT협회</a></h1>
+                </div>
+                <div class="nav-menu">
+                    <ul class="nav-links">
+                        <li><a href="online-class.html" class="active">온라인 클래스</a></li>
+                        <li><a href="offline-class.html">오프라인 클래스</a></li>
+                        <li><a href="community.html">학습 커뮤니티</a></li>
+                        <li><a href="my-classroom.html">내 강의실</a></li>
+                        <li><a href="enterprise.html">기업교육</a></li>
+                    </ul>
+                    <div class="nav-actions">
+                        <a href="checkout.html" class="btn-cart-icon">
+                            <i class="fas fa-shopping-cart"></i>
+                            <span class="cart-count">0</span>
+                        </a>
+                        <a href="login.html" class="btn-login">로그인</a>
+                        <a href="my-classroom.html" class="btn-dashboard">
+                            <i class="fas fa-user-circle"></i> 내 강의실
+                        </a>
+                    </div>
+                </div>
+                <button class="mobile-menu-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- 히어로 섹션 -->
+    <section class="online-hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-badge">
+                    <i class="fas fa-star"></i> 비개발자 맞춤 교육
+                </div>
+                <h1>코딩 없이 AI로 <span class="gradient-text">업무 효율 200%</span> 높이기</h1>
+                <p class="hero-description">
+                    복잡한 프로그래밍은 필요 없습니다.<br>
+                    클릭 몇 번으로 AI를 내 업무 도우미로 만드는 방법을 알려드립니다.
+                </p>
+                
+                <div class="hero-features">
+                    <div class="feature-item">
+                        <i class="fas fa-check-circle"></i>
+                        <span>평균 <strong>3시간</strong>이면 기초 마스터</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-check-circle"></i>
+                        <span><strong>실무 예제 100%</strong> 바로 적용 가능</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-check-circle"></i>
+                        <span><strong>무제한 반복</strong> 수강 가능</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 강좌 필터 섹션 -->
+    <section class="course-filter-section">
+        <div class="container">
+            <div class="filter-header">
+                <h2>엄선된 <span class="highlight">7개의 핵심 강좌</span></h2>
+                <p>AI 전문가들이 직접 검증한 실무 필수 과정만 모았습니다</p>
+            </div>
+            
+            <div class="filter-tabs">
+                <button class="filter-tab active" data-filter="all">
+                    <i class="fas fa-th"></i> 전체보기
+                </button>
+                <button class="filter-tab" data-filter="beginner">
+                    <i class="fas fa-seedling"></i> 입문자용
+                </button>
+                <button class="filter-tab" data-filter="practical">
+                    <i class="fas fa-briefcase"></i> 실무활용
+                </button>
+                <button class="filter-tab" data-filter="advanced">
+                    <i class="fas fa-rocket"></i> 심화과정
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- 강좌 목록 섹션 -->
+    <section class="courses-section">
+        <div class="container">
+            <div class="courses-grid">
+                <!-- 강좌 1: ChatGPT 첫걸음 -->
+                <div class="course-card" data-category="beginner">
+                    <div class="course-thumbnail">
+                        <img src="https://via.placeholder.com/400x225" alt="ChatGPT 첫걸음">
+                        <div class="course-badge-overlay">
+                            <span class="badge-bestseller">BEST</span>
+                            <span class="badge-new">NEW</span>
+                        </div>
+                        <div class="course-preview">
+                            <button class="btn-preview"><i class="fas fa-play"></i> 미리보기</button>
+                        </div>
+                    </div>
+                    
+                    <div class="course-info">
+                        <div class="course-category">
+                            <span class="category-tag">입문</span>
+                            <span class="difficulty">
+                                <i class="fas fa-signal"></i> 쉬움
+                            </span>
+                        </div>
+                        
+                        <h3 class="course-title">ChatGPT 첫걸음: 30분 만에 시작하기</h3>
+                        <p class="course-description">
+                            계정 만들기부터 첫 대화까지, AI와 친해지는 가장 쉬운 방법
+                        </p>
+                        
+                        <div class="course-meta">
+                            <div class="meta-item">
+                                <i class="fas fa-user"></i>
+                                <span>김민준 강사</span>
+                            </div>
+                            <div class="meta-item">
+                                <i class="fas fa-clock"></i>
+                                <span>총 3시간</span>
+                            </div>
+                            <div class="meta-item">
+                                <i class="fas fa-video"></i>
+                                <span>15개 강의</span>
+                            </div>
+                        </div>
+                        
+                        <div class="course-stats">
+                            <div class="rating">
+                                <div class="stars">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                </div>
+                                <span class="rating-score">5.0</span>
+                                <span class="rating-count">(1,234)</span>
+                            </div>
+                            <div class="students">
+                                <i class="fas fa-users"></i>
+                                <span>2,150명 수강중</span>
+                            </div>
+                        </div>
+                        
+                        <div class="course-footer">
+                            <div class="price-info">
+                                <span class="original-price">66,000원</span>
+                                <span class="discount-rate">50%</span>
+                                <div class="current-price">33,000원</div>
+                            </div>
+                            <div class="course-actions">
+                                <button class="btn-cart" title="장바구니">
+                                    <i class="fas fa-shopping-cart"></i>
+                                </button>
+                                <button class="btn-enroll">수강신청</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 강좌 2: GPT & AI 스탠다드 -->
+                <div class="course-card featured" data-category="practical">
+                    <div class="ribbon">인기 급상승</div>
+                    <div class="course-thumbnail">
+                        <img src="https://via.placeholder.com/400x225" alt="GPT & AI 스탠다드">
+                        <div class="course-badge-overlay">
+                            <span class="badge-recommend">추천</span>
+                        </div>
+                        <div class="course-preview">
+                            <button class="btn-preview"><i class="fas fa-play"></i> 미리보기</button>
+                        </div>
+                    </div>
+                    
+                    <div class="course-info">
+                        <div class="course-category">
+                            <span class="category-tag">종합</span>
+                            <span class="difficulty">
+                                <i class="fas fa-signal"></i> 보통
+                            </span>
+                        </div>
+                        
+                        <h3 class="course-title">GPT & AI 스탠다드: 업무 자동화의 모든 것</h3>
+                        <p class="course-description">
+                            메일 작성부터 보고서 요약까지, 57개 실무 템플릿으로 마스터하는 AI 활용법
+                        </p>
+                        
+                        <div class="course-highlights">
+                            <span class="highlight-item">
+                                <i class="fas fa-gift"></i> 템플릿 57개 제공
+                            </span>
+                            <span class="highlight-item">
+                                <i class="fas fa-certificate"></i> 수료증 발급
+                            </span>
+                        </div>
+                        
+                        <div class="course-meta">
+                            <div class="meta-item">
+                                <i class="fas fa-user"></i>
+                                <span>이서연 강사</span>
+                            </div>
+                            <div class="meta-item">
+                                <i class="fas fa-clock"></i>
+                                <span>총 16시간</span>
+                            </div>
+                            <div class="meta-item">
+                                <i class="fas fa-video"></i>
+                                <span>57개 강의</span>
+                            </div>
+                        </div>
+                        
+                        <div class="course-stats">
+                            <div class="rating">
+                                <div class="stars">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                </div>
+                                <span class="rating-score">4.9</span>
+                                <span class="rating-count">(523)</span>
+                            </div>
+                            <div class="students">
+                                <i class="fas fa-users"></i>
+                                <span>1,880명 수강중</span>
+                            </div>
+                        </div>
+                        
+                        <div class="course-footer">
+                            <div class="price-info">
+                                <span class="original-price">198,000원</span>
+                                <span class="discount-rate">33%</span>
+                                <div class="current-price">132,000원</div>
+                            </div>
+                            <div class="course-actions">
+                                <button class="btn-cart" title="장바구니">
+                                    <i class="fas fa-shopping-cart"></i>
+                                </button>
+                                <button class="btn-enroll primary">수강신청</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 강좌 3: 마케팅 자동화 -->
+                <div class="course-card" data-category="practical">
+                    <div class="course-thumbnail">
+                        <img src="https://via.placeholder.com/400x225" alt="AI 마케팅">
+                        <div class="course-preview">
+                            <button class="btn-preview"><i class="fas fa-play"></i> 미리보기</button>
+                        </div>
+                    </div>
+                    
+                    <div class="course-info">
+                        <div class="course-category">
+                            <span class="category-tag">마케팅</span>
+                            <span class="difficulty">
+                                <i class="fas fa-signal"></i> 보통
+                            </span>
+                        </div>
+                        
+                        <h3 class="course-title">ChatGPT로 마케팅 자동화하기</h3>
+                        <p class="course-description">
+                            SNS 콘텐츠, 광고 카피, 블로그 글까지 AI로 뚝딱!
+                        </p>
+                        
+                        <div class="course-meta">
+                            <div class="meta-item">
+                                <i class="fas fa-user"></i>
+                                <span>박지훈 강사</span>
+                            </div>
+                            <div class="meta-item">
+                                <i class="fas fa-clock"></i>
+                                <span>총 8시간</span>
+                            </div>
+                            <div class="meta-item">
+                                <i class="fas fa-video"></i>
+                                <span>32개 강의</span>
+                            </div>
+                        </div>
+                        
+                        <div class="course-stats">
+                            <div class="rating">
+                                <div class="stars">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star-half-alt"></i>
+                                </div>
+                                <span class="rating-score">4.7</span>
+                                <span class="rating-count">(412)</span>
+                            </div>
+                            <div class="students">
+                                <i class="fas fa-users"></i>
+                                <span>890명 수강중</span>
+                            </div>
+                        </div>
+                        
+                        <div class="course-footer">
+                            <div class="price-info">
+                                <span class="original-price">149,000원</span>
+                                <span class="discount-rate">20%</span>
+                                <div class="current-price">119,000원</div>
+                            </div>
+                            <div class="course-actions">
+                                <button class="btn-cart" title="장바구니">
+                                    <i class="fas fa-shopping-cart"></i>
+                                </button>
+                                <button class="btn-enroll">수강신청</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 강좌 4: 엑셀 & AI -->
+                <div class="course-card" data-category="practical">
+                    <div class="course-thumbnail">
+                        <img src="https://via.placeholder.com/400x225" alt="엑셀 AI">
+                        <div class="course-badge-overlay">
+                            <span class="badge-new">NEW</span>
+                        </div>
+                        <div class="course-preview">
+                            <button class="btn-preview"><i class="fas fa-play"></i> 미리보기</button>
+                        </div>
+                    </div>
+                    
+                    <div class="course-info">
+                        <div class="course-category">
+                            <span class="category-tag">업무효율</span>
+                            <span class="difficulty">
+                                <i class="fas fa-signal"></i> 쉬움
+                            </span>
+                        </div>
+                        
+                        <h3 class="course-title">엑셀 작업 10분 만에 끝내기: ChatGPT 활용법</h3>
+                        <p class="course-description">
+                            복잡한 함수 대신 AI로! 데이터 정리부터 차트 생성까지
+                        </p>
+                        
+                        <div class="course-meta">
+                            <div class="meta-item">
+                                <i class="fas fa-user"></i>
+                                <span>최은지 강사</span>
+                            </div>
+                            <div class="meta-item">
+                                <i class="fas fa-clock"></i>
+                                <span>총 5시간</span>
+                            </div>
+                            <div class="meta-item">
+                                <i class="fas fa-video"></i>
+                                <span>20개 강의</span>
+                            </div>
+                        </div>
+                        
+                        <div class="course-stats">
+                            <div class="rating">
+                                <div class="stars">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                </div>
+                                <span class="rating-score">4.8</span>
+                                <span class="rating-count">(156)</span>
+                            </div>
+                            <div class="students">
+                                <i class="fas fa-users"></i>
+                                <span>420명 수강중</span>
+                            </div>
+                        </div>
+                        
+                        <div class="course-footer">
+                            <div class="price-info">
+                                <span class="original-price">99,000원</span>
+                                <span class="discount-rate">30%</span>
+                                <div class="current-price">69,000원</div>
+                            </div>
+                            <div class="course-actions">
+                                <button class="btn-cart" title="장바구니">
+                                    <i class="fas fa-shopping-cart"></i>
+                                </button>
+                                <button class="btn-enroll">수강신청</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 강좌 5: PPT 프레젠테이션 -->
+                <div class="course-card" data-category="practical">
+                    <div class="course-thumbnail">
+                        <img src="https://via.placeholder.com/400x225" alt="PPT AI">
+                        <div class="course-preview">
+                            <button class="btn-preview"><i class="fas fa-play"></i> 미리보기</button>
+                        </div>
+                    </div>
+                    
+                    <div class="course-info">
+                        <div class="course-category">
+                            <span class="category-tag">프레젠테이션</span>
+                            <span class="difficulty">
+                                <i class="fas fa-signal"></i> 쉬움
+                            </span>
+                        </div>
+                        
+                        <h3 class="course-title">AI로 만드는 임팩트 있는 PPT</h3>
+                        <p class="course-description">
+                            기획서, 제안서, 보고서를 30분 만에 완성하는 비법
+                        </p>
+                        
+                        <div class="course-meta">
+                            <div class="meta-item">
+                                <i class="fas fa-user"></i>
+                                <span>정현우 강사</span>
+                            </div>
+                            <div class="meta-item">
+                                <i class="fas fa-clock"></i>
+                                <span>총 6시간</span>
+                            </div>
+                            <div class="meta-item">
+                                <i class="fas fa-video"></i>
+                                <span>24개 강의</span>
+                            </div>
+                        </div>
+                        
+                        <div class="course-stats">
+                            <div class="rating">
+                                <div class="stars">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star-half-alt"></i>
+                                </div>
+                                <span class="rating-score">4.6</span>
+                                <span class="rating-count">(289)</span>
+                            </div>
+                            <div class="students">
+                                <i class="fas fa-users"></i>
+                                <span>650명 수강중</span>
+                            </div>
+                        </div>
+                        
+                        <div class="course-footer">
+                            <div class="price-info">
+                                <span class="original-price">119,000원</span>
+                                <span class="discount-rate">25%</span>
+                                <div class="current-price">89,000원</div>
+                            </div>
+                            <div class="course-actions">
+                                <button class="btn-cart" title="장바구니">
+                                    <i class="fas fa-shopping-cart"></i>
+                                </button>
+                                <button class="btn-enroll">수강신청</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 강좌 6: 영어 이메일 -->
+                <div class="course-card" data-category="beginner">
+                    <div class="course-thumbnail">
+                        <img src="https://via.placeholder.com/400x225" alt="영어 이메일">
+                        <div class="course-preview">
+                            <button class="btn-preview"><i class="fas fa-play"></i> 미리보기</button>
+                        </div>
+                    </div>
+                    
+                    <div class="course-info">
+                        <div class="course-category">
+                            <span class="category-tag">비즈니스</span>
+                            <span class="difficulty">
+                                <i class="fas fa-signal"></i> 쉬움
+                            </span>
+                        </div>
+                        
+                        <h3 class="course-title">ChatGPT로 완벽한 영어 이메일 쓰기</h3>
+                        <p class="course-description">
+                            비즈니스 영어 걱정 끝! AI가 도와주는 프로페셔널 이메일
+                        </p>
+                        
+                        <div class="course-meta">
+                            <div class="meta-item">
+                                <i class="fas fa-user"></i>
+                                <span>김서영 강사</span>
+                            </div>
+                            <div class="meta-item">
+                                <i class="fas fa-clock"></i>
+                                <span>총 4시간</span>
+                            </div>
+                            <div class="meta-item">
+                                <i class="fas fa-video"></i>
+                                <span>16개 강의</span>
+                            </div>
+                        </div>
+                        
+                        <div class="course-stats">
+                            <div class="rating">
+                                <div class="stars">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                </div>
+                                <span class="rating-score">4.9</span>
+                                <span class="rating-count">(178)</span>
+                            </div>
+                            <div class="students">
+                                <i class="fas fa-users"></i>
+                                <span>380명 수강중</span>
+                            </div>
+                        </div>
+                        
+                        <div class="course-footer">
+                            <div class="price-info">
+                                <span class="original-price">79,000원</span>
+                                <span class="discount-rate">20%</span>
+                                <div class="current-price">63,000원</div>
+                            </div>
+                            <div class="course-actions">
+                                <button class="btn-cart" title="장바구니">
+                                    <i class="fas fa-shopping-cart"></i>
+                                </button>
+                                <button class="btn-enroll">수강신청</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 강좌 7: AI 비즈니스 전략 -->
+                <div class="course-card" data-category="advanced">
+                    <div class="course-thumbnail">
+                        <img src="https://via.placeholder.com/400x225" alt="AI 비즈니스">
+                        <div class="course-badge-overlay">
+                            <span class="badge-advanced">고급</span>
+                        </div>
+                        <div class="course-preview">
+                            <button class="btn-preview"><i class="fas fa-play"></i> 미리보기</button>
+                        </div>
+                    </div>
+                    
+                    <div class="course-info">
+                        <div class="course-category">
+                            <span class="category-tag">경영전략</span>
+                            <span class="difficulty">
+                                <i class="fas fa-signal"></i> 어려움
+                            </span>
+                        </div>
+                        
+                        <h3 class="course-title">AI 시대의 비즈니스 마스터 클래스</h3>
+                        <p class="course-description">
+                            경영진과 팀장을 위한 AI 비즈니스 전략 수립법
+                        </p>
+                        
+                        <div class="course-meta">
+                            <div class="meta-item">
+                                <i class="fas fa-user"></i>
+                                <span>이준호 대표</span>
+                            </div>
+                            <div class="meta-item">
+                                <i class="fas fa-clock"></i>
+                                <span>총 12시간</span>
+                            </div>
+                            <div class="meta-item">
+                                <i class="fas fa-video"></i>
+                                <span>45개 강의</span>
+                            </div>
+                        </div>
+                        
+                        <div class="course-stats">
+                            <div class="rating">
+                                <div class="stars">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                </div>
+                                <span class="rating-score">4.8</span>
+                                <span class="rating-count">(87)</span>
+                            </div>
+                            <div class="students">
+                                <i class="fas fa-users"></i>
+                                <span>120명 수강중</span>
+                            </div>
+                        </div>
+                        
+                        <div class="course-footer">
+                            <div class="price-info">
+                                <span class="original-price">249,000원</span>
+                                <span class="discount-rate">29%</span>
+                                <div class="current-price">176,000원</div>
+                            </div>
+                            <div class="course-actions">
+                                <button class="btn-cart" title="장바구니">
+                                    <i class="fas fa-shopping-cart"></i>
+                                </button>
+                                <button class="btn-enroll">수강신청</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 수강 혜택 섹션 -->
+    <section class="benefits-section">
+        <div class="container">
+            <h2>한국GPT협회만의 특별한 혜택</h2>
+            <div class="benefits-grid">
+                <div class="benefit-card">
+                    <div class="benefit-icon">
+                        <i class="fas fa-infinity"></i>
+                    </div>
+                    <h3>평생 소장</h3>
+                    <p>한 번 구매로 평생 반복 수강<br>업데이트된 내용도 무료 제공</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="benefit-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3>전용 커뮤니티</h3>
+                    <p>수강생끼리 질문과 노하우 공유<br>강사님의 직접 답변</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="benefit-icon">
+                        <i class="fas fa-certificate"></i>
+                    </div>
+                    <h3>수료증 발급</h3>
+                    <p>이력서에 기재 가능한<br>공식 수료증 제공</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="benefit-icon">
+                        <i class="fas fa-file-download"></i>
+                    </div>
+                    <h3>실습 자료 제공</h3>
+                    <p>바로 쓸 수 있는 템플릿과<br>프롬프트 모음집</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ 섹션 -->
+    <section class="faq-section">
+        <div class="container">
+            <h2>자주 묻는 질문</h2>
+            <div class="faq-list">
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span>정말 코딩을 전혀 몰라도 수강할 수 있나요?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <p>네, 전혀 문제없습니다! 모든 강좌는 비개발자를 위해 설계되었습니다. 복잡한 프로그래밍 대신 클릭과 대화만으로 AI를 활용하는 방법을 알려드립니다.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span>ChatGPT 유료 계정이 필요한가요?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <p>무료 계정으로도 대부분의 실습이 가능합니다. 일부 고급 기능은 유료 계정이 필요하지만, 강의에서 무료 대안도 함께 소개해드립니다.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span>수강 기간 제한이 있나요?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <p>아니요! 한 번 구매하시면 평생 수강 가능합니다. 강의가 업데이트되어도 추가 비용 없이 새로운 내용을 학습하실 수 있습니다.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span>환불은 가능한가요?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <p>구매 후 7일 이내, 진도율 10% 미만일 경우 100% 환불 가능합니다. 단순 변심도 환불 사유가 됩니다.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA 섹션 -->
+    <section class="cta-section">
+        <div class="container">
+            <div class="cta-content">
+                <h2>지금 시작하면 <span class="highlight">3시간 후</span>엔 AI 전문가!</h2>
+                <p>망설이는 동안 동료들은 이미 AI로 일하고 있습니다</p>
+                <div class="cta-stats">
+                    <div class="stat">
+                        <span class="number">127명</span>
+                        <span class="label">오늘 수강 시작</span>
+                    </div>
+                    <div class="stat">
+                        <span class="number">23명</span>
+                        <span class="label">지금 수강 중</span>
+                    </div>
+                    <div class="stat">
+                        <span class="number">98%</span>
+                        <span class="label">만족도</span>
+                    </div>
+                </div>
+                <button class="btn-cta-large">
+                    <i class="fas fa-graduation-cap"></i>
+                    지금 시작하기
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- 푸터 -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>한국GPT협회</h3>
+                    <p>비개발자를 위한 AI 교육 플랫폼<br>누구나 쉽게 AI를 활용할 수 있습니다</p>
+                </div>
+                <div class="footer-section">
+                    <h4>교육 과정</h4>
+                    <ul>
+                        <li><a href="online-class.html">온라인 클래스</a></li>
+                        <li><a href="offline-class.html">오프라인 클래스</a></li>
+                        <li><a href="enterprise.html">기업 교육</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>고객 지원</h4>
+                    <ul>
+                        <li><a href="#faq">자주 묻는 질문</a></li>
+                        <li><a href="#contact">1:1 문의</a></li>
+                        <li><a href="#refund">환불 정책</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>문의</h4>
+                    <p><i class="fas fa-phone"></i> 02-1234-5678</p>
+                    <p><i class="fas fa-envelope"></i> edu@koreangpt.org</p>
+                    <p><i class="fas fa-clock"></i> 평일 09:00 - 18:00</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 한국GPT협회. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 미리보기 모달 -->
+    <div id="previewModal" class="modal">
+        <div class="modal-content preview-modal">
+            <button class="modal-close">&times;</button>
+            <div class="preview-video">
+                <iframe src="" frameborder="0" allowfullscreen></iframe>
+            </div>
+        </div>
+    </div>
+
+    <!-- 장바구니 알림 -->
+    <div id="cartNotification" class="cart-notification">
+        <i class="fas fa-check-circle"></i>
+        <span>장바구니에 담았습니다</span>
+    </div>
+
+    <script src="user-manager.js"></script>
+    <script src="online-class.js"></script>
+</body>
+</html>

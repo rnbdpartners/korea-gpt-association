@@ -1,0 +1,670 @@
+/* 강의 플레이어 페이지 스타일 */
+
+/* 플레이어 헤더 */
+.player-header {
+    background: var(--dark);
+    color: white;
+    padding: 1rem 0;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.player-nav {
+    max-width: 100%;
+    margin: 0 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.nav-left {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.btn-back {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.2rem;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 0.25rem;
+    transition: background 0.3s ease;
+}
+
+.btn-back:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.course-info h1 {
+    font-size: 1.2rem;
+    margin: 0;
+    font-weight: 600;
+}
+
+.current-lesson {
+    font-size: 0.9rem;
+    opacity: 0.8;
+}
+
+.nav-right {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+
+.progress-info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.progress-text {
+    font-size: 0.9rem;
+}
+
+.progress-bar {
+    width: 200px;
+    height: 8px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: var(--primary);
+    transition: width 0.3s ease;
+}
+
+.btn-certificate {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-certificate:not(:disabled):hover {
+    background: var(--primary);
+    border-color: var(--primary);
+}
+
+.btn-certificate:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* 메인 컨테이너 */
+.player-container {
+    display: flex;
+    margin-top: 4rem;
+    height: calc(100vh - 4rem);
+}
+
+/* 사이드바 */
+.player-sidebar {
+    width: 320px;
+    background: #f8f9fa;
+    border-right: 1px solid #e9ecef;
+    overflow-y: auto;
+    transition: margin-left 0.3s ease;
+}
+
+.player-sidebar.collapsed {
+    margin-left: -320px;
+}
+
+.sidebar-header {
+    padding: 1.5rem;
+    border-bottom: 1px solid #e9ecef;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.sidebar-header h2 {
+    font-size: 1.1rem;
+    margin: 0;
+}
+
+.btn-toggle-sidebar {
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    cursor: pointer;
+    color: #6c757d;
+}
+
+/* 커리큘럼 리스트 */
+.curriculum-section {
+    border-bottom: 1px solid #e9ecef;
+}
+
+.section-header {
+    padding: 1rem 1.5rem;
+    background: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+}
+
+.section-header h3 {
+    font-size: 0.95rem;
+    margin: 0;
+    font-weight: 600;
+}
+
+.section-progress {
+    font-size: 0.85rem;
+    color: #6c757d;
+}
+
+.lesson-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.lesson-list.collapsed {
+    display: none;
+}
+
+.lesson-item {
+    display: flex;
+    align-items: center;
+    padding: 1rem 1.5rem;
+    cursor: pointer;
+    transition: background 0.2s ease;
+    border-left: 3px solid transparent;
+}
+
+.lesson-item:hover {
+    background: #f0f0f0;
+}
+
+.lesson-item.active {
+    background: #e8f7f3;
+    border-left-color: var(--primary);
+}
+
+.lesson-item.completed .lesson-checkbox {
+    color: var(--primary);
+}
+
+.lesson-item.locked {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.lesson-checkbox {
+    font-size: 1.2rem;
+    margin-right: 1rem;
+    color: #dee2e6;
+}
+
+.lesson-info {
+    flex: 1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.lesson-title {
+    font-size: 0.9rem;
+}
+
+.lesson-duration {
+    font-size: 0.85rem;
+    color: #6c757d;
+}
+
+/* 메인 콘텐츠 */
+.player-main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+}
+
+/* 비디오 컨테이너 */
+.video-container {
+    position: relative;
+    background: #000;
+    aspect-ratio: 16 / 9;
+    max-height: 70vh;
+}
+
+#courseVideo {
+    width: 100%;
+    height: 100%;
+}
+
+.video-controls {
+    position: absolute;
+    bottom: 50px;
+    right: 20px;
+    display: flex;
+    gap: 0.5rem;
+}
+
+.video-controls button {
+    background: rgba(0, 0, 0, 0.7);
+    border: none;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background 0.3s ease;
+}
+
+.video-controls button:hover {
+    background: rgba(0, 0, 0, 0.9);
+}
+
+/* 콘텐츠 탭 */
+.content-tabs {
+    background: #fff;
+    border-bottom: 1px solid #e9ecef;
+    display: flex;
+    padding: 0 2rem;
+    overflow-x: auto;
+}
+
+.tab-btn {
+    background: none;
+    border: none;
+    padding: 1rem 1.5rem;
+    cursor: pointer;
+    font-size: 0.95rem;
+    color: #6c757d;
+    border-bottom: 3px solid transparent;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    white-space: nowrap;
+}
+
+.tab-btn:hover {
+    color: var(--dark);
+}
+
+.tab-btn.active {
+    color: var(--primary);
+    border-bottom-color: var(--primary);
+}
+
+/* 탭 콘텐츠 */
+.tab-content {
+    padding: 2rem;
+    background: #fff;
+    flex: 1;
+}
+
+.tab-pane {
+    display: none;
+}
+
+.tab-pane.active {
+    display: block;
+}
+
+/* 개요 탭 */
+.lesson-overview h2 {
+    font-size: 1.3rem;
+    margin-bottom: 1.5rem;
+}
+
+.learning-points {
+    list-style: none;
+    padding: 0;
+    margin-bottom: 2rem;
+}
+
+.learning-points li {
+    padding: 0.75rem 0;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.learning-points i {
+    color: var(--primary);
+}
+
+.instructor-note {
+    background: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 0.5rem;
+    border-left: 4px solid var(--primary);
+}
+
+.instructor-note h3 {
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+}
+
+/* 메모 탭 */
+.note-editor {
+    background: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 0.5rem;
+    margin-bottom: 2rem;
+}
+
+.note-timestamp {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    color: #6c757d;
+    font-size: 0.9rem;
+}
+
+#noteText {
+    width: 100%;
+    min-height: 120px;
+    padding: 1rem;
+    border: 1px solid #dee2e6;
+    border-radius: 0.5rem;
+    resize: vertical;
+    font-family: inherit;
+    margin-bottom: 1rem;
+}
+
+.btn-save-note {
+    background: var(--primary);
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: background 0.3s ease;
+}
+
+.btn-save-note:hover {
+    background: #28c997;
+}
+
+.saved-notes h3 {
+    margin-bottom: 1.5rem;
+}
+
+.note-item {
+    background: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.note-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.75rem;
+    font-size: 0.9rem;
+    color: #6c757d;
+}
+
+.note-time {
+    color: var(--primary);
+    cursor: pointer;
+}
+
+.note-time:hover {
+    text-decoration: underline;
+}
+
+.note-content {
+    margin-bottom: 1rem;
+    line-height: 1.6;
+}
+
+.note-actions {
+    display: flex;
+    gap: 1rem;
+}
+
+.note-actions button {
+    background: none;
+    border: none;
+    color: #6c757d;
+    cursor: pointer;
+    font-size: 0.9rem;
+    padding: 0.25rem 0.5rem;
+    transition: color 0.3s ease;
+}
+
+.note-actions button:hover {
+    color: var(--primary);
+}
+
+/* 학습자료 탭 */
+.resource-item {
+    display: flex;
+    align-items: center;
+    padding: 1.5rem;
+    background: #f8f9fa;
+    border-radius: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.resource-icon {
+    font-size: 2.5rem;
+    color: #dc3545;
+    margin-right: 1.5rem;
+}
+
+.resource-info {
+    flex: 1;
+}
+
+.resource-info h4 {
+    margin: 0 0 0.5rem 0;
+    font-size: 1.1rem;
+}
+
+.resource-size {
+    color: #6c757d;
+    font-size: 0.9rem;
+}
+
+.btn-download {
+    background: var(--primary);
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: background 0.3s ease;
+}
+
+.btn-download:hover {
+    background: #28c997;
+}
+
+/* Q&A 탭 */
+.qa-form {
+    background: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 0.5rem;
+    margin-bottom: 2rem;
+}
+
+.qa-form h3 {
+    margin-bottom: 1rem;
+}
+
+.qa-form textarea {
+    width: 100%;
+    min-height: 100px;
+    padding: 1rem;
+    border: 1px solid #dee2e6;
+    border-radius: 0.5rem;
+    resize: vertical;
+    font-family: inherit;
+    margin-bottom: 1rem;
+}
+
+.btn-submit-question {
+    background: var(--primary);
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: background 0.3s ease;
+}
+
+.btn-submit-question:hover {
+    background: #28c997;
+}
+
+.qa-item {
+    border: 1px solid #e9ecef;
+    border-radius: 0.5rem;
+    margin-bottom: 1rem;
+    overflow: hidden;
+}
+
+.question {
+    padding: 1.5rem;
+    background: #fff;
+}
+
+.answer {
+    padding: 1.5rem;
+    background: #f8f9fa;
+    border-top: 1px solid #e9ecef;
+}
+
+.qa-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.75rem;
+    font-size: 0.9rem;
+}
+
+.qa-author {
+    font-weight: 600;
+}
+
+.qa-author.instructor {
+    color: var(--primary);
+}
+
+.qa-date {
+    color: #6c757d;
+}
+
+/* 하단 네비게이션 */
+.bottom-navigation {
+    padding: 1.5rem 2rem;
+    background: #f8f9fa;
+    border-top: 1px solid #e9ecef;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.btn-prev-lesson,
+.btn-complete-lesson {
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.btn-prev-lesson {
+    background: #fff;
+    border: 1px solid #dee2e6;
+    color: var(--dark);
+}
+
+.btn-prev-lesson:hover {
+    background: #f8f9fa;
+}
+
+.btn-complete-lesson {
+    background: var(--primary);
+    border: none;
+    color: white;
+}
+
+.btn-complete-lesson:hover {
+    background: #28c997;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 1024px) {
+    .player-sidebar {
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        z-index: 50;
+        box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+    }
+    
+    .player-sidebar.collapsed {
+        margin-left: -320px;
+    }
+}
+
+@media (max-width: 768px) {
+    .player-nav {
+        margin: 0 1rem;
+    }
+    
+    .nav-right {
+        display: none;
+    }
+    
+    .content-tabs {
+        padding: 0 1rem;
+    }
+    
+    .tab-btn {
+        padding: 1rem;
+        font-size: 0.85rem;
+    }
+    
+    .tab-content {
+        padding: 1rem;
+    }
+    
+    .bottom-navigation {
+        padding: 1rem;
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .btn-prev-lesson,
+    .btn-complete-lesson {
+        width: 100%;
+        justify-content: center;
+    }
+}

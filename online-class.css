@@ -1,0 +1,802 @@
+/* 온라인 클래스 페이지 스타일 */
+
+/* 히어로 섹션 */
+.online-hero {
+    background: linear-gradient(135deg, var(--bg-accent) 0%, var(--bg-primary) 100%);
+    padding: 5rem 0 3rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.online-hero::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -20%;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, var(--primary-color) 0%, transparent 70%);
+    opacity: 0.1;
+    border-radius: 50%;
+}
+
+.hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--primary-color);
+    color: var(--accent-color);
+    padding: 0.5rem 1rem;
+    border-radius: 9999px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+}
+
+.online-hero h1 {
+    font-size: 3rem;
+    font-weight: 800;
+    margin-bottom: 1rem;
+    line-height: 1.3;
+}
+
+.gradient-text {
+    background: linear-gradient(90deg, var(--primary-color) 0%, #00d99e 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.hero-description {
+    font-size: 1.25rem;
+    color: var(--text-secondary);
+    margin-bottom: 2rem;
+    line-height: 1.6;
+}
+
+.hero-features {
+    display: flex;
+    gap: 2rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.feature-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1rem;
+    color: var(--text-secondary);
+}
+
+.feature-item i {
+    color: var(--primary-color);
+    font-size: 1.25rem;
+}
+
+/* 필터 섹션 */
+.course-filter-section {
+    background: white;
+    padding: 3rem 0;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.filter-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.filter-header h2 {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+.filter-header .highlight {
+    color: var(--primary-color);
+}
+
+.filter-tabs {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.filter-tab {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    background: var(--bg-secondary);
+    border: 2px solid transparent;
+    border-radius: 9999px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.filter-tab:hover {
+    background: var(--bg-accent);
+    border-color: var(--primary-color);
+    color: var(--text-primary);
+}
+
+.filter-tab.active {
+    background: var(--primary-color);
+    color: var(--accent-color);
+    border-color: var(--primary-color);
+}
+
+/* 강좌 목록 */
+.courses-section {
+    padding: 4rem 0;
+    background: var(--bg-secondary);
+}
+
+.courses-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 2rem;
+}
+
+/* 강좌 카드 */
+.course-card {
+    background: white;
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.course-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-lg);
+}
+
+.course-card.featured {
+    border: 2px solid var(--primary-color);
+}
+
+.ribbon {
+    position: absolute;
+    top: 20px;
+    right: -30px;
+    background: var(--error-color);
+    color: white;
+    padding: 0.5rem 3rem;
+    transform: rotate(45deg);
+    font-size: 0.875rem;
+    font-weight: 600;
+    z-index: 1;
+    box-shadow: var(--shadow-md);
+}
+
+/* 강좌 썸네일 */
+.course-thumbnail {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 16/9;
+}
+
+.course-thumbnail img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.course-card:hover .course-thumbnail img {
+    transform: scale(1.05);
+}
+
+.course-badge-overlay {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    display: flex;
+    gap: 0.5rem;
+}
+
+.course-badge-overlay span {
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.badge-bestseller {
+    background: var(--error-color);
+    color: white;
+}
+
+.badge-new {
+    background: var(--primary-color);
+    color: var(--accent-color);
+}
+
+.badge-recommend {
+    background: var(--warning-color);
+    color: white;
+}
+
+.badge-advanced {
+    background: var(--accent-color);
+    color: white;
+}
+
+.course-preview {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.course-card:hover .course-preview {
+    opacity: 1;
+}
+
+.btn-preview {
+    background: white;
+    color: var(--accent-color);
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 9999px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+}
+
+.btn-preview:hover {
+    background: var(--primary-color);
+    transform: scale(1.05);
+}
+
+/* 강좌 정보 */
+.course-info {
+    padding: 1.5rem;
+}
+
+.course-category {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+}
+
+.category-tag {
+    background: var(--bg-accent);
+    color: var(--text-secondary);
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.difficulty {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-size: 0.875rem;
+    color: var(--text-light);
+}
+
+.course-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+    line-height: 1.4;
+    color: var(--text-primary);
+}
+
+.course-description {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin-bottom: 1rem;
+    line-height: 1.5;
+}
+
+.course-highlights {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+}
+
+.highlight-item {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-size: 0.875rem;
+    color: var(--primary-color);
+    font-weight: 600;
+}
+
+/* 강좌 메타 정보 */
+.course-meta {
+    display: flex;
+    gap: 1.5rem;
+    margin-bottom: 1rem;
+    padding: 1rem 0;
+    border-top: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.meta-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+}
+
+.meta-item i {
+    color: var(--text-light);
+}
+
+/* 강좌 통계 */
+.course-stats {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+}
+
+.rating {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.stars {
+    color: #facc15;
+}
+
+.rating-score {
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.rating-count {
+    font-size: 0.875rem;
+    color: var(--text-light);
+}
+
+.students {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+}
+
+/* 강좌 푸터 */
+.course-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border-color);
+}
+
+.price-info {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.original-price {
+    font-size: 0.875rem;
+    color: var(--text-light);
+    text-decoration: line-through;
+}
+
+.discount-rate {
+    background: var(--error-color);
+    color: white;
+    padding: 0.25rem 0.5rem;
+    border-radius: var(--radius-sm);
+    font-size: 0.75rem;
+    font-weight: 700;
+}
+
+.current-price {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--text-primary);
+}
+
+.course-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.btn-cart {
+    background: var(--bg-secondary);
+    color: var(--text-secondary);
+    border: 1px solid var(--border-color);
+    padding: 0.75rem;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-cart:hover {
+    background: var(--bg-accent);
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+}
+
+.btn-enroll {
+    background: var(--accent-color);
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: var(--radius-md);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-enroll:hover {
+    background: #262b30;
+    transform: translateY(-2px);
+}
+
+.btn-enroll.primary {
+    background: var(--primary-color);
+    color: var(--accent-color);
+}
+
+.btn-enroll.primary:hover {
+    background: #00d99e;
+}
+
+/* 혜택 섹션 */
+.benefits-section {
+    padding: 5rem 0;
+    background: white;
+    text-align: center;
+}
+
+.benefits-section h2 {
+    font-size: 2.5rem;
+    margin-bottom: 3rem;
+}
+
+.benefits-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+}
+
+.benefit-card {
+    padding: 2rem;
+    text-align: center;
+}
+
+.benefit-icon {
+    width: 80px;
+    height: 80px;
+    background: var(--bg-accent);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.5rem;
+    font-size: 2rem;
+    color: var(--primary-color);
+}
+
+.benefit-card h3 {
+    font-size: 1.25rem;
+    margin-bottom: 0.75rem;
+    color: var(--text-primary);
+}
+
+.benefit-card p {
+    color: var(--text-secondary);
+    line-height: 1.6;
+}
+
+/* FAQ 섹션 */
+.faq-section {
+    padding: 5rem 0;
+    background: var(--bg-secondary);
+}
+
+.faq-section h2 {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 3rem;
+}
+
+.faq-list {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.faq-item {
+    background: white;
+    border-radius: var(--radius-lg);
+    margin-bottom: 1rem;
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+}
+
+.faq-question {
+    width: 100%;
+    padding: 1.5rem;
+    background: none;
+    border: none;
+    text-align: left;
+    font-size: 1.125rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.3s ease;
+}
+
+.faq-question:hover {
+    background: var(--bg-secondary);
+}
+
+.faq-question i {
+    transition: transform 0.3s ease;
+}
+
+.faq-item.active .faq-question i {
+    transform: rotate(180deg);
+}
+
+.faq-answer {
+    padding: 0 1.5rem;
+    max-height: 0;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.faq-item.active .faq-answer {
+    padding: 0 1.5rem 1.5rem;
+    max-height: 500px;
+}
+
+.faq-answer p {
+    color: var(--text-secondary);
+    line-height: 1.6;
+}
+
+/* CTA 섹션 */
+.cta-section {
+    padding: 5rem 0;
+    background: linear-gradient(135deg, var(--bg-dark) 0%, #262b30 100%);
+    color: white;
+    text-align: center;
+}
+
+.cta-content h2 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.cta-content .highlight {
+    color: var(--primary-color);
+}
+
+.cta-content p {
+    font-size: 1.25rem;
+    margin-bottom: 2rem;
+    opacity: 0.9;
+}
+
+.cta-stats {
+    display: flex;
+    gap: 3rem;
+    justify-content: center;
+    margin-bottom: 3rem;
+}
+
+.cta-stats .stat {
+    text-align: center;
+}
+
+.cta-stats .number {
+    display: block;
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: var(--primary-color);
+    margin-bottom: 0.5rem;
+}
+
+.cta-stats .label {
+    font-size: 1rem;
+    opacity: 0.8;
+}
+
+.btn-cta-large {
+    background: var(--primary-color);
+    color: var(--accent-color);
+    padding: 1.25rem 3rem;
+    border: none;
+    border-radius: 9999px;
+    font-size: 1.25rem;
+    font-weight: 700;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    transition: all 0.3s ease;
+    box-shadow: var(--shadow-lg);
+}
+
+.btn-cta-large:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-xl);
+}
+
+/* 모달 */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal.active {
+    display: flex;
+}
+
+.preview-modal {
+    background: black;
+    border-radius: var(--radius-xl);
+    width: 90%;
+    max-width: 900px;
+    position: relative;
+}
+
+.modal-close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: white;
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    font-size: 1.5rem;
+    cursor: pointer;
+    z-index: 1;
+    transition: all 0.3s ease;
+}
+
+.modal-close:hover {
+    background: var(--primary-color);
+    color: var(--accent-color);
+}
+
+.preview-video {
+    aspect-ratio: 16/9;
+}
+
+.preview-video iframe {
+    width: 100%;
+    height: 100%;
+    border-radius: var(--radius-xl);
+}
+
+/* 장바구니 알림 */
+.cart-notification {
+    position: fixed;
+    top: 2rem;
+    right: 2rem;
+    background: var(--accent-color);
+    color: white;
+    padding: 1rem 2rem;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    transform: translateX(400px);
+    transition: transform 0.3s ease;
+    z-index: 1000;
+}
+
+.cart-notification.show {
+    transform: translateX(0);
+}
+
+.cart-notification i {
+    font-size: 1.5rem;
+    color: var(--primary-color);
+}
+
+/* 장바구니 아이콘 */
+.btn-cart-icon {
+    position: relative;
+    display: flex;
+    align-items: center;
+    color: white;
+    font-size: 1.2rem;
+    margin-right: 1rem;
+    text-decoration: none;
+    transition: opacity 0.3s ease;
+}
+
+.btn-cart-icon:hover {
+    opacity: 0.8;
+}
+
+.cart-count {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background: var(--primary);
+    color: var(--dark);
+    font-size: 0.75rem;
+    font-weight: bold;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    display: none;
+}
+
+/* 반응형 */
+@media (max-width: 768px) {
+    .online-hero h1 {
+        font-size: 2rem;
+    }
+    
+    .hero-features {
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+    }
+    
+    .filter-tabs {
+        overflow-x: auto;
+        padding: 0 1rem;
+    }
+    
+    .courses-grid {
+        grid-template-columns: 1fr;
+        padding: 0 1rem;
+    }
+    
+    .course-meta {
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+    
+    .benefits-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .cta-stats {
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+}

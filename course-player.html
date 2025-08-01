@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>강의 플레이어 | 한국GPT협회</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="course-player.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- 헤더 -->
+    <header class="player-header">
+        <div class="player-nav">
+            <div class="nav-left">
+                <button class="btn-back" onclick="window.history.back()">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <div class="course-info">
+                    <h1 class="course-title">ChatGPT 첫걸음: 30분 만에 시작하기</h1>
+                    <span class="current-lesson">1강. ChatGPT란 무엇인가?</span>
+                </div>
+            </div>
+            <div class="nav-right">
+                <div class="progress-info">
+                    <span class="progress-text">전체 진도율: 15%</span>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 15%"></div>
+                    </div>
+                </div>
+                <button class="btn-certificate" disabled>
+                    <i class="fas fa-certificate"></i> 수료증
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <div class="player-container">
+        <!-- 사이드바 -->
+        <aside class="player-sidebar">
+            <div class="sidebar-header">
+                <h2>강의 목차</h2>
+                <button class="btn-toggle-sidebar">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+            </div>
+            
+            <div class="curriculum-list">
+                <!-- 섹션 1 -->
+                <div class="curriculum-section">
+                    <div class="section-header">
+                        <h3>섹션 1. ChatGPT 시작하기</h3>
+                        <span class="section-progress">2/5 완료</span>
+                    </div>
+                    <ul class="lesson-list">
+                        <li class="lesson-item completed">
+                            <div class="lesson-checkbox">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                            <div class="lesson-info">
+                                <span class="lesson-title">1. ChatGPT란 무엇인가?</span>
+                                <span class="lesson-duration">10:23</span>
+                            </div>
+                        </li>
+                        <li class="lesson-item completed">
+                            <div class="lesson-checkbox">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                            <div class="lesson-info">
+                                <span class="lesson-title">2. 계정 만들기</span>
+                                <span class="lesson-duration">5:15</span>
+                            </div>
+                        </li>
+                        <li class="lesson-item active">
+                            <div class="lesson-checkbox">
+                                <i class="fas fa-play-circle"></i>
+                            </div>
+                            <div class="lesson-info">
+                                <span class="lesson-title">3. 첫 대화 시작하기</span>
+                                <span class="lesson-duration">8:42</span>
+                            </div>
+                        </li>
+                        <li class="lesson-item">
+                            <div class="lesson-checkbox">
+                                <i class="far fa-circle"></i>
+                            </div>
+                            <div class="lesson-info">
+                                <span class="lesson-title">4. 프롬프트 작성 기초</span>
+                                <span class="lesson-duration">12:30</span>
+                            </div>
+                        </li>
+                        <li class="lesson-item locked">
+                            <div class="lesson-checkbox">
+                                <i class="fas fa-lock"></i>
+                            </div>
+                            <div class="lesson-info">
+                                <span class="lesson-title">5. 실습: 첫 번째 프로젝트</span>
+                                <span class="lesson-duration">15:00</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- 섹션 2 -->
+                <div class="curriculum-section">
+                    <div class="section-header">
+                        <h3>섹션 2. 실무 활용하기</h3>
+                        <span class="section-progress">0/6 완료</span>
+                    </div>
+                    <ul class="lesson-list collapsed">
+                        <li class="lesson-item">
+                            <div class="lesson-checkbox">
+                                <i class="far fa-circle"></i>
+                            </div>
+                            <div class="lesson-info">
+                                <span class="lesson-title">6. 이메일 작성하기</span>
+                                <span class="lesson-duration">11:20</span>
+                            </div>
+                        </li>
+                        <!-- 더 많은 강의 항목... -->
+                    </ul>
+                </div>
+            </div>
+        </aside>
+
+        <!-- 메인 콘텐츠 -->
+        <main class="player-main">
+            <!-- 비디오 플레이어 -->
+            <div class="video-container">
+                <video id="courseVideo" controls>
+                    <source src="sample-video.mp4" type="video/mp4">
+                    브라우저가 비디오를 지원하지 않습니다.
+                </video>
+                
+                <!-- 비디오 컨트롤 오버레이 -->
+                <div class="video-controls">
+                    <button class="btn-speed">1.0x</button>
+                    <button class="btn-quality">1080p</button>
+                    <button class="btn-fullscreen">
+                        <i class="fas fa-expand"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- 콘텐츠 탭 -->
+            <div class="content-tabs">
+                <button class="tab-btn active" data-tab="overview">
+                    <i class="fas fa-info-circle"></i> 개요
+                </button>
+                <button class="tab-btn" data-tab="notes">
+                    <i class="fas fa-sticky-note"></i> 메모
+                </button>
+                <button class="tab-btn" data-tab="resources">
+                    <i class="fas fa-download"></i> 학습자료
+                </button>
+                <button class="tab-btn" data-tab="qa">
+                    <i class="fas fa-comments"></i> Q&A
+                </button>
+            </div>
+
+            <!-- 탭 콘텐츠 -->
+            <div class="tab-content">
+                <!-- 개요 탭 -->
+                <div class="tab-pane active" id="overview">
+                    <div class="lesson-overview">
+                        <h2>이번 강의에서 배울 내용</h2>
+                        <ul class="learning-points">
+                            <li><i class="fas fa-check"></i> ChatGPT의 기본 개념과 작동 원리</li>
+                            <li><i class="fas fa-check"></i> AI와 대화하는 올바른 방법</li>
+                            <li><i class="fas fa-check"></i> 효과적인 프롬프트 작성의 기초</li>
+                            <li><i class="fas fa-check"></i> 실무에서 바로 활용 가능한 예제</li>
+                        </ul>
+
+                        <div class="instructor-note">
+                            <h3>강사 노트</h3>
+                            <p>이 강의는 ChatGPT를 처음 접하는 분들을 위해 준비했습니다. 
+                            복잡한 기술 용어 없이, 누구나 이해할 수 있도록 쉽게 설명드리겠습니다.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 메모 탭 -->
+                <div class="tab-pane" id="notes">
+                    <div class="notes-section">
+                        <div class="note-editor">
+                            <div class="note-timestamp">
+                                <i class="fas fa-clock"></i>
+                                <span id="currentTimestamp">00:00</span>에 메모 추가
+                            </div>
+                            <textarea id="noteText" placeholder="여기에 메모를 작성하세요..."></textarea>
+                            <button class="btn-save-note">
+                                <i class="fas fa-save"></i> 메모 저장
+                            </button>
+                        </div>
+
+                        <div class="saved-notes">
+                            <h3>내 메모</h3>
+                            <div class="note-item">
+                                <div class="note-header">
+                                    <span class="note-time">
+                                        <i class="fas fa-play-circle"></i> 02:15
+                                    </span>
+                                    <span class="note-date">2024.12.01</span>
+                                </div>
+                                <p class="note-content">프롬프트는 명확하고 구체적으로 작성하는 것이 중요!</p>
+                                <div class="note-actions">
+                                    <button class="btn-edit-note">수정</button>
+                                    <button class="btn-delete-note">삭제</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 학습자료 탭 -->
+                <div class="tab-pane" id="resources">
+                    <div class="resources-section">
+                        <h3>다운로드 가능한 자료</h3>
+                        <div class="resource-list">
+                            <div class="resource-item">
+                                <div class="resource-icon">
+                                    <i class="fas fa-file-pdf"></i>
+                                </div>
+                                <div class="resource-info">
+                                    <h4>ChatGPT 시작 가이드.pdf</h4>
+                                    <span class="resource-size">2.3 MB</span>
+                                </div>
+                                <button class="btn-download">
+                                    <i class="fas fa-download"></i> 다운로드
+                                </button>
+                            </div>
+                            <div class="resource-item">
+                                <div class="resource-icon">
+                                    <i class="fas fa-file-word"></i>
+                                </div>
+                                <div class="resource-info">
+                                    <h4>프롬프트 템플릿 모음.docx</h4>
+                                    <span class="resource-size">1.5 MB</span>
+                                </div>
+                                <button class="btn-download">
+                                    <i class="fas fa-download"></i> 다운로드
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Q&A 탭 -->
+                <div class="tab-pane" id="qa">
+                    <div class="qa-section">
+                        <div class="qa-form">
+                            <h3>질문하기</h3>
+                            <textarea placeholder="강의 내용에 대해 궁금한 점을 질문해주세요"></textarea>
+                            <button class="btn-submit-question">
+                                <i class="fas fa-paper-plane"></i> 질문 등록
+                            </button>
+                        </div>
+
+                        <div class="qa-list">
+                            <h3>다른 수강생들의 질문</h3>
+                            <div class="qa-item">
+                                <div class="question">
+                                    <div class="qa-header">
+                                        <span class="qa-author">김민수</span>
+                                        <span class="qa-date">2일 전</span>
+                                    </div>
+                                    <p>ChatGPT Plus 구독이 꼭 필요한가요?</p>
+                                </div>
+                                <div class="answer">
+                                    <div class="qa-header">
+                                        <span class="qa-author instructor">
+                                            <i class="fas fa-check-circle"></i> 김민준 강사
+                                        </span>
+                                        <span class="qa-date">1일 전</span>
+                                    </div>
+                                    <p>아니요, 무료 버전으로도 충분히 학습 가능합니다. 
+                                    다만 Plus 버전은 응답 속도가 빠르고 GPT-4를 사용할 수 있다는 장점이 있습니다.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 하단 네비게이션 -->
+            <div class="bottom-navigation">
+                <button class="btn-prev-lesson">
+                    <i class="fas fa-chevron-left"></i> 이전 강의
+                </button>
+                <button class="btn-complete-lesson">
+                    <i class="fas fa-check"></i> 완료하고 다음으로
+                </button>
+            </div>
+        </main>
+    </div>
+
+    <script src="course-player.js"></script>
+</body>
+</html>
