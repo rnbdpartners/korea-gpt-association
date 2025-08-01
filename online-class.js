@@ -212,6 +212,20 @@ document.addEventListener('DOMContentLoaded', function() {
         observer.observe(el);
     });
     
+    // 강의 카드 클릭 시 상세 페이지로 이동
+    const courseCards = document.querySelectorAll('.course-card');
+    courseCards.forEach(card => {
+        card.addEventListener('click', function(e) {
+            // 버튼 클릭이 아닌 경우에만 상세 페이지로 이동
+            if (!e.target.closest('.btn-cart, .btn-enroll, .btn-preview')) {
+                window.location.href = 'course-detail.html';
+            }
+        });
+        
+        // 커서 포인터 스타일 추가
+        card.style.cursor = 'pointer';
+    });
+    
     // 실시간 수강생 수 업데이트 (데모용)
     updateLiveStats();
 });
