@@ -3345,3 +3345,68 @@
         padding: 1rem 1rem 0.5rem;
     }
 }
+
+/* 교육 일정 관리 섹션 */
+.education-summary .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.recent-schedules {
+    background: var(--admin-bg-primary);
+    border-radius: 12px;
+    padding: 1.5rem;
+}
+
+.recent-schedules h3 {
+    font-size: 1.125rem;
+    color: var(--admin-text-primary);
+    margin-bottom: 1rem;
+}
+
+.education-notice {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.education-notice i {
+    font-size: 1.125rem;
+}
+
+/* 상태 배지 추가 스타일 */
+.status-badge.pending {
+    background: rgba(251, 146, 60, 0.1);
+    color: #f59e0b;
+}
+
+.status-badge.processing {
+    background: rgba(59, 130, 246, 0.1);
+    color: #3b82f6;
+}
+
+.status-badge.completed {
+    background: rgba(16, 185, 129, 0.1);
+    color: #10b981;
+}
+
+/* 콘텐츠 편집 안내 */
+.content-editor-notice {
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    background: #e8f5e9;
+    border-radius: 8px;
+    border: 1px solid #4CAF50;
+}
+
+.content-editor-notice h4 {
+    margin: 0 0 0.5rem 0;
+    color: #2e7d32;
+}
+
+.content-editor-notice p {
+    margin: 0;
+    color: #388e3c;
+}

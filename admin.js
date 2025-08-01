@@ -98,6 +98,7 @@ document.addEventListener('DOMContentLoaded', function() {
     setupFileUpload();
     setupCustomerManagement();
     setupSupportSystem();
+    setupEducationManagement();
     setupTicketManagement();
     setupContentManagement();
     setupMediaLibrary();
@@ -3793,6 +3794,82 @@ function loadSupportActivity() {
             </div>
         </div>
     `).join('');
+}
+
+// 교육 일정 관리
+function setupEducationManagement() {
+    // 교육 관리 시스템 데이터 로드
+    loadEducationSummary();
+    loadRecentEducationSchedules();
+}
+
+function loadEducationSummary() {
+    // 교육 일정 통계 업데이트
+    const totalSchedules = document.getElementById('totalEducationSchedules');
+    const activeInstructors = document.getElementById('activeInstructors');
+    const totalStudents = document.getElementById('totalStudents');
+    const corporateClients = document.getElementById('corporateClients');
+    
+    if (totalSchedules) totalSchedules.textContent = '12';
+    if (activeInstructors) activeInstructors.textContent = '5';
+    if (totalStudents) totalStudents.textContent = '248';
+    if (corporateClients) corporateClients.textContent = '8';
+}
+
+function loadRecentEducationSchedules() {
+    const schedulesTable = document.getElementById('recentEducationSchedules');
+    if (!schedulesTable) return;
+    
+    // 샘플 교육 일정 데이터
+    const schedules = [
+        {
+            name: 'AI 프롬프트 엔지니어링 기초',
+            instructor: '김철수',
+            datetime: '2024-01-25 14:00',
+            location: '온라인',
+            students: 25,
+            status: '모집중'
+        },
+        {
+            name: 'ChatGPT 비즈니스 활용',
+            instructor: '이영희',
+            datetime: '2024-01-28 10:00',
+            location: '강남센터',
+            students: 15,
+            status: '확정'
+        },
+        {
+            name: '기업 맞춤형 AI 교육',
+            instructor: '박민수',
+            datetime: '2024-02-01 09:00',
+            location: '삼성전자 사내',
+            students: 30,
+            status: '진행중'
+        }
+    ];
+    
+    schedulesTable.innerHTML = schedules.map(schedule => `
+        <tr>
+            <td>${schedule.name}</td>
+            <td>${schedule.instructor}</td>
+            <td>${schedule.datetime}</td>
+            <td>${schedule.location}</td>
+            <td>${schedule.students}명</td>
+            <td>
+                <span class="status-badge ${getStatusClass(schedule.status)}">${schedule.status}</span>
+            </td>
+        </tr>
+    `).join('');
+}
+
+function getStatusClass(status) {
+    const statusClasses = {
+        '모집중': 'pending',
+        '확정': 'active',
+        '진행중': 'processing',
+        '완료': 'completed'
+    };
+    return statusClasses[status] || 'default';
 }
 
 // 티켓 관리
