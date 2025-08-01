@@ -4,28 +4,417 @@
 let isEditMode = false;
 let currentEditingElement = null;
 
+// 데이터 저장소
+let dashboardData = {};
+let requestsData = [];
+let membersData = [];
+let instructorsData = [];
+
 // 페이지 로드 시 초기화
 document.addEventListener('DOMContentLoaded', function() {
     checkAdminAccess();
+    loadDashboardData();
     initializeEditMode();
     makeElementsEditable();
+    setupTabNavigation();
 });
 
 // 관리자 접근 권한 확인
 function checkAdminAccess() {
-    const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
-    const isLoggedIn = sessionStorage.getItem('isLoggedIn') === 'true';
-    
-    if (!isLoggedIn) {
-        alert('로그인이 필요합니다.');
+    if (!authAPI.isLoggedIn() || !authAPI.isAdmin()) {
+        alert('관리자 권한이 필요합니다.');
         window.location.href = 'login.html';
         return;
     }
+}
+
+// 대시보드 데이터 로드
+async function loadDashboardData() {
+    try {
+        dashboardData = await adminAPI.getDashboard();
+        updateDashboardStats();
+        await loadRequestsData();
+        await loadMembersData();
+        await loadInstructorsData();
+    } catch (error) {
+        console.error('Dashboard data loading failed:', error);
+        showNotification('데이터 로딩 중 오류가 발생했습니다.', 'error');
+    }
+}
+
+// 대시보드 통계 업데이트
+function updateDashboardStats() {
+    const stats = [
+        { id: 'total-requests', value: dashboardData.totalRequests || 0 },
+        { id: 'pending-requests', value: dashboardData.pendingRequests || 0 },
+        { id: 'completed-requests', value: dashboardData.completedRequests || 0 },
+        { id: 'total-members', value: dashboardData.totalMembers || 0 },
+        { id: 'total-instructors', value: dashboardData.totalInstructors || 0 }
+    ];
+
+    stats.forEach(stat => {
+        const element = document.getElementById(stat.id);
+        if (element) {
+            element.textContent = stat.value;
+        }
+    });
+}
+
+// 교육 신청 데이터 로드
+async function loadRequestsData() {
+    try {
+        const response = await adminAPI.getRequests({ limit: 100 });
+        requestsData = response.requests || [];
+        updateRequestsTable();
+    } catch (error) {
+        console.error('Requests data loading failed:', error);
+    }
+}
+
+// 회원 데이터 로드
+async function loadMembersData() {
+    try {
+        const response = await adminAPI.getMembers({ limit: 100 });
+        membersData = response.members || [];
+        updateMembersTable();
+    } catch (error) {
+        console.error('Members data loading failed:', error);
+    }
+}
+
+// 강사 데이터 로드
+async function loadInstructorsData() {
+    try {
+        instructorsData = await instructorAPI.getInstructors();
+        updateInstructorsTable();
+    } catch (error) {
+        console.error('Instructors data loading failed:', error);
+    }
+}
+
+// 교육 신청 테이블 업데이트
+function updateRequestsTable() {
+    const tableBody = document.querySelector('#requests-table tbody');
+    if (!tableBody) return;
+
+    tableBody.innerHTML = '';
     
-    if (currentUser.role !== 'admin') {
-        alert('관리자 권한이 필요합니다.');
-        window.location.href = 'index.html';
-        return;
+    requestsData.forEach(request => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${request.requestNumber}</td>
+            <td>${request.enterpriseMember?.companyName || '-'}</td>
+            <td>${request.program?.programName || '-'}</td>
+            <td>${request.participantsCount}명</td>
+            <td><span class="status-badge status-${request.status}">${getStatusText(request.status)}</span></td>
+            <td>${formatDate(request.createdAt)}</td>
+            <td>
+                <button class="btn-sm btn-primary" onclick="viewRequest(${request.id})">상세보기</button>
+                <button class="btn-sm btn-secondary" onclick="updateRequestStatus(${request.id})">상태변경</button>
+            </td>
+        `;
+        tableBody.appendChild(row);
+    });
+}
+
+// 회원 테이블 업데이트
+function updateMembersTable() {
+    const tableBody = document.querySelector('#members-table tbody');
+    if (!tableBody) return;
+
+    tableBody.innerHTML = '';
+    
+    membersData.forEach(member => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${member.companyName}</td>
+            <td>${member.managerName}</td>
+            <td>${member.email}</td>
+            <td>${member.phone}</td>
+            <td><span class="status-badge ${member.isActive ? 'status-active' : 'status-inactive'}">${member.isActive ? '활성' : '비활성'}</span></td>
+            <td>${formatDate(member.createdAt)}</td>
+            <td>
+                <button class="btn-sm btn-secondary" onclick="toggleMemberStatus(${member.id})">${member.isActive ? '비활성화' : '활성화'}</button>
+            </td>
+        `;
+        tableBody.appendChild(row);
+    });
+}
+
+// 강사 테이블 업데이트
+function updateInstructorsTable() {
+    const tableBody = document.querySelector('#instructors-table tbody');
+    if (!tableBody) return;
+
+    tableBody.innerHTML = '';
+    
+    instructorsData.forEach(instructor => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${instructor.name}</td>
+            <td>${instructor.email}</td>
+            <td>${instructor.phone}</td>
+            <td>${instructor.carModel || '-'} (${instructor.carNumber || '-'})</td>
+            <td>${instructor.specialty || '-'}</td>
+            <td><span class="status-badge ${instructor.isActive ? 'status-active' : 'status-inactive'}">${instructor.isActive ? '활성' : '비활성'}</span></td>
+            <td>
+                <button class="btn-sm btn-primary" onclick="viewInstructorProfile(${instructor.id})">프로필</button>
+                <button class="btn-sm btn-secondary" onclick="manageInstructorSchedule(${instructor.id})">일정관리</button>
+            </td>
+        `;
+        tableBody.appendChild(row);
+    });
+}
+
+// 탭 네비게이션 설정
+function setupTabNavigation() {
+    const tabButtons = document.querySelectorAll('.tab-button');
+    const tabContents = document.querySelectorAll('.tab-content');
+
+    tabButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const targetTab = button.dataset.tab;
+            
+            // 모든 탭 버튼과 컨텐츠 비활성화
+            tabButtons.forEach(btn => btn.classList.remove('active'));
+            tabContents.forEach(content => content.classList.remove('active'));
+            
+            // 선택된 탭 활성화
+            button.classList.add('active');
+            document.getElementById(targetTab).classList.add('active');
+        });
+    });
+}
+
+// 유틸리티 함수들
+function getStatusText(status) {
+    const statusMap = {
+        'pending': '대기중',
+        'quote_sent': '견적발송',
+        'date_selecting': '날짜선택중',
+        'confirmed': '확정',
+        'document_pending': '서류대기',
+        'completed': '완료',
+        'cancelled': '취소'
+    };
+    return statusMap[status] || status;
+}
+
+function formatDate(dateString) {
+    if (!dateString) return '-';
+    const date = new Date(dateString);
+    return date.toLocaleDateString('ko-KR');
+}
+
+function showNotification(message, type = 'info') {
+    // 간단한 알림 표시
+    const notification = document.createElement('div');
+    notification.className = `notification notification-${type}`;
+    notification.textContent = message;
+    notification.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        padding: 12px 20px;
+        background: ${type === 'error' ? '#f44336' : '#4CAF50'};
+        color: white;
+        border-radius: 4px;
+        z-index: 1000;
+    `;
+    
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
+        notification.remove();
+    }, 3000);
+}
+
+// 신청 상세보기
+async function viewRequest(requestId) {
+    try {
+        const request = await adminAPI.getRequest(requestId);
+        showRequestModal(request);
+    } catch (error) {
+        showNotification('신청 정보를 불러오는데 실패했습니다.', 'error');
+    }
+}
+
+// 신청 상태 변경
+async function updateRequestStatus(requestId) {
+    const newStatus = prompt('새로운 상태를 입력하세요:\npending, quote_sent, date_selecting, confirmed, document_pending, completed, cancelled');
+    
+    if (!newStatus) return;
+    
+    try {
+        await adminAPI.updateRequestStatus(requestId, newStatus);
+        showNotification('상태가 변경되었습니다.');
+        loadRequestsData();
+    } catch (error) {
+        showNotification('상태 변경에 실패했습니다.', 'error');
+    }
+}
+
+// 회원 상태 토글
+async function toggleMemberStatus(memberId) {
+    try {
+        await adminAPI.toggleMemberStatus(memberId);
+        showNotification('회원 상태가 변경되었습니다.');
+        loadMembersData();
+    } catch (error) {
+        showNotification('회원 상태 변경에 실패했습니다.', 'error');
+    }
+}
+
+// 강사 프로필 보기
+function viewInstructorProfile(instructorId) {
+    const instructor = instructorsData.find(i => i.id === instructorId);
+    if (instructor) {
+        showInstructorModal(instructor);
+    }
+}
+
+// 강사 일정 관리
+function manageInstructorSchedule(instructorId) {
+    // 강사 일정 관리 모달이나 페이지 열기
+    window.open(`instructor-schedule.html?id=${instructorId}`, '_blank');
+}
+
+// 신청 상세 모달 표시
+function showRequestModal(request) {
+    const modal = document.createElement('div');
+    modal.className = 'modal-overlay';
+    modal.innerHTML = `
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>교육 신청 상세정보</h3>
+                <button class="modal-close" onclick="this.closest('.modal-overlay').remove()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="request-details">
+                    <p><strong>신청번호:</strong> ${request.requestNumber}</p>
+                    <p><strong>기업명:</strong> ${request.enterpriseMember?.companyName}</p>
+                    <p><strong>담당자:</strong> ${request.enterpriseMember?.managerName}</p>
+                    <p><strong>프로그램:</strong> ${request.program?.programName}</p>
+                    <p><strong>참가인원:</strong> ${request.participantsCount}명</p>
+                    <p><strong>교육형태:</strong> ${request.educationType}</p>
+                    <p><strong>상태:</strong> ${getStatusText(request.status)}</p>
+                    <p><strong>신청일:</strong> ${formatDate(request.createdAt)}</p>
+                </div>
+                ${request.preferredDates && request.preferredDates.length > 0 ? `
+                    <div class="preferred-dates">
+                        <h4>희망 날짜</h4>
+                        ${request.preferredDates.map(date => 
+                            `<p>${date.priority}순위: ${formatDate(date.preferredDate)}</p>`
+                        ).join('')}
+                    </div>
+                ` : ''}
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="this.closest('.modal-overlay').remove()">닫기</button>
+                <button class="btn btn-primary" onclick="confirmScheduleModal(${request.id})">일정 확정</button>
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(modal);
+}
+
+// 강사 상세 모달 표시
+function showInstructorModal(instructor) {
+    const modal = document.createElement('div');
+    modal.className = 'modal-overlay';
+    modal.innerHTML = `
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>강사 정보</h3>
+                <button class="modal-close" onclick="this.closest('.modal-overlay').remove()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="instructor-details">
+                    <p><strong>이름:</strong> ${instructor.name}</p>
+                    <p><strong>이메일:</strong> ${instructor.email}</p>
+                    <p><strong>연락처:</strong> ${instructor.phone}</p>
+                    <p><strong>생년월일:</strong> ${formatDate(instructor.birthDate)}</p>
+                    <p><strong>차량:</strong> ${instructor.carModel || '-'} (${instructor.carNumber || '-'})</p>
+                    <p><strong>전문분야:</strong> ${instructor.specialty || '-'}</p>
+                    <p><strong>시급:</strong> ${instructor.hourlyRate ? instructor.hourlyRate + '원' : '-'}</p>
+                    ${instructor.bio ? `<p><strong>소개:</strong> ${instructor.bio}</p>` : ''}
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="this.closest('.modal-overlay').remove()">닫기</button>
+                <button class="btn btn-primary" onclick="editInstructor(${instructor.id})">수정</button>
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(modal);
+}
+
+// 일정 확정 모달
+function confirmScheduleModal(requestId) {
+    const modal = document.createElement('div');
+    modal.className = 'modal-overlay';
+    modal.innerHTML = `
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>교육 일정 확정</h3>
+                <button class="modal-close" onclick="this.closest('.modal-overlay').remove()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="confirm-schedule-form">
+                    <div class="form-group">
+                        <label>확정 날짜</label>
+                        <input type="date" name="confirmedDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label>시작 시간</label>
+                        <input type="time" name="startTime" required>
+                    </div>
+                    <div class="form-group">
+                        <label>종료 시간</label>
+                        <input type="time" name="endTime" required>
+                    </div>
+                    <div class="form-group">
+                        <label>장소</label>
+                        <input type="text" name="location" placeholder="오프라인 교육 장소">
+                    </div>
+                    <div class="form-group">
+                        <label>온라인 링크</label>
+                        <input type="url" name="onlineLink" placeholder="온라인 교육 링크">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="this.closest('.modal-overlay').remove()">취소</button>
+                <button class="btn btn-primary" onclick="submitScheduleConfirmation(${requestId})">확정</button>
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(modal);
+}
+
+// 일정 확정 제출
+async function submitScheduleConfirmation(requestId) {
+    const form = document.getElementById('confirm-schedule-form');
+    const formData = new FormData(form);
+    
+    const scheduleData = {
+        confirmedDate: formData.get('confirmedDate'),
+        startTime: formData.get('startTime'),
+        endTime: formData.get('endTime'),
+        location: formData.get('location'),
+        onlineLink: formData.get('onlineLink')
+    };
+    
+    try {
+        await adminAPI.confirmSchedule(requestId, scheduleData);
+        showNotification('일정이 확정되었습니다.');
+        document.querySelector('.modal-overlay').remove();
+        loadRequestsData();
+    } catch (error) {
+        showNotification('일정 확정에 실패했습니다.', 'error');
     }
 }
 
