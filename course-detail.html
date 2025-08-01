@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChatGPT 첫걸음: 30분 만에 시작하기 | 한국GPT협회</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="course-detail.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- 헤더 -->
+    <header class="header">
+        <nav class="navbar">
+            <div class="container">
+                <div class="nav-brand">
+                    <h1><a href="index.html" class="logo">한국GPT협회</a></h1>
+                </div>
+                <div class="nav-menu">
+                    <ul class="nav-links">
+                        <li><a href="online-class.html" class="active">온라인 클래스</a></li>
+                        <li><a href="offline-class.html">오프라인 클래스</a></li>
+                        <li><a href="community.html">학습 커뮤니티</a></li>
+                        <li><a href="my-classroom.html">내 강의실</a></li>
+                        <li><a href="enterprise.html">기업교육</a></li>
+                    </ul>
+                    <div class="nav-actions">
+                        <a href="checkout.html" class="btn-cart-icon">
+                            <i class="fas fa-shopping-cart"></i>
+                            <span class="cart-count">0</span>
+                        </a>
+                        <a href="login.html" class="btn-login">로그인</a>
+                        <a href="my-classroom.html" class="btn-dashboard">
+                            <i class="fas fa-user-circle"></i> 강의실
+                        </a>
+                    </div>
+                </div>
+                <button class="mobile-menu-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- 브레드크럼 -->
+    <section class="breadcrumb">
+        <div class="container">
+            <nav class="breadcrumb-nav">
+                <a href="index.html">홈</a>
+                <i class="fas fa-chevron-right"></i>
+                <a href="online-class.html">온라인 클래스</a>
+                <i class="fas fa-chevron-right"></i>
+                <span class="current">ChatGPT 첫걸음</span>
+            </nav>
+        </div>
+    </section>
+
+    <!-- 강의 메인 정보 -->
+    <section class="course-main">
+        <div class="container">
+            <div class="course-main-content">
+                <!-- 강의 소개 -->
+                <div class="course-intro">
+                    <div class="course-badges">
+                        <span class="badge badge-bestseller">BEST</span>
+                        <span class="badge badge-beginner">입문자용</span>
+                        <span class="badge badge-new">NEW</span>
+                    </div>
+                    
+                    <h1 class="course-title">ChatGPT 첫걸음: 30분 만에 시작하기</h1>
+                    <p class="course-subtitle">계정 만들기부터 첫 대화까지, AI와 친해지는 가장 쉬운 방법</p>
+                    
+                    <div class="course-meta">
+                        <div class="meta-item">
+                            <i class="fas fa-user"></i>
+                            <span>김민준 강사</span>
+                        </div>
+                        <div class="meta-item">
+                            <i class="fas fa-clock"></i>
+                            <span>총 3시간</span>
+                        </div>
+                        <div class="meta-item">
+                            <i class="fas fa-video"></i>
+                            <span>15개 강의</span>
+                        </div>
+                        <div class="meta-item">
+                            <i class="fas fa-globe"></i>
+                            <span>한국어</span>
+                        </div>
+                    </div>
+                    
+                    <div class="course-stats">
+                        <div class="rating">
+                            <div class="stars">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <span class="rating-score">5.0</span>
+                            <span class="rating-count">(1,234개 평가)</span>
+                        </div>
+                        <div class="students">
+                            <i class="fas fa-users"></i>
+                            <span>2,150명이 수강했어요</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 강의 미리보기 비디오 -->
+                <div class="course-preview">
+                    <div class="preview-video">
+                        <img src="https://via.placeholder.com/500x300" alt="강의 미리보기">
+                        <button class="play-button" id="previewPlay">
+                            <i class="fas fa-play"></i>
+                        </button>
+                        <div class="video-duration">미리보기 3분</div>
+                    </div>
+                    
+                    <div class="course-purchase">
+                        <div class="price-section">
+                            <div class="price-original">66,000원</div>
+                            <div class="price-discount">
+                                <span class="discount-rate">50% 할인</span>
+                                <span class="price-current">33,000원</span>
+                            </div>
+                            <div class="discount-timer">
+                                <i class="fas fa-clock"></i>
+                                <span>할인 종료까지 2일 15시간</span>
+                            </div>
+                        </div>
+                        
+                        <div class="purchase-buttons">
+                            <button class="btn-enroll-now">
+                                <i class="fas fa-play-circle"></i>
+                                지금 바로 수강하기
+                            </button>
+                            <button class="btn-add-cart">
+                                <i class="fas fa-shopping-cart"></i>
+                                장바구니 담기
+                            </button>
+                        </div>
+                        
+                        <div class="course-benefits">
+                            <div class="benefit-item">
+                                <i class="fas fa-infinity"></i>
+                                <span>평생 소장</span>
+                            </div>
+                            <div class="benefit-item">
+                                <i class="fas fa-mobile-alt"></i>
+                                <span>모바일 시청</span>
+                            </div>
+                            <div class="benefit-item">
+                                <i class="fas fa-certificate"></i>
+                                <span>수료증 발급</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 강의 상세 탭 -->
+    <section class="course-details">
+        <div class="container">
+            <div class="detail-tabs">
+                <button class="tab-btn active" data-tab="overview">
+                    <i class="fas fa-info-circle"></i> 강의소개
+                </button>
+                <button class="tab-btn" data-tab="curriculum">
+                    <i class="fas fa-list"></i> 커리큘럼
+                </button>
+                <button class="tab-btn" data-tab="instructor">
+                    <i class="fas fa-user-tie"></i> 강사소개
+                </button>
+                <button class="tab-btn" data-tab="reviews">
+                    <i class="fas fa-star"></i> 수강후기
+                </button>
+                <button class="tab-btn" data-tab="faq">
+                    <i class="fas fa-question-circle"></i> FAQ
+                </button>
+            </div>
+
+            <div class="tab-content">
+                <!-- 강의소개 탭 -->
+                <div class="tab-pane active" id="overview">
+                    <div class="overview-content">
+                        <h2>이런 걸 배워요</h2>
+                        <div class="learning-objectives">
+                            <div class="objective-item">
+                                <i class="fas fa-check-circle"></i>
+                                <span>ChatGPT 계정 생성부터 기본 사용법까지</span>
+                            </div>
+                            <div class="objective-item">
+                                <i class="fas fa-check-circle"></i>
+                                <span>효과적인 프롬프트 작성하는 방법</span>
+                            </div>
+                            <div class="objective-item">
+                                <i class="fas fa-check-circle"></i>
+                                <span>일상 업무에 ChatGPT 활용하기</span>
+                            </div>
+                            <div class="objective-item">
+                                <i class="fas fa-check-circle"></i>
+                                <span>ChatGPT의 한계와 주의사항 이해하기</span>
+                            </div>
+                        </div>
+
+                        <h2>강의 설명</h2>
+                        <div class="course-description">
+                            <p>
+                                <strong>AI 시대, 아직도 혼자 모든 걸 하고 계신가요?</strong>
+                            </p>
+                            <p>
+                                ChatGPT는 단순한 챗봇이 아닙니다. 당신의 업무 효율을 200% 높여줄 수 있는 
+                                강력한 AI 비서입니다. 하지만 많은 사람들이 ChatGPT를 제대로 활용하지 못하고 있어요.
+                            </p>
+                            <p>
+                                이 강의에서는 ChatGPT를 처음 접하는 분들도 쉽게 따라할 수 있도록 
+                                계정 생성부터 실전 활용까지 단계별로 알려드립니다.
+                            </p>
+                            
+                            <h3>🎯 이런 분께 추천해요</h3>
+                            <ul class="recommend-list">
+                                <li>ChatGPT를 들어는 봤지만 어떻게 시작해야 할지 모르는 분</li>
+                                <li>AI 도구를 업무에 활용하고 싶은 직장인</li>
+                                <li>반복적인 작업을 자동화하고 싶은 분</li>
+                                <li>새로운 기술에 관심이 많은 모든 분</li>
+                            </ul>
+
+                            <h3>📚 준비물</h3>
+                            <ul class="prepare-list">
+                                <li>인터넷이 연결된 컴퓨터 또는 스마트폰</li>
+                                <li>이메일 주소 (계정 생성용)</li>
+                                <li>학습 의지만 있으면 OK!</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 커리큘럼 탭 -->
+                <div class="tab-pane" id="curriculum">
+                    <div class="curriculum-content">
+                        <div class="curriculum-header">
+                            <h2>전체 15개 강의 · 총 3시간</h2>
+                            <p>모든 강의를 순서대로 수강하시면 ChatGPT 활용법을 완전히 마스터할 수 있어요.</p>
+                        </div>
+
+                        <div class="curriculum-sections">
+                            <!-- 섹션 1 -->
+                            <div class="curriculum-section">
+                                <div class="section-header">
+                                    <h3>
+                                        <i class="fas fa-play-circle"></i>
+                                        섹션 1. ChatGPT 시작하기 (5강)
+                                    </h3>
+                                    <span class="section-duration">1시간 15분</span>
+                                </div>
+                                <div class="section-lessons">
+                                    <div class="lesson-item">
+                                        <div class="lesson-info">
+                                            <div class="lesson-title">
+                                                <i class="fas fa-play"></i>
+                                                1강. ChatGPT란 무엇인가?
+                                            </div>
+                                            <div class="lesson-duration">10:23</div>
+                                        </div>
+                                        <button class="btn-preview">미리보기</button>
+                                    </div>
+                                    <div class="lesson-item">
+                                        <div class="lesson-info">
+                                            <div class="lesson-title">
+                                                <i class="fas fa-play"></i>
+                                                2강. 계정 생성하고 로그인하기
+                                            </div>
+                                            <div class="lesson-duration">8:15</div>
+                                        </div>
+                                        <button class="btn-preview">미리보기</button>
+                                    </div>
+                                    <div class="lesson-item">
+                                        <div class="lesson-info">
+                                            <div class="lesson-title">
+                                                <i class="fas fa-lock"></i>
+                                                3강. 첫 대화 시작하기
+                                            </div>
+                                            <div class="lesson-duration">12:30</div>
+                                        </div>
+                                    </div>
+                                    <div class="lesson-item">
+                                        <div class="lesson-info">
+                                            <div class="lesson-title">
+                                                <i class="fas fa-lock"></i>
+                                                4강. 기본 인터페이스 이해하기
+                                            </div>
+                                            <div class="lesson-duration">15:20</div>
+                                        </div>
+                                    </div>
+                                    <div class="lesson-item">
+                                        <div class="lesson-info">
+                                            <div class="lesson-title">
+                                                <i class="fas fa-lock"></i>
+                                                5강. 무료 vs 유료 버전 비교
+                                            </div>
+                                            <div class="lesson-duration">18:45</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 섹션 2 -->
+                            <div class="curriculum-section">
+                                <div class="section-header">
+                                    <h3>
+                                        <i class="fas fa-play-circle"></i>
+                                        섹션 2. 효과적인 프롬프트 작성법 (5강)
+                                    </h3>
+                                    <span class="section-duration">1시간 20분</span>
+                                </div>
+                                <div class="section-lessons collapsed">
+                                    <div class="lesson-item">
+                                        <div class="lesson-info">
+                                            <div class="lesson-title">
+                                                <i class="fas fa-lock"></i>
+                                                6강. 프롬프트란 무엇인가?
+                                            </div>
+                                            <div class="lesson-duration">12:10</div>
+                                        </div>
+                                    </div>
+                                    <div class="lesson-item">
+                                        <div class="lesson-info">
+                                            <div class="lesson-title">
+                                                <i class="fas fa-lock"></i>
+                                                7강. 명확한 질문 작성하기
+                                            </div>
+                                            <div class="lesson-duration">16:25</div>
+                                        </div>
+                                    </div>
+                                    <div class="lesson-item">
+                                        <div class="lesson-info">
+                                            <div class="lesson-title">
+                                                <i class="fas fa-lock"></i>
+                                                8강. 역할 설정하기 (Role Play)
+                                            </div>
+                                            <div class="lesson-duration">18:30</div>
+                                        </div>
+                                    </div>
+                                    <div class="lesson-item">
+                                        <div class="lesson-info">
+                                            <div class="lesson-title">
+                                                <i class="fas fa-lock"></i>
+                                                9강. 예시를 활용한 프롬프트
+                                            </div>
+                                            <div class="lesson-duration">20:15</div>
+                                        </div>
+                                    </div>
+                                    <div class="lesson-item">
+                                        <div class="lesson-info">
+                                            <div class="lesson-title">
+                                                <i class="fas fa-lock"></i>
+                                                10강. 프롬프트 개선하기
+                                            </div>
+                                            <div class="lesson-duration">22:40</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 섹션 3 -->
+                            <div class="curriculum-section">
+                                <div class="section-header">
+                                    <h3>
+                                        <i class="fas fa-play-circle"></i>
+                                        섹션 3. 실전 활용 사례 (5강)
+                                    </h3>
+                                    <span class="section-duration">25분</span>
+                                </div>
+                                <div class="section-lessons collapsed">
+                                    <div class="lesson-item">
+                                        <div class="lesson-info">
+                                            <div class="lesson-title">
+                                                <i class="fas fa-lock"></i>
+                                                11강. 이메일 작성하기
+                                            </div>
+                                            <div class="lesson-duration">8:20</div>
+                                        </div>
+                                    </div>
+                                    <div class="lesson-item">
+                                        <div class="lesson-info">
+                                            <div class="lesson-title">
+                                                <i class="fas fa-lock"></i>
+                                                12강. 문서 요약하기
+                                            </div>
+                                            <div class="lesson-duration">6:45</div>
+                                        </div>
+                                    </div>
+                                    <div class="lesson-item">
+                                        <div class="lesson-info">
+                                            <div class="lesson-title">
+                                                <i class="fas fa-lock"></i>
+                                                13강. 아이디어 브레인스토밍
+                                            </div>
+                                            <div class="lesson-duration">7:30</div>
+                                        </div>
+                                    </div>
+                                    <div class="lesson-item">
+                                        <div class="lesson-info">
+                                            <div class="lesson-title">
+                                                <i class="fas fa-lock"></i>
+                                                14강. 한계와 주의사항
+                                            </div>
+                                            <div class="lesson-duration">5:15</div>
+                                        </div>
+                                    </div>
+                                    <div class="lesson-item">
+                                        <div class="lesson-info">
+                                            <div class="lesson-title">
+                                                <i class="fas fa-lock"></i>
+                                                15강. 다음 단계로 나아가기
+                                            </div>
+                                            <div class="lesson-duration">8:10</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 강사소개 탭 -->
+                <div class="tab-pane" id="instructor">
+                    <div class="instructor-content">
+                        <div class="instructor-profile">
+                            <div class="instructor-avatar">
+                                <img src="https://via.placeholder.com/120x120" alt="김민준 강사">
+                            </div>
+                            <div class="instructor-info">
+                                <h2>김민준</h2>
+                                <p class="instructor-title">AI 교육 전문가 · 한국GPT협회 수석강사</p>
+                                <div class="instructor-stats">
+                                    <div class="stat-item">
+                                        <i class="fas fa-users"></i>
+                                        <span>15,480명 수강생</span>
+                                    </div>
+                                    <div class="stat-item">
+                                        <i class="fas fa-star"></i>
+                                        <span>4.9점 평점</span>
+                                    </div>
+                                    <div class="stat-item">
+                                        <i class="fas fa-play-circle"></i>
+                                        <span>25개 강의</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="instructor-bio">
+                            <h3>강사 소개</h3>
+                            <p>
+                                안녕하세요, AI 교육 전문가 김민준입니다. 
+                                저는 5년간 AI 기술을 연구하고 교육해온 전문가로, 
+                                복잡한 AI 기술을 누구나 쉽게 이해할 수 있도록 설명하는 것을 전문으로 합니다.
+                            </p>
+                            <p>
+                                특히 비개발자분들이 AI 도구를 실무에 바로 활용할 수 있도록 돕는 데 
+                                집중하고 있으며, 지금까지 15,000명 이상의 수강생들이 저의 강의를 통해 
+                                AI를 업무에 성공적으로 도입했습니다.
+                            </p>
+
+                            <h3>경력 및 이력</h3>
+                            <ul class="instructor-experience">
+                                <li>現 한국GPT협회 수석강사</li>
+                                <li>現 AI 교육 컨설팅 전문가</li>
+                                <li>前 네이버 AI 연구원 (3년)</li>
+                                <li>前 카카오 데이터 사이언티스트 (2년)</li>
+                                <li>서울대학교 컴퓨터공학 석사</li>
+                            </ul>
+
+                            <h3>저서 및 활동</h3>
+                            <ul class="instructor-books">
+                                <li>📚 「비개발자를 위한 ChatGPT 활용법」 (2024, 한빛미디어)</li>
+                                <li>📚 「AI 시대의 업무 혁신」 (2023, 길벗)</li>
+                                <li>🎤 TEDx Seoul "AI와 함께하는 미래" 연사 (2023)</li>
+                                <li>📺 KBS "AI 혁명 시대" 출연 (2024)</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 수강후기 탭 -->
+                <div class="tab-pane" id="reviews">
+                    <div class="reviews-content">
+                        <div class="reviews-summary">
+                            <div class="rating-overview">
+                                <div class="overall-rating">
+                                    <span class="rating-number">5.0</span>
+                                    <div class="rating-stars">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                    </div>
+                                    <span class="rating-text">강의 만족도</span>
+                                </div>
+                                <div class="rating-breakdown">
+                                    <div class="rating-bar">
+                                        <span>5점</span>
+                                        <div class="bar">
+                                            <div class="fill" style="width: 85%"></div>
+                                        </div>
+                                        <span>85%</span>
+                                    </div>
+                                    <div class="rating-bar">
+                                        <span>4점</span>
+                                        <div class="bar">
+                                            <div class="fill" style="width: 12%"></div>
+                                        </div>
+                                        <span>12%</span>
+                                    </div>
+                                    <div class="rating-bar">
+                                        <span>3점</span>
+                                        <div class="bar">
+                                            <div class="fill" style="width: 2%"></div>
+                                        </div>
+                                        <span>2%</span>
+                                    </div>
+                                    <div class="rating-bar">
+                                        <span>2점</span>
+                                        <div class="bar">
+                                            <div class="fill" style="width: 1%"></div>
+                                        </div>
+                                        <span>1%</span>
+                                    </div>
+                                    <div class="rating-bar">
+                                        <span>1점</span>
+                                        <div class="bar">
+                                            <div class="fill" style="width: 0%"></div>
+                                        </div>
+                                        <span>0%</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="reviews-list">
+                            <div class="review-item">
+                                <div class="review-header">
+                                    <div class="reviewer-info">
+                                        <div class="reviewer-avatar">
+                                            <img src="https://via.placeholder.com/40x40" alt="수강생">
+                                        </div>
+                                        <div class="reviewer-details">
+                                            <span class="reviewer-name">김**</span>
+                                            <span class="review-date">2024.11.28</span>
+                                        </div>
+                                    </div>
+                                    <div class="review-rating">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                    </div>
+                                </div>
+                                <div class="review-content">
+                                    <p>
+                                        완전 초보자도 쉽게 따라할 수 있게 설명해주셔서 너무 좋았어요! 
+                                        ChatGPT가 이렇게 유용한 줄 몰랐는데, 이제 매일 업무에 활용하고 있습니다. 
+                                        특히 이메일 작성할 때 정말 도움이 많이 돼요.
+                                    </p>
+                                </div>
+                                <div class="review-actions">
+                                    <button class="btn-helpful">
+                                        <i class="fas fa-thumbs-up"></i> 도움돼요 (24)
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="review-item">
+                                <div class="review-header">
+                                    <div class="reviewer-info">
+                                        <div class="reviewer-avatar">
+                                            <img src="https://via.placeholder.com/40x40" alt="수강생">
+                                        </div>
+                                        <div class="reviewer-details">
+                                            <span class="reviewer-name">박**</span>
+                                            <span class="review-date">2024.11.25</span>
+                                        </div>
+                                    </div>
+                                    <div class="review-rating">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                    </div>
+                                </div>
+                                <div class="review-content">
+                                    <p>
+                                        3시간짜리 강의지만 전혀 지루하지 않았어요. 
+                                        실습 위주로 진행되어서 바로바로 따라하면서 배울 수 있어서 좋았습니다. 
+                                        강사님 설명도 명확하고, 질문에 대한 답변도 친절하게 해주세요.
+                                    </p>
+                                </div>
+                                <div class="review-actions">
+                                    <button class="btn-helpful">
+                                        <i class="fas fa-thumbs-up"></i> 도움돼요 (18)
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="review-item">
+                                <div class="review-header">
+                                    <div class="reviewer-info">
+                                        <div class="reviewer-avatar">
+                                            <img src="https://via.placeholder.com/40x40" alt="수강생">
+                                        </div>
+                                        <div class="reviewer-details">
+                                            <span class="reviewer-name">이**</span>
+                                            <span class="review-date">2024.11.22</span>
+                                        </div>
+                                    </div>
+                                    <div class="review-rating">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="far fa-star"></i>
+                                    </div>
+                                </div>
+                                <div class="review-content">
+                                    <p>
+                                        ChatGPT를 처음 써보는데 정말 신기했어요! 
+                                        처음에는 어려울 줄 알았는데 강의를 듣고 나니 생각보다 간단하더라구요. 
+                                        회사에서 보고서 쓸 때 활용해봤는데 시간이 정말 많이 단축됐어요.
+                                    </p>
+                                </div>
+                                <div class="review-actions">
+                                    <button class="btn-helpful">
+                                        <i class="fas fa-thumbs-up"></i> 도움돼요 (31)
+                                    </button>
+                                </div>
+                            </div>
+
+                            <button class="btn-load-more">더 많은 후기 보기</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FAQ 탭 -->
+                <div class="tab-pane" id="faq">
+                    <div class="faq-content">
+                        <h2>자주 묻는 질문</h2>
+                        
+                        <div class="faq-list">
+                            <div class="faq-item">
+                                <button class="faq-question">
+                                    <span>정말 코딩을 전혀 몰라도 수강할 수 있나요?</span>
+                                    <i class="fas fa-chevron-down"></i>
+                                </button>
+                                <div class="faq-answer">
+                                    <p>
+                                        네, 전혀 문제없습니다! 이 강의는 완전 초보자를 위해 설계되었습니다. 
+                                        코딩 지식이 전혀 없어도 ChatGPT 웹사이트에서 클릭과 타이핑만으로 
+                                        모든 실습을 따라하실 수 있어요.
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="faq-item">
+                                <button class="faq-question">
+                                    <span>ChatGPT Plus 유료 구독이 꼭 필요한가요?</span>
+                                    <i class="fas fa-chevron-down"></i>
+                                </button>
+                                <div class="faq-answer">
+                                    <p>
+                                        무료 버전으로도 충분히 학습 가능합니다. 강의에서는 무료 버전을 기준으로 
+                                        설명하며, Plus 버전의 장점도 함께 소개해드립니다. 
+                                        학습 후 필요에 따라 업그레이드하시면 됩니다.
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="faq-item">
+                                <button class="faq-question">
+                                    <span>강의를 완주하는데 얼마나 걸리나요?</span>
+                                    <i class="fas fa-chevron-down"></i>
+                                </button>
+                                <div class="faq-answer">
+                                    <p>
+                                        총 강의 시간은 3시간이지만, 실습을 직접 따라하시면 약 4-5시간 정도 
+                                        소요될 것 같습니다. 하루에 1시간씩 투자하셔도 1주일이면 완주 가능해요!
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="faq-item">
+                                <button class="faq-question">
+                                    <span>모바일에서도 수강할 수 있나요?</span>
+                                    <i class="fas fa-chevron-down"></i>
+                                </button>
+                                <div class="faq-answer">
+                                    <p>
+                                        네, 모바일에서도 수강 가능합니다! 다만 ChatGPT 실습의 경우 
+                                        PC 환경에서 하시는 것을 추천드립니다. 강의 시청은 모바일로, 
+                                        실습은 PC로 하시면 가장 좋아요.
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="faq-item">
+                                <button class="faq-question">
+                                    <span>수료증은 어떻게 받나요?</span>
+                                    <i class="fas fa-chevron-down"></i>
+                                </button>
+                                <div class="faq-answer">
+                                    <p>
+                                        모든 강의를 완주하시면 자동으로 수료증이 발급됩니다. 
+                                        '내 강의실'에서 수료증을 다운로드 받으실 수 있으며, 
+                                        이력서나 포트폴리오에 활용하실 수 있어요.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 관련 강의 추천 -->
+    <section class="related-courses">
+        <div class="container">
+            <h2>이런 강의도 추천해요</h2>
+            <div class="courses-grid">
+                <div class="course-card mini">
+                    <div class="course-thumbnail">
+                        <img src="https://via.placeholder.com/200x120" alt="관련 강의">
+                        <div class="price-tag">132,000원</div>
+                    </div>
+                    <div class="course-info">
+                        <h3>GPT & AI 스탠다드: 업무 자동화의 모든 것</h3>
+                        <p class="instructor">이서연 강사</p>
+                        <div class="rating">
+                            <span class="stars">★★★★★</span>
+                            <span class="score">4.9 (523)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="course-card mini">
+                    <div class="course-thumbnail">
+                        <img src="https://via.placeholder.com/200x120" alt="관련 강의">
+                        <div class="price-tag">119,000원</div>
+                    </div>
+                    <div class="course-info">
+                        <h3>ChatGPT로 마케팅 자동화하기</h3>
+                        <p class="instructor">박지훈 강사</p>
+                        <div class="rating">
+                            <span class="stars">★★★★☆</span>
+                            <span class="score">4.7 (412)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="course-card mini">
+                    <div class="course-thumbnail">
+                        <img src="https://via.placeholder.com/200x120" alt="관련 강의">
+                        <div class="price-tag">69,000원</div>
+                    </div>
+                    <div class="course-info">
+                        <h3>엑셀 작업 10분 만에 끝내기: ChatGPT 활용법</h3>
+                        <p class="instructor">최은지 강사</p>
+                        <div class="rating">
+                            <span class="stars">★★★★★</span>
+                            <span class="score">4.8 (156)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 푸터 -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>한국GPT협회</h3>
+                    <p>비개발자를 위한 AI 교육 플랫폼</p>
+                </div>
+                <div class="footer-section">
+                    <h4>교육 과정</h4>
+                    <ul>
+                        <li><a href="online-class.html">온라인 클래스</a></li>
+                        <li><a href="offline-class.html">오프라인 클래스</a></li>
+                        <li><a href="enterprise.html">기업 교육</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>고객 지원</h4>
+                    <ul>
+                        <li><a href="#faq">자주 묻는 질문</a></li>
+                        <li><a href="#contact">1:1 문의</a></li>
+                        <li><a href="#refund">환불 정책</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>문의</h4>
+                    <p><i class="fas fa-phone"></i> 02-1234-5678</p>
+                    <p><i class="fas fa-envelope"></i> edu@koreangpt.org</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 한국GPT협회. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 미리보기 모달 -->
+    <div id="previewModal" class="modal">
+        <div class="modal-content preview-modal">
+            <button class="modal-close">&times;</button>
+            <div class="preview-video">
+                <iframe src="" frameborder="0" allowfullscreen></iframe>
+            </div>
+        </div>
+    </div>
+
+    <script src="course-detail.js"></script>
+</body>
+</html>
