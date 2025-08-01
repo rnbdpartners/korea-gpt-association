@@ -191,7 +191,10 @@ function saveToSecureStorage(key, data) {
         CSRFToken.store(data._csrf);
         
         // 데이터 암호화 (간단한 Base64, 실제로는 더 강력한 암호화 필요)
-        const encrypted = btoa(JSON.stringify(data));
+        // 한글 문자 처리를 위해 encodeURIComponent 사용
+        const jsonString = JSON.stringify(data);
+        const encoded = encodeURIComponent(jsonString);
+        const encrypted = btoa(encoded);
         
         // 세션 스토리지에 저장 (브라우저 종료 시 자동 삭제)
         sessionStorage.setItem(key, encrypted);
@@ -209,7 +212,10 @@ function loadFromSecureStorage(key) {
         const encrypted = sessionStorage.getItem(key);
         if (!encrypted) return null;
         
-        const data = JSON.parse(atob(encrypted));
+        // 한글 문자 처리를 위해 decodeURIComponent 사용
+        const decoded = atob(encrypted);
+        const jsonString = decodeURIComponent(decoded);
+        const data = JSON.parse(jsonString);
         
         // CSRF 토큰 검증
         if (!data._csrf || !CSRFToken.verify(data._csrf)) {

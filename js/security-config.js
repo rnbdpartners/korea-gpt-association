@@ -215,7 +215,10 @@ class SecureSessionManager {
         };
         
         // 세션 데이터 암호화 (간단한 Base64, 실제로는 더 강력한 암호화 필요)
-        const encrypted = btoa(JSON.stringify(sessionData));
+        // 한글 문자 처리를 위해 encodeURIComponent 사용
+        const jsonString = JSON.stringify(sessionData);
+        const encoded = encodeURIComponent(jsonString);
+        const encrypted = btoa(encoded);
         sessionStorage.setItem('secureSession', encrypted);
         
         // 세션 타임아웃 설정
@@ -227,7 +230,10 @@ class SecureSessionManager {
             const encrypted = sessionStorage.getItem('secureSession');
             if (!encrypted) return null;
             
-            const sessionData = JSON.parse(atob(encrypted));
+            // 한글 문자 처리를 위해 decodeURIComponent 사용
+            const decoded = atob(encrypted);
+            const jsonString = decodeURIComponent(decoded);
+            const sessionData = JSON.parse(jsonString);
             
             // 세션 만료 체크
             if (Date.now() - sessionData.lastActivity > SecurityConfig.sessionTimeout) {
@@ -237,7 +243,10 @@ class SecureSessionManager {
             
             // 활동 시간 업데이트
             sessionData.lastActivity = Date.now();
-            sessionStorage.setItem('secureSession', btoa(JSON.stringify(sessionData)));
+            // 한글 문자 처리를 위해 encodeURIComponent 사용
+            const updatedJson = JSON.stringify(sessionData);
+            const updatedEncoded = encodeURIComponent(updatedJson);
+            sessionStorage.setItem('secureSession', btoa(updatedEncoded));
             
             return sessionData;
         } catch (error) {
