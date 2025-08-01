@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>결제하기 | 한국GPT협회</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="checkout.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- 헤더 -->
+    <header class="header">
+        <nav class="navbar">
+            <div class="container">
+                <div class="nav-brand">
+                    <h1><a href="index.html" class="logo">한국GPT협회</a></h1>
+                </div>
+                <div class="checkout-steps">
+                    <div class="step active">
+                        <span class="step-number">1</span>
+                        <span class="step-label">장바구니</span>
+                    </div>
+                    <div class="step-line"></div>
+                    <div class="step">
+                        <span class="step-number">2</span>
+                        <span class="step-label">주문정보</span>
+                    </div>
+                    <div class="step-line"></div>
+                    <div class="step">
+                        <span class="step-number">3</span>
+                        <span class="step-label">결제완료</span>
+                    </div>
+                </div>
+                <div class="nav-actions">
+                    <a href="login.html" class="btn-login">
+                        <i class="fas fa-user-circle"></i> 로그인
+                    </a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- 결제 콘텐츠 -->
+    <section class="checkout-section">
+        <div class="container">
+            <div class="checkout-container">
+                <!-- 장바구니 단계 -->
+                <div class="checkout-step-content active" id="cart-step">
+                    <h2>장바구니</h2>
+                    
+                    <div class="cart-items">
+                        <!-- 장바구니 아이템 1 -->
+                        <div class="cart-item">
+                            <div class="item-image">
+                                <img src="https://via.placeholder.com/120x80" alt="강의 썸네일">
+                            </div>
+                            <div class="item-info">
+                                <h3>ChatGPT 첫걸음: 30분 만에 시작하기</h3>
+                                <p class="instructor">김민준 강사</p>
+                                <div class="item-meta">
+                                    <span><i class="fas fa-clock"></i> 총 3시간</span>
+                                    <span><i class="fas fa-video"></i> 15개 강의</span>
+                                    <span><i class="fas fa-infinity"></i> 평생 소장</span>
+                                </div>
+                            </div>
+                            <div class="item-price">
+                                <span class="original-price">66,000원</span>
+                                <span class="discount-rate">-50%</span>
+                                <div class="final-price">33,000원</div>
+                            </div>
+                            <button class="btn-remove" title="삭제">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+
+                        <!-- 장바구니 아이템 2 -->
+                        <div class="cart-item">
+                            <div class="item-image">
+                                <img src="https://via.placeholder.com/120x80" alt="강의 썸네일">
+                            </div>
+                            <div class="item-info">
+                                <h3>GPT & AI 스탠다드: 업무 자동화의 모든 것</h3>
+                                <p class="instructor">이서연 강사</p>
+                                <div class="item-meta">
+                                    <span><i class="fas fa-clock"></i> 총 16시간</span>
+                                    <span><i class="fas fa-video"></i> 57개 강의</span>
+                                    <span><i class="fas fa-gift"></i> 템플릿 57개</span>
+                                </div>
+                            </div>
+                            <div class="item-price">
+                                <span class="original-price">198,000원</span>
+                                <span class="discount-rate">-33%</span>
+                                <div class="final-price">132,000원</div>
+                            </div>
+                            <button class="btn-remove" title="삭제">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 쿠폰 입력 -->
+                    <div class="coupon-section">
+                        <h3>할인 쿠폰</h3>
+                        <div class="coupon-input">
+                            <input type="text" placeholder="쿠폰 코드를 입력하세요">
+                            <button class="btn-apply-coupon">적용</button>
+                        </div>
+                    </div>
+
+                    <!-- 결제 금액 요약 -->
+                    <div class="price-summary">
+                        <h3>결제 금액</h3>
+                        <div class="summary-item">
+                            <span>상품 금액</span>
+                            <span>264,000원</span>
+                        </div>
+                        <div class="summary-item">
+                            <span>할인 금액</span>
+                            <span class="discount">-99,000원</span>
+                        </div>
+                        <div class="summary-item coupon-discount" style="display: none;">
+                            <span>쿠폰 할인</span>
+                            <span class="discount">-0원</span>
+                        </div>
+                        <div class="summary-total">
+                            <span>최종 결제 금액</span>
+                            <span class="total-price">165,000원</span>
+                        </div>
+                    </div>
+
+                    <div class="checkout-buttons">
+                        <button class="btn-continue-shopping">
+                            <i class="fas fa-arrow-left"></i> 계속 쇼핑하기
+                        </button>
+                        <button class="btn-next-step">
+                            주문정보 입력 <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 주문정보 단계 -->
+                <div class="checkout-step-content" id="order-step">
+                    <h2>주문정보 입력</h2>
+                    
+                    <form class="order-form">
+                        <div class="form-section">
+                            <h3>구매자 정보</h3>
+                            <div class="form-group">
+                                <label for="buyer-name">이름 *</label>
+                                <input type="text" id="buyer-name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="buyer-email">이메일 *</label>
+                                <input type="email" id="buyer-email" required>
+                                <small>강의 수강 권한이 부여될 이메일입니다</small>
+                            </div>
+                            <div class="form-group">
+                                <label for="buyer-phone">휴대폰 번호 *</label>
+                                <input type="tel" id="buyer-phone" placeholder="010-1234-5678" required>
+                            </div>
+                        </div>
+
+                        <div class="form-section">
+                            <h3>결제 수단</h3>
+                            <div class="payment-methods">
+                                <label class="payment-method">
+                                    <input type="radio" name="payment" value="card" checked>
+                                    <div class="method-content">
+                                        <i class="fas fa-credit-card"></i>
+                                        <span>신용/체크카드</span>
+                                    </div>
+                                </label>
+                                <label class="payment-method">
+                                    <input type="radio" name="payment" value="kakao">
+                                    <div class="method-content">
+                                        <i class="fas fa-comment"></i>
+                                        <span>카카오페이</span>
+                                    </div>
+                                </label>
+                                <label class="payment-method">
+                                    <input type="radio" name="payment" value="naver">
+                                    <div class="method-content">
+                                        <i class="fas fa-n"></i>
+                                        <span>네이버페이</span>
+                                    </div>
+                                </label>
+                                <label class="payment-method">
+                                    <input type="radio" name="payment" value="transfer">
+                                    <div class="method-content">
+                                        <i class="fas fa-university"></i>
+                                        <span>실시간 계좌이체</span>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="form-section">
+                            <h3>현금영수증</h3>
+                            <div class="cash-receipt">
+                                <label class="radio-label">
+                                    <input type="radio" name="receipt" value="none" checked>
+                                    <span>신청 안함</span>
+                                </label>
+                                <label class="radio-label">
+                                    <input type="radio" name="receipt" value="personal">
+                                    <span>개인 소득공제</span>
+                                </label>
+                                <label class="radio-label">
+                                    <input type="radio" name="receipt" value="business">
+                                    <span>사업자 지출증빙</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="form-section">
+                            <h3>약관 동의</h3>
+                            <div class="agreement-list">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" id="agree-all">
+                                    <span>전체 동의</span>
+                                </label>
+                                <div class="sub-agreements">
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" class="agree-item" required>
+                                        <span>구매조건 확인 및 결제진행 동의 (필수)</span>
+                                        <a href="#" class="terms-link">보기</a>
+                                    </label>
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" class="agree-item" required>
+                                        <span>개인정보 제3자 제공 동의 (필수)</span>
+                                        <a href="#" class="terms-link">보기</a>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+
+                    <div class="order-summary">
+                        <h3>주문 내역</h3>
+                        <div class="order-items">
+                            <div class="order-item">
+                                <span>ChatGPT 첫걸음: 30분 만에 시작하기</span>
+                                <span>33,000원</span>
+                            </div>
+                            <div class="order-item">
+                                <span>GPT & AI 스탠다드: 업무 자동화의 모든 것</span>
+                                <span>132,000원</span>
+                            </div>
+                        </div>
+                        <div class="order-total">
+                            <span>총 결제 금액</span>
+                            <span class="total-amount">165,000원</span>
+                        </div>
+                    </div>
+
+                    <div class="checkout-buttons">
+                        <button class="btn-prev-step">
+                            <i class="fas fa-arrow-left"></i> 이전 단계
+                        </button>
+                        <button class="btn-payment">
+                            165,000원 결제하기
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 결제완료 단계 -->
+                <div class="checkout-step-content" id="complete-step">
+                    <div class="complete-container">
+                        <div class="complete-icon">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <h2>결제가 완료되었습니다!</h2>
+                        <p class="complete-message">
+                            한국GPT협회의 강의를 구매해주셔서 감사합니다.<br>
+                            지금 바로 학습을 시작하실 수 있습니다.
+                        </p>
+
+                        <div class="order-number">
+                            <span>주문번호</span>
+                            <strong>2024120112345678</strong>
+                        </div>
+
+                        <div class="complete-info">
+                            <h3>구매 내역</h3>
+                            <div class="purchase-list">
+                                <div class="purchase-item">
+                                    <div class="purchase-detail">
+                                        <h4>ChatGPT 첫걸음: 30분 만에 시작하기</h4>
+                                        <p>김민준 강사 · 총 3시간 · 15개 강의</p>
+                                    </div>
+                                    <button class="btn-start-learning">
+                                        학습 시작하기 <i class="fas fa-arrow-right"></i>
+                                    </button>
+                                </div>
+                                <div class="purchase-item">
+                                    <div class="purchase-detail">
+                                        <h4>GPT & AI 스탠다드: 업무 자동화의 모든 것</h4>
+                                        <p>이서연 강사 · 총 16시간 · 57개 강의</p>
+                                    </div>
+                                    <button class="btn-start-learning">
+                                        학습 시작하기 <i class="fas fa-arrow-right"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="email-notice">
+                            <i class="fas fa-envelope"></i>
+                            <p>구매 확인 이메일이 <strong>user@example.com</strong>으로 발송되었습니다.</p>
+                        </div>
+
+                        <div class="complete-buttons">
+                            <button class="btn-go-classroom">
+                                <i class="fas fa-graduation-cap"></i> 내 강의실 가기
+                            </button>
+                            <button class="btn-continue-browse">
+                                더 둘러보기
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 신뢰 배지 -->
+    <section class="trust-badges">
+        <div class="container">
+            <div class="badges-list">
+                <div class="badge-item">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>안전한 결제</span>
+                </div>
+                <div class="badge-item">
+                    <i class="fas fa-lock"></i>
+                    <span>SSL 암호화</span>
+                </div>
+                <div class="badge-item">
+                    <i class="fas fa-undo"></i>
+                    <span>7일 환불보장</span>
+                </div>
+                <div class="badge-item">
+                    <i class="fas fa-headset"></i>
+                    <span>고객지원</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 푸터 -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>한국GPT협회</h3>
+                    <p>비개발자를 위한 AI 교육 플랫폼</p>
+                </div>
+                <div class="footer-section">
+                    <h4>고객 지원</h4>
+                    <p><i class="fas fa-phone"></i> 02-1234-5678</p>
+                    <p><i class="fas fa-envelope"></i> support@koreangpt.org</p>
+                    <p><i class="fas fa-clock"></i> 평일 09:00 - 18:00</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 한국GPT협회. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="checkout.js"></script>
+</body>
+</html>

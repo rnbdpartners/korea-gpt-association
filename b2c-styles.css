@@ -606,6 +606,7 @@
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
+    text-decoration: none;
 }
 
 .path-cta:hover {
@@ -617,6 +618,7 @@
     background: var(--accent-color);
     color: white;
     border: none;
+    text-decoration: none;
 }
 
 .path-cta.primary:hover {

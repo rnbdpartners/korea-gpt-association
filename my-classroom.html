@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>내 강의실 | 한국GPT협회 - AI 학습 대시보드</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="my-classroom.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- 헤더 -->
+    <header class="header">
+        <nav class="navbar">
+            <div class="container">
+                <div class="nav-brand">
+                    <h1><a href="index.html" class="logo">한국GPT협회</a></h1>
+                </div>
+                <div class="nav-menu">
+                    <ul class="nav-links">
+                        <li><a href="online-class.html">온라인 클래스</a></li>
+                        <li><a href="offline-class.html">오프라인 클래스</a></li>
+                        <li><a href="community.html">학습 커뮤니티</a></li>
+                        <li><a href="my-classroom.html" class="active">내 강의실</a></li>
+                        <li><a href="enterprise.html">기업교육</a></li>
+                    </ul>
+                    <div class="nav-actions">
+                        <div class="user-profile">
+                            <img src="https://via.placeholder.com/40" alt="프로필">
+                            <span>김지은님</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <button class="btn-logout" onclick="logout()">로그아웃</button>
+                    </div>
+                </div>
+                <button class="mobile-menu-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- 대시보드 히어로 -->
+    <section class="dashboard-hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="welcome-message">
+                    <h1>안녕하세요, <span class="user-name">김지은</span>님! 👋</h1>
+                    <p>오늘도 AI와 함께 성장하는 하루 되세요</p>
+                </div>
+                <div class="streak-info">
+                    <div class="streak-badge">
+                        <i class="fas fa-fire"></i>
+                        <span class="streak-count">7</span>
+                    </div>
+                    <div class="streak-text">
+                        <strong>7일 연속 학습중!</strong>
+                        <p>훌륭해요! 계속 이어가세요</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 학습 현황 요약 -->
+    <section class="summary-section">
+        <div class="container">
+            <div class="summary-grid">
+                <div class="summary-card">
+                    <div class="summary-icon">
+                        <i class="fas fa-book-open"></i>
+                    </div>
+                    <div class="summary-content">
+                        <h3>수강중인 강의</h3>
+                        <div class="summary-number">3</div>
+                        <p>이번 주 2개 완료</p>
+                    </div>
+                </div>
+
+                <div class="summary-card">
+                    <div class="summary-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="summary-content">
+                        <h3>총 학습 시간</h3>
+                        <div class="summary-number">24.5</div>
+                        <p>시간</p>
+                    </div>
+                </div>
+
+                <div class="summary-card">
+                    <div class="summary-icon">
+                        <i class="fas fa-certificate"></i>
+                    </div>
+                    <div class="summary-content">
+                        <h3>획득한 수료증</h3>
+                        <div class="summary-number">2</div>
+                        <p>1개 진행중</p>
+                    </div>
+                </div>
+
+                <div class="summary-card">
+                    <div class="summary-icon">
+                        <i class="fas fa-trophy"></i>
+                    </div>
+                    <div class="summary-content">
+                        <h3>학습 포인트</h3>
+                        <div class="summary-number">1,250</div>
+                        <p>상위 15%</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 현재 수강중인 강의 -->
+    <section class="current-courses-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>현재 수강중인 강의</h2>
+                <a href="#" class="view-all">전체보기 <i class="fas fa-arrow-right"></i></a>
+            </div>
+
+            <div class="courses-grid">
+                <!-- 강의 카드 1 -->
+                <div class="course-progress-card">
+                    <div class="course-thumbnail">
+                        <img src="https://via.placeholder.com/400x200" alt="ChatGPT 마스터">
+                        <div class="play-button">
+                            <i class="fas fa-play"></i>
+                        </div>
+                    </div>
+                    <div class="course-info">
+                        <span class="course-category">중급</span>
+                        <h3>ChatGPT & AI 스탠다드 과정</h3>
+                        <p class="last-watched">마지막 학습: 2시간 전</p>
+                        
+                        <div class="progress-info">
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 65%;"></div>
+                            </div>
+                            <div class="progress-text">
+                                <span>진도율 65%</span>
+                                <span>15/23 강의</span>
+                            </div>
+                        </div>
+
+                        <div class="course-actions">
+                            <button class="btn-continue">
+                                이어서 학습하기 <i class="fas fa-play-circle"></i>
+                            </button>
+                            <button class="btn-certificate" disabled>
+                                <i class="fas fa-certificate"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 강의 카드 2 -->
+                <div class="course-progress-card">
+                    <div class="course-thumbnail">
+                        <img src="https://via.placeholder.com/400x200" alt="프롬프트 엔지니어링">
+                        <div class="play-button">
+                            <i class="fas fa-play"></i>
+                        </div>
+                    </div>
+                    <div class="course-info">
+                        <span class="course-category">고급</span>
+                        <h3>프롬프트 엔지니어링 심화</h3>
+                        <p class="last-watched">마지막 학습: 어제</p>
+                        
+                        <div class="progress-info">
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 30%;"></div>
+                            </div>
+                            <div class="progress-text">
+                                <span>진도율 30%</span>
+                                <span>6/20 강의</span>
+                            </div>
+                        </div>
+
+                        <div class="course-actions">
+                            <button class="btn-continue">
+                                이어서 학습하기 <i class="fas fa-play-circle"></i>
+                            </button>
+                            <button class="btn-certificate" disabled>
+                                <i class="fas fa-certificate"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 강의 카드 3 (완료) -->
+                <div class="course-progress-card completed">
+                    <div class="course-thumbnail">
+                        <img src="https://via.placeholder.com/400x200" alt="ChatGPT 첫걸음">
+                        <div class="completed-badge">
+                            <i class="fas fa-check-circle"></i> 수료완료
+                        </div>
+                    </div>
+                    <div class="course-info">
+                        <span class="course-category">입문</span>
+                        <h3>ChatGPT 첫걸음: 30분 만에 시작하기</h3>
+                        <p class="last-watched">수료일: 2024.11.20</p>
+                        
+                        <div class="progress-info">
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 100%;"></div>
+                            </div>
+                            <div class="progress-text">
+                                <span>진도율 100%</span>
+                                <span>7/7 강의</span>
+                            </div>
+                        </div>
+
+                        <div class="course-actions">
+                            <button class="btn-review">
+                                다시 보기 <i class="fas fa-redo"></i>
+                            </button>
+                            <button class="btn-certificate">
+                                <i class="fas fa-certificate"></i> 수료증
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 학습 활동 통계 -->
+    <section class="activity-stats-section">
+        <div class="container">
+            <h2>이번 주 학습 활동</h2>
+            
+            <div class="stats-layout">
+                <!-- 학습 캘린더 -->
+                <div class="learning-calendar">
+                    <h3>주간 학습 현황</h3>
+                    <div class="calendar-grid">
+                        <div class="day-item">
+                            <span class="day">월</span>
+                            <div class="activity-level high" title="2시간 학습"></div>
+                        </div>
+                        <div class="day-item">
+                            <span class="day">화</span>
+                            <div class="activity-level medium" title="1시간 학습"></div>
+                        </div>
+                        <div class="day-item">
+                            <span class="day">수</span>
+                            <div class="activity-level high" title="3시간 학습"></div>
+                        </div>
+                        <div class="day-item">
+                            <span class="day">목</span>
+                            <div class="activity-level low" title="30분 학습"></div>
+                        </div>
+                        <div class="day-item">
+                            <span class="day">금</span>
+                            <div class="activity-level medium" title="1.5시간 학습"></div>
+                        </div>
+                        <div class="day-item today">
+                            <span class="day">토</span>
+                            <div class="activity-level high" title="2.5시간 학습"></div>
+                        </div>
+                        <div class="day-item">
+                            <span class="day">일</span>
+                            <div class="activity-level none" title="학습 예정"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="calendar-legend">
+                        <span><i class="dot none"></i> 0시간</span>
+                        <span><i class="dot low"></i> ~1시간</span>
+                        <span><i class="dot medium"></i> 1~2시간</span>
+                        <span><i class="dot high"></i> 2시간+</span>
+                    </div>
+                </div>
+
+                <!-- 학습 통계 -->
+                <div class="learning-stats">
+                    <h3>학습 성과</h3>
+                    <div class="stat-item">
+                        <div class="stat-label">이번 주 학습 시간</div>
+                        <div class="stat-value">10.5시간</div>
+                        <div class="stat-change positive">
+                            <i class="fas fa-arrow-up"></i> 지난주 대비 +2.5시간
+                        </div>
+                    </div>
+                    
+                    <div class="stat-item">
+                        <div class="stat-label">완료한 강의</div>
+                        <div class="stat-value">8개</div>
+                        <div class="stat-change positive">
+                            <i class="fas fa-arrow-up"></i> 지난주 대비 +3개
+                        </div>
+                    </div>
+                    
+                    <div class="stat-item">
+                        <div class="stat-label">획득 포인트</div>
+                        <div class="stat-value">250P</div>
+                        <div class="stat-change neutral">
+                            <i class="fas fa-minus"></i> 지난주와 동일
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 학습 목표 -->
+                <div class="learning-goals">
+                    <h3>이번 주 목표</h3>
+                    <div class="goal-item">
+                        <div class="goal-info">
+                            <i class="fas fa-clock"></i>
+                            <span>주 15시간 학습</span>
+                        </div>
+                        <div class="goal-progress">
+                            <div class="progress-bar small">
+                                <div class="progress-fill" style="width: 70%;"></div>
+                            </div>
+                            <span class="progress-text">70%</span>
+                        </div>
+                    </div>
+                    
+                    <div class="goal-item">
+                        <div class="goal-info">
+                            <i class="fas fa-book"></i>
+                            <span>강의 10개 완료</span>
+                        </div>
+                        <div class="goal-progress">
+                            <div class="progress-bar small">
+                                <div class="progress-fill" style="width: 80%;"></div>
+                            </div>
+                            <span class="progress-text">80%</span>
+                        </div>
+                    </div>
+                    
+                    <div class="goal-item completed">
+                        <div class="goal-info">
+                            <i class="fas fa-fire"></i>
+                            <span>7일 연속 학습</span>
+                        </div>
+                        <div class="goal-progress">
+                            <i class="fas fa-check-circle"></i>
+                            <span class="progress-text">달성!</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 수료증 & 배지 -->
+    <section class="achievements-section">
+        <div class="container">
+            <h2>나의 성취</h2>
+            
+            <div class="achievements-tabs">
+                <button class="tab-btn active" data-tab="certificates">수료증</button>
+                <button class="tab-btn" data-tab="badges">배지</button>
+            </div>
+
+            <!-- 수료증 탭 -->
+            <div class="tab-content active" id="certificates">
+                <div class="certificates-grid">
+                    <div class="certificate-card">
+                        <div class="certificate-image">
+                            <img src="https://via.placeholder.com/300x200" alt="수료증">
+                            <div class="certificate-overlay">
+                                <button class="btn-download">
+                                    <i class="fas fa-download"></i> 다운로드
+                                </button>
+                                <button class="btn-share">
+                                    <i class="fas fa-share-alt"></i> 공유
+                                </button>
+                            </div>
+                        </div>
+                        <div class="certificate-info">
+                            <h4>ChatGPT 첫걸음 과정</h4>
+                            <p>수료일: 2024.11.20</p>
+                            <span class="certificate-id">인증번호: KGPT-2024-1120-001</span>
+                        </div>
+                    </div>
+
+                    <div class="certificate-card">
+                        <div class="certificate-image">
+                            <img src="https://via.placeholder.com/300x200" alt="수료증">
+                            <div class="certificate-overlay">
+                                <button class="btn-download">
+                                    <i class="fas fa-download"></i> 다운로드
+                                </button>
+                                <button class="btn-share">
+                                    <i class="fas fa-share-alt"></i> 공유
+                                </button>
+                            </div>
+                        </div>
+                        <div class="certificate-info">
+                            <h4>AI 업무 자동화 실전</h4>
+                            <p>수료일: 2024.10.15</p>
+                            <span class="certificate-id">인증번호: KGPT-2024-1015-023</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 배지 탭 -->
+            <div class="tab-content" id="badges">
+                <div class="badges-grid">
+                    <div class="badge-item earned">
+                        <div class="badge-icon">
+                            <i class="fas fa-rocket"></i>
+                        </div>
+                        <h4>빠른 시작</h4>
+                        <p>첫 강의 완료</p>
+                    </div>
+
+                    <div class="badge-item earned">
+                        <div class="badge-icon">
+                            <i class="fas fa-fire"></i>
+                        </div>
+                        <h4>열정 학습자</h4>
+                        <p>7일 연속 학습</p>
+                    </div>
+
+                    <div class="badge-item earned">
+                        <div class="badge-icon">
+                            <i class="fas fa-graduation-cap"></i>
+                        </div>
+                        <h4>첫 수료</h4>
+                        <p>첫 과정 수료</p>
+                    </div>
+
+                    <div class="badge-item">
+                        <div class="badge-icon locked">
+                            <i class="fas fa-lock"></i>
+                        </div>
+                        <h4>AI 마스터</h4>
+                        <p>5개 과정 수료</p>
+                    </div>
+
+                    <div class="badge-item">
+                        <div class="badge-icon locked">
+                            <i class="fas fa-lock"></i>
+                        </div>
+                        <h4>커뮤니티 리더</h4>
+                        <p>답변 50개 작성</p>
+                    </div>
+
+                    <div class="badge-item">
+                        <div class="badge-icon locked">
+                            <i class="fas fa-lock"></i>
+                        </div>
+                        <h4>프롬프트 전문가</h4>
+                        <p>프롬프트 과정 수료</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 추천 강의 -->
+    <section class="recommendations-section">
+        <div class="container">
+            <h2>다음 학습 추천</h2>
+            <p class="section-subtitle">김지은님의 학습 패턴을 분석한 맞춤 추천입니다</p>
+
+            <div class="recommendations-grid">
+                <div class="recommendation-card">
+                    <div class="match-score">
+                        <span>95% 매칭</span>
+                    </div>
+                    <div class="recommendation-content">
+                        <h3>엑셀 자동화와 ChatGPT</h3>
+                        <p>업무 효율을 200% 높이는 엑셀 AI 활용법</p>
+                        <div class="recommendation-meta">
+                            <span><i class="fas fa-clock"></i> 3시간</span>
+                            <span><i class="fas fa-signal"></i> 중급</span>
+                            <span><i class="fas fa-users"></i> 892명 수강</span>
+                        </div>
+                        <button class="btn-start-course">수강 시작하기</button>
+                    </div>
+                </div>
+
+                <div class="recommendation-card">
+                    <div class="match-score">
+                        <span>88% 매칭</span>
+                    </div>
+                    <div class="recommendation-content">
+                        <h3>AI로 PPT 10분 만에 만들기</h3>
+                        <p>프레젠테이션 자료 제작의 혁신</p>
+                        <div class="recommendation-meta">
+                            <span><i class="fas fa-clock"></i> 2시간</span>
+                            <span><i class="fas fa-signal"></i> 초급</span>
+                            <span><i class="fas fa-users"></i> 1,234명 수강</span>
+                        </div>
+                        <button class="btn-start-course">수강 시작하기</button>
+                    </div>
+                </div>
+
+                <div class="recommendation-card">
+                    <div class="match-score">
+                        <span>82% 매칭</span>
+                    </div>
+                    <div class="recommendation-content">
+                        <h3>Claude vs ChatGPT 완벽 비교</h3>
+                        <p>상황별 최적의 AI 도구 선택법</p>
+                        <div class="recommendation-meta">
+                            <span><i class="fas fa-clock"></i> 1.5시간</span>
+                            <span><i class="fas fa-signal"></i> 중급</span>
+                            <span><i class="fas fa-users"></i> 567명 수강</span>
+                        </div>
+                        <button class="btn-start-course">수강 시작하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 학습 도우미 -->
+    <div class="learning-assistant">
+        <button class="assistant-toggle">
+            <i class="fas fa-robot"></i>
+            <span class="assistant-badge">1</span>
+        </button>
+        
+        <div class="assistant-panel">
+            <div class="assistant-header">
+                <h3>AI 학습 도우미</h3>
+                <button class="assistant-close">&times;</button>
+            </div>
+            <div class="assistant-content">
+                <div class="assistant-message">
+                    <i class="fas fa-lightbulb"></i>
+                    <p>오늘도 열심히 학습중이시네요! 잠시 휴식을 취하시는 것은 어떨까요? ☕</p>
+                </div>
+                <div class="assistant-suggestions">
+                    <h4>오늘의 추천 활동</h4>
+                    <ul>
+                        <li><a href="#">✓ 프롬프트 연습문제 3개 풀기</a></li>
+                        <li><a href="#">✓ 커뮤니티에 학습 후기 작성</a></li>
+                        <li><a href="#">✓ 다음 강의 미리보기</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 푸터 -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>한국GPT협회</h3>
+                    <p>비개발자를 위한 AI 교육 플랫폼<br>누구나 쉽게 AI를 활용할 수 있습니다</p>
+                </div>
+                <div class="footer-section">
+                    <h4>학습 지원</h4>
+                    <ul>
+                        <li><a href="#guide">학습 가이드</a></li>
+                        <li><a href="#faq">자주 묻는 질문</a></li>
+                        <li><a href="#support">1:1 문의</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>내 정보</h4>
+                    <ul>
+                        <li><a href="#profile">프로필 설정</a></li>
+                        <li><a href="#certificates">수료증 관리</a></li>
+                        <li><a href="#payment">결제 내역</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>문의</h4>
+                    <p><i class="fas fa-phone"></i> 02-1234-5678</p>
+                    <p><i class="fas fa-envelope"></i> edu@koreangpt.org</p>
+                    <p><i class="fas fa-clock"></i> 평일 09:00 - 18:00</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 한국GPT협회. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 수료증 모달 -->
+    <div id="certificateModal" class="modal">
+        <div class="modal-content certificate-modal">
+            <button class="modal-close">&times;</button>
+            <h2>수료증 상세보기</h2>
+            <div class="certificate-preview">
+                <img src="https://via.placeholder.com/600x400" alt="수료증">
+            </div>
+            <div class="certificate-actions">
+                <button class="btn-download-pdf">
+                    <i class="fas fa-file-pdf"></i> PDF 다운로드
+                </button>
+                <button class="btn-print">
+                    <i class="fas fa-print"></i> 인쇄하기
+                </button>
+                <button class="btn-share-linkedin">
+                    <i class="fab fa-linkedin"></i> LinkedIn 공유
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="user-manager.js"></script>
+    <script src="my-classroom.js"></script>
+</body>
+</html>
