@@ -1,13 +1,18 @@
 // Authentication Handler
 document.addEventListener('DOMContentLoaded', function() {
-    // API 스크립트 로드
-    const script = document.createElement('script');
-    script.src = '/js/api-config.js';
-    document.head.appendChild(script);
-    
-    script.onload = () => {
+    // API 스크립트가 이미 로드되었는지 확인
+    if (typeof API !== 'undefined') {
         initializeAuth();
-    };
+    } else {
+        // API 스크립트 로드
+        const script = document.createElement('script');
+        script.src = '/js/api-config.js';
+        document.head.appendChild(script);
+        
+        script.onload = () => {
+            initializeAuth();
+        };
+    }
 });
 
 function initializeAuth() {
@@ -130,6 +135,7 @@ async function handleAdminLogin(e) {
 // 데모 로그인 처리
 async function handleDemoLogin(e) {
     const demoType = e.currentTarget.dataset.demoType;
+    console.log('Demo login type:', demoType);
     
     const demoAccounts = {
         student: {
@@ -152,23 +158,29 @@ async function handleDemoLogin(e) {
     try {
         let response;
         if (demoType === 'admin') {
+            console.log('Admin login attempt:', account);
             response = await API.adminLogin(account);
             localStorage.setItem('adminUser', JSON.stringify(response.user));
+            localStorage.setItem('authToken', response.token);
+            alert('관리자 로그인 성공');
             window.location.href = 'admin-select.html';
         } else {
+            console.log('User login attempt:', account);
             response = await API.login(account);
             localStorage.setItem('user', JSON.stringify(response.user));
+            localStorage.setItem('authToken', response.token);
             
             if (demoType === 'enterprise') {
+                alert('기업 회원 로그인 성공');
                 window.location.href = 'enterprise-request.html';
             } else {
+                alert('로그인 성공');
                 window.location.href = 'index.html';
             }
         }
-        
-        localStorage.setItem('authToken', response.token);
     } catch (error) {
-        alert('데모 계정 로그인 실패: ' + error.message);
+        console.error('Demo login error:', error);
+        alert('데모 계정 로그인 실패: ' + (error.message || '서버 연결 오류'));
     }
 }
 

@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>로그인 테스트</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+        .test-section {
+            border: 1px solid #ddd;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
+        button {
+            padding: 10px 20px;
+            margin: 5px;
+            cursor: pointer;
+        }
+        .success {
+            color: green;
+        }
+        .error {
+            color: red;
+        }
+        #result {
+            margin-top: 20px;
+            padding: 10px;
+            background: #f5f5f5;
+            border-radius: 5px;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+    <h1>API 연동 테스트</h1>
+    
+    <div class="test-section">
+        <h2>1. 서버 연결 테스트</h2>
+        <button onclick="testServerConnection()">서버 연결 확인</button>
+    </div>
+    
+    <div class="test-section">
+        <h2>2. 일반 로그인 테스트</h2>
+        <input type="email" id="email" placeholder="이메일" value="enterprise@demo.com"><br>
+        <input type="password" id="password" placeholder="비밀번호" value="demo123"><br>
+        <button onclick="testLogin()">로그인 테스트</button>
+    </div>
+    
+    <div class="test-section">
+        <h2>3. 관리자 로그인 테스트</h2>
+        <button onclick="testAdminLogin()">관리자 로그인</button>
+    </div>
+    
+    <div class="test-section">
+        <h2>4. 회원가입 테스트</h2>
+        <button onclick="testRegister()">회원가입 테스트</button>
+    </div>
+    
+    <div id="result"></div>
+
+    <script>
+        const API_BASE_URL = 'http://localhost:3001/api';
+        const resultDiv = document.getElementById('result');
+        
+        function log(message, type = 'info') {
+            const timestamp = new Date().toLocaleTimeString();
+            const className = type === 'error' ? 'error' : type === 'success' ? 'success' : '';
+            resultDiv.innerHTML += `<div class="${className}">[${timestamp}] ${message}</div>`;
+        }
+        
+        async function testServerConnection() {
+            try {
+                log('서버 연결 테스트 시작...');
+                const response = await fetch(`${API_BASE_URL}/health`);
+                const data = await response.json();
+                log(`서버 응답: ${JSON.stringify(data)}`, 'success');
+            } catch (error) {
+                log(`서버 연결 실패: ${error.message}`, 'error');
+            }
+        }
+        
+        async function testLogin() {
+            try {
+                const email = document.getElementById('email').value;
+                const password = document.getElementById('password').value;
+                
+                log(`로그인 시도: ${email}`);
+                
+                const response = await fetch(`${API_BASE_URL}/auth/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ email, password })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    log(`로그인 성공: ${JSON.stringify(data)}`, 'success');
+                    localStorage.setItem('authToken', data.token);
+                    localStorage.setItem('user', JSON.stringify(data.user));
+                } else {
+                    log(`로그인 실패: ${JSON.stringify(data)}`, 'error');
+                }
+            } catch (error) {
+                log(`로그인 오류: ${error.message}`, 'error');
+            }
+        }
+        
+        async function testAdminLogin() {
+            try {
+                log('관리자 로그인 시도...');
+                
+                const response = await fetch(`${API_BASE_URL}/auth/admin/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        email: 'admin@koreagpt.org',
+                        password: 'admin123!@#'
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    log(`관리자 로그인 성공: ${JSON.stringify(data)}`, 'success');
+                    localStorage.setItem('authToken', data.token);
+                    localStorage.setItem('adminUser', JSON.stringify(data.user));
+                } else {
+                    log(`관리자 로그인 실패: ${JSON.stringify(data)}`, 'error');
+                }
+            } catch (error) {
+                log(`관리자 로그인 오류: ${error.message}`, 'error');
+            }
+        }
+        
+        async function testRegister() {
+            try {
+                log('회원가입 테스트 시작...');
+                
+                const testUser = {
+                    email: `test${Date.now()}@example.com`,
+                    password: 'test123!',
+                    managerName: '테스트담당자',
+                    position: '과장',
+                    phone: '010-1234-5678',
+                    companyName: '테스트회사',
+                    businessNumber: '123-45-67890',
+                    industry: 'IT',
+                    employeeCount: '10-50'
+                };
+                
+                log(`회원가입 데이터: ${JSON.stringify(testUser)}`);
+                
+                const response = await fetch(`${API_BASE_URL}/auth/register`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(testUser)
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    log(`회원가입 성공: ${JSON.stringify(data)}`, 'success');
+                } else {
+                    log(`회원가입 실패: ${JSON.stringify(data)}`, 'error');
+                }
+            } catch (error) {
+                log(`회원가입 오류: ${error.message}`, 'error');
+            }
+        }
+        
+        // 페이지 로드 시 서버 연결 확인
+        window.onload = () => {
+            testServerConnection();
+        };
+    </script>
+</body>
+</html>
