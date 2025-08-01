@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>페이지 빌더 | 한국GPT협회</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="page-builder.css">
+</head>
+<body>
+    <!-- 상단 툴바 -->
+    <div class="builder-toolbar">
+        <div class="toolbar-left">
+            <button class="btn-back" onclick="window.location.href='index.html'">
+                <i class="fas fa-arrow-left"></i> 돌아가기
+            </button>
+            <span class="toolbar-title">페이지 빌더 - 한국GPT협회</span>
+        </div>
+        <div class="toolbar-center">
+            <button class="btn-device active" data-device="desktop">
+                <i class="fas fa-desktop"></i>
+            </button>
+            <button class="btn-device" data-device="tablet">
+                <i class="fas fa-tablet-alt"></i>
+            </button>
+            <button class="btn-device" data-device="mobile">
+                <i class="fas fa-mobile-alt"></i>
+            </button>
+        </div>
+        <div class="toolbar-right">
+            <button class="btn-preview">
+                <i class="fas fa-eye"></i> 미리보기
+            </button>
+            <button class="btn-save">
+                <i class="fas fa-save"></i> 저장하기
+            </button>
+            <button class="btn-publish">
+                <i class="fas fa-cloud-upload-alt"></i> 게시하기
+            </button>
+        </div>
+    </div>
+
+    <div class="builder-container">
+        <!-- 왼쪽 사이드바 - 위젯/블록 -->
+        <div class="builder-sidebar">
+            <div class="sidebar-tabs">
+                <button class="tab-btn active" data-tab="blocks">
+                    <i class="fas fa-th-large"></i> 블록
+                </button>
+                <button class="tab-btn" data-tab="templates">
+                    <i class="fas fa-layer-group"></i> 템플릿
+                </button>
+                <button class="tab-btn" data-tab="global">
+                    <i class="fas fa-globe"></i> 전역
+                </button>
+            </div>
+
+            <!-- 블록 탭 -->
+            <div class="tab-content active" id="blocks-tab">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="블록 검색...">
+                </div>
+
+                <div class="blocks-category">
+                    <h3>레이아웃</h3>
+                    <div class="blocks-grid">
+                        <div class="block-item" draggable="true" data-block-type="section">
+                            <i class="fas fa-square"></i>
+                            <span>섹션</span>
+                        </div>
+                        <div class="block-item" draggable="true" data-block-type="container">
+                            <i class="fas fa-box"></i>
+                            <span>컨테이너</span>
+                        </div>
+                        <div class="block-item" draggable="true" data-block-type="columns">
+                            <i class="fas fa-columns"></i>
+                            <span>컬럼</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="blocks-category">
+                    <h3>기본 요소</h3>
+                    <div class="blocks-grid">
+                        <div class="block-item" draggable="true" data-block-type="heading">
+                            <i class="fas fa-heading"></i>
+                            <span>제목</span>
+                        </div>
+                        <div class="block-item" draggable="true" data-block-type="text">
+                            <i class="fas fa-paragraph"></i>
+                            <span>텍스트</span>
+                        </div>
+                        <div class="block-item" draggable="true" data-block-type="button">
+                            <i class="fas fa-square"></i>
+                            <span>버튼</span>
+                        </div>
+                        <div class="block-item" draggable="true" data-block-type="image">
+                            <i class="fas fa-image"></i>
+                            <span>이미지</span>
+                        </div>
+                        <div class="block-item" draggable="true" data-block-type="video">
+                            <i class="fas fa-video"></i>
+                            <span>비디오</span>
+                        </div>
+                        <div class="block-item" draggable="true" data-block-type="icon">
+                            <i class="fas fa-icons"></i>
+                            <span>아이콘</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="blocks-category">
+                    <h3>고급 요소</h3>
+                    <div class="blocks-grid">
+                        <div class="block-item" draggable="true" data-block-type="hero">
+                            <i class="fas fa-flag"></i>
+                            <span>히어로</span>
+                        </div>
+                        <div class="block-item" draggable="true" data-block-type="card">
+                            <i class="fas fa-id-card"></i>
+                            <span>카드</span>
+                        </div>
+                        <div class="block-item" draggable="true" data-block-type="carousel">
+                            <i class="fas fa-images"></i>
+                            <span>캐러셀</span>
+                        </div>
+                        <div class="block-item" draggable="true" data-block-type="tabs">
+                            <i class="fas fa-folder"></i>
+                            <span>탭</span>
+                        </div>
+                        <div class="block-item" draggable="true" data-block-type="accordion">
+                            <i class="fas fa-bars"></i>
+                            <span>아코디언</span>
+                        </div>
+                        <div class="block-item" draggable="true" data-block-type="testimonial">
+                            <i class="fas fa-comment-dots"></i>
+                            <span>후기</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="blocks-category">
+                    <h3>교육 플랫폼 전용</h3>
+                    <div class="blocks-grid">
+                        <div class="block-item" draggable="true" data-block-type="course-grid">
+                            <i class="fas fa-graduation-cap"></i>
+                            <span>강좌 그리드</span>
+                        </div>
+                        <div class="block-item" draggable="true" data-block-type="instructor">
+                            <i class="fas fa-user-tie"></i>
+                            <span>강사 프로필</span>
+                        </div>
+                        <div class="block-item" draggable="true" data-block-type="pricing">
+                            <i class="fas fa-tags"></i>
+                            <span>가격표</span>
+                        </div>
+                        <div class="block-item" draggable="true" data-block-type="faq">
+                            <i class="fas fa-question-circle"></i>
+                            <span>FAQ</span>
+                        </div>
+                        <div class="block-item" draggable="true" data-block-type="live-stats">
+                            <i class="fas fa-chart-line"></i>
+                            <span>실시간 통계</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 템플릿 탭 -->
+            <div class="tab-content" id="templates-tab">
+                <div class="template-list">
+                    <div class="template-item">
+                        <img src="https://via.placeholder.com/200x150" alt="히어로 템플릿 1">
+                        <span>모던 히어로</span>
+                    </div>
+                    <div class="template-item">
+                        <img src="https://via.placeholder.com/200x150" alt="강좌 목록">
+                        <span>강좌 목록</span>
+                    </div>
+                    <div class="template-item">
+                        <img src="https://via.placeholder.com/200x150" alt="CTA 섹션">
+                        <span>CTA 섹션</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 전역 설정 탭 -->
+            <div class="tab-content" id="global-tab">
+                <div class="global-settings">
+                    <div class="setting-group">
+                        <h4>사이트 색상</h4>
+                        <div class="color-picker-group">
+                            <label>
+                                <span>주 색상</span>
+                                <input type="color" value="#31E0AA">
+                            </label>
+                            <label>
+                                <span>보조 색상</span>
+                                <input type="color" value="#2D3E50">
+                            </label>
+                        </div>
+                    </div>
+                    <div class="setting-group">
+                        <h4>글꼴</h4>
+                        <select class="font-selector">
+                            <option>Pretendard</option>
+                            <option>Noto Sans KR</option>
+                            <option>Spoqa Han Sans</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 중앙 캔버스 영역 -->
+        <div class="builder-canvas">
+            <div class="canvas-wrapper" id="canvas">
+                <div class="empty-state">
+                    <i class="fas fa-layer-group"></i>
+                    <h3>여기에 블록을 드래그하세요</h3>
+                    <p>왼쪽 패널에서 블록을 선택하여 페이지를 구성하세요</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 오른쪽 속성 패널 -->
+        <div class="builder-properties">
+            <div class="properties-header">
+                <h3>속성 편집</h3>
+                <button class="btn-close-properties">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="properties-content" id="properties-panel">
+                <div class="empty-properties">
+                    <i class="fas fa-mouse-pointer"></i>
+                    <p>편집할 요소를 선택하세요</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 컨텍스트 메뉴 -->
+    <div class="context-menu" id="contextMenu">
+        <div class="menu-item" data-action="duplicate">
+            <i class="fas fa-copy"></i> 복제
+        </div>
+        <div class="menu-item" data-action="delete">
+            <i class="fas fa-trash"></i> 삭제
+        </div>
+        <div class="menu-item" data-action="moveUp">
+            <i class="fas fa-arrow-up"></i> 위로 이동
+        </div>
+        <div class="menu-item" data-action="moveDown">
+            <i class="fas fa-arrow-down"></i> 아래로 이동
+        </div>
+    </div>
+
+    <script src="page-builder.js"></script>
+</body>
+</html>
