@@ -21,25 +21,37 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // 관리자 접근 권한 확인
 function checkAdminAccess() {
-    if (!authAPI.isLoggedIn() || !authAPI.isAdmin()) {
-        alert('관리자 권한이 필요합니다.');
+    // GitHub Pages에서는 로컬 스토리지 기반 인증 사용
+    const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
+    const isLoggedIn = sessionStorage.getItem('isLoggedIn') === 'true';
+    
+    if (!isLoggedIn) {
+        alert('로그인이 필요합니다.');
         window.location.href = 'login.html';
+        return;
+    }
+    
+    if (currentUser.role !== 'admin') {
+        alert('관리자 권한이 필요합니다.');
+        window.location.href = 'index.html';
         return;
     }
 }
 
 // 대시보드 데이터 로드
 async function loadDashboardData() {
-    try {
-        dashboardData = await adminAPI.getDashboard();
-        updateDashboardStats();
-        await loadRequestsData();
-        await loadMembersData();
-        await loadInstructorsData();
-    } catch (error) {
-        console.error('Dashboard data loading failed:', error);
-        showNotification('데이터 로딩 중 오류가 발생했습니다.', 'error');
-    }
+    // GitHub Pages에서는 정적 데이터 사용
+    dashboardData = {
+        totalRequests: 156,
+        pendingRequests: 23,
+        completedRequests: 98,
+        totalMembers: 42,
+        totalInstructors: 8
+    };
+    updateDashboardStats();
+    loadRequestsData();
+    loadMembersData();
+    loadInstructorsData();
 }
 
 // 대시보드 통계 업데이트
@@ -61,35 +73,111 @@ function updateDashboardStats() {
 }
 
 // 교육 신청 데이터 로드
-async function loadRequestsData() {
-    try {
-        const response = await adminAPI.getRequests({ limit: 100 });
-        requestsData = response.requests || [];
-        updateRequestsTable();
-    } catch (error) {
-        console.error('Requests data loading failed:', error);
-    }
+function loadRequestsData() {
+    // GitHub Pages에서는 정적 데이터 사용
+    requestsData = [
+        {
+            id: 1,
+            requestNumber: 'REQ-2024-0001',
+            enterpriseMember: { companyName: '삼성전자', managerName: '이매니저' },
+            program: { programName: 'ChatGPT 기초 과정' },
+            participantsCount: 30,
+            status: 'pending',
+            createdAt: new Date('2024-01-15')
+        },
+        {
+            id: 2,
+            requestNumber: 'REQ-2024-0002',
+            enterpriseMember: { companyName: 'LG전자', managerName: '김담당' },
+            program: { programName: '업무 자동화 과정' },
+            participantsCount: 25,
+            status: 'confirmed',
+            createdAt: new Date('2024-01-18')
+        },
+        {
+            id: 3,
+            requestNumber: 'REQ-2024-0003',
+            enterpriseMember: { companyName: '현대자동차', managerName: '박매니저' },
+            program: { programName: 'AI 전문가 과정' },
+            participantsCount: 20,
+            status: 'completed',
+            createdAt: new Date('2024-01-20')
+        }
+    ];
+    updateRequestsTable();
 }
 
 // 회원 데이터 로드
-async function loadMembersData() {
-    try {
-        const response = await adminAPI.getMembers({ limit: 100 });
-        membersData = response.members || [];
-        updateMembersTable();
-    } catch (error) {
-        console.error('Members data loading failed:', error);
-    }
+function loadMembersData() {
+    // GitHub Pages에서는 정적 데이터 사용
+    membersData = [
+        {
+            id: 1,
+            companyName: '삼성전자',
+            managerName: '이매니저',
+            email: 'manager@samsung.com',
+            phone: '02-1234-5678',
+            isActive: true,
+            createdAt: new Date('2024-01-10')
+        },
+        {
+            id: 2,
+            companyName: 'LG전자',
+            managerName: '김담당',
+            email: 'kim@lg.com',
+            phone: '02-2345-6789',
+            isActive: true,
+            createdAt: new Date('2024-01-12')
+        },
+        {
+            id: 3,
+            companyName: '현대자동차',
+            managerName: '박매니저',
+            email: 'park@hyundai.com',
+            phone: '02-3456-7890',
+            isActive: false,
+            createdAt: new Date('2024-01-15')
+        }
+    ];
+    updateMembersTable();
 }
 
 // 강사 데이터 로드
-async function loadInstructorsData() {
-    try {
-        instructorsData = await instructorAPI.getInstructors();
-        updateInstructorsTable();
-    } catch (error) {
-        console.error('Instructors data loading failed:', error);
-    }
+function loadInstructorsData() {
+    // GitHub Pages에서는 정적 데이터 사용
+    instructorsData = [
+        {
+            id: 1,
+            name: '김철수',
+            email: 'kimcs@example.com',
+            phone: '010-1234-5678',
+            carModel: 'SM5',
+            carNumber: '12가3456',
+            specialty: 'ChatGPT 기초 및 중급',
+            isActive: true
+        },
+        {
+            id: 2,
+            name: '이영희',
+            email: 'leeyh@example.com',
+            phone: '010-2345-6789',
+            carModel: 'K5',
+            carNumber: '34나5678',
+            specialty: '업무 자동화 전문',
+            isActive: true
+        },
+        {
+            id: 3,
+            name: '박민수',
+            email: 'parkms@example.com',
+            phone: '010-3456-7890',
+            carModel: '소나타',
+            carNumber: '56다7890',
+            specialty: 'AI 전략 및 고급 과정',
+            isActive: true
+        }
+    ];
+    updateInstructorsTable();
 }
 
 // 교육 신청 테이블 업데이트
@@ -230,37 +318,45 @@ function showNotification(message, type = 'info') {
 }
 
 // 신청 상세보기
-async function viewRequest(requestId) {
-    try {
-        const request = await adminAPI.getRequest(requestId);
+function viewRequest(requestId) {
+    const request = requestsData.find(r => r.id === requestId);
+    if (request) {
+        // 더미 상세 데이터 추가
+        request.preferredDates = [
+            { priority: 1, preferredDate: new Date('2024-02-15') },
+            { priority: 2, preferredDate: new Date('2024-02-20') },
+            { priority: 3, preferredDate: new Date('2024-02-25') }
+        ];
         showRequestModal(request);
-    } catch (error) {
-        showNotification('신청 정보를 불러오는데 실패했습니다.', 'error');
+    } else {
+        showNotification('신청 정보를 찾을 수 없습니다.', 'error');
     }
 }
 
 // 신청 상태 변경
-async function updateRequestStatus(requestId) {
+function updateRequestStatus(requestId) {
     const newStatus = prompt('새로운 상태를 입력하세요:\npending, quote_sent, date_selecting, confirmed, document_pending, completed, cancelled');
     
     if (!newStatus) return;
     
-    try {
-        await adminAPI.updateRequestStatus(requestId, newStatus);
+    const request = requestsData.find(r => r.id === requestId);
+    if (request) {
+        request.status = newStatus;
         showNotification('상태가 변경되었습니다.');
-        loadRequestsData();
-    } catch (error) {
+        updateRequestsTable();
+    } else {
         showNotification('상태 변경에 실패했습니다.', 'error');
     }
 }
 
 // 회원 상태 토글
-async function toggleMemberStatus(memberId) {
-    try {
-        await adminAPI.toggleMemberStatus(memberId);
+function toggleMemberStatus(memberId) {
+    const member = membersData.find(m => m.id === memberId);
+    if (member) {
+        member.isActive = !member.isActive;
         showNotification('회원 상태가 변경되었습니다.');
-        loadMembersData();
-    } catch (error) {
+        updateMembersTable();
+    } else {
         showNotification('회원 상태 변경에 실패했습니다.', 'error');
     }
 }
@@ -396,7 +492,7 @@ function confirmScheduleModal(requestId) {
 }
 
 // 일정 확정 제출
-async function submitScheduleConfirmation(requestId) {
+function submitScheduleConfirmation(requestId) {
     const form = document.getElementById('confirm-schedule-form');
     const formData = new FormData(form);
     
@@ -408,12 +504,14 @@ async function submitScheduleConfirmation(requestId) {
         onlineLink: formData.get('onlineLink')
     };
     
-    try {
-        await adminAPI.confirmSchedule(requestId, scheduleData);
+    const request = requestsData.find(r => r.id === requestId);
+    if (request) {
+        request.status = 'confirmed';
+        request.confirmedSchedule = scheduleData;
         showNotification('일정이 확정되었습니다.');
         document.querySelector('.modal-overlay').remove();
-        loadRequestsData();
-    } catch (error) {
+        updateRequestsTable();
+    } else {
         showNotification('일정 확정에 실패했습니다.', 'error');
     }
 }
