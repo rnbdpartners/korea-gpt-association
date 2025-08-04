@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>관리자 로그인 정보 | 한국GPT협회</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            background: #f5f7fa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+        
+        .admin-info-card {
+            background: white;
+            border-radius: 16px;
+            padding: 40px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+        }
+        
+        .admin-info-card h1 {
+            color: #2d3e50;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+        
+        .admin-info-card .subtitle {
+            color: #6c757d;
+            margin-bottom: 30px;
+            font-size: 16px;
+        }
+        
+        .info-section {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        
+        .info-section h3 {
+            color: #2d3e50;
+            margin-bottom: 15px;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .info-section h3 i {
+            color: #31E0AA;
+        }
+        
+        .credential {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        .credential:last-child {
+            border-bottom: none;
+        }
+        
+        .credential label {
+            color: #6c757d;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        .credential code {
+            background: #2d3e50;
+            color: #31E0AA;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-family: 'Monaco', 'Consolas', monospace;
+            font-size: 14px;
+        }
+        
+        .features-list {
+            text-align: left;
+            margin-top: 15px;
+        }
+        
+        .features-list li {
+            padding: 8px 0;
+            color: #495057;
+            font-size: 14px;
+            list-style: none;
+            position: relative;
+            padding-left: 25px;
+        }
+        
+        .features-list li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #31E0AA;
+            font-weight: bold;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+        
+        .btn {
+            flex: 1;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-size: 15px;
+        }
+        
+        .btn-primary {
+            background: #31E0AA;
+            color: #1a1a1a;
+        }
+        
+        .btn-primary:hover {
+            background: #28c997;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(49, 224, 170, 0.3);
+        }
+        
+        .btn-secondary {
+            background: #e9ecef;
+            color: #495057;
+        }
+        
+        .btn-secondary:hover {
+            background: #dee2e6;
+        }
+        
+        .warning-note {
+            background: #fff3cd;
+            border: 1px solid #ffeeba;
+            color: #856404;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .warning-note i {
+            color: #f39c12;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-info-card">
+        <h1>한국GPT협회 관리자 시스템</h1>
+        <p class="subtitle">페이지 편집 및 관리를 위한 관리자 정보</p>
+        
+        <div class="info-section">
+            <h3><i class="fas fa-key"></i> 관리자 로그인 정보</h3>
+            <div class="credential">
+                <label>이메일</label>
+                <code>admin@koreangpt.org</code>
+            </div>
+            <div class="credential">
+                <label>비밀번호</label>
+                <code>admin123</code>
+            </div>
+        </div>
+        
+        <div class="info-section">
+            <h3><i class="fas fa-magic"></i> 관리자 기능</h3>
+            <ul class="features-list">
+                <li>모든 페이지 상단에 관리자 배너 표시</li>
+                <li>드래그 앤 드롭 페이지 빌더 접근</li>
+                <li>실시간 사이트 통계 확인</li>
+                <li>각 페이지별 편집 모드 진입</li>
+                <li>관리자 대시보드 접근</li>
+            </ul>
+        </div>
+        
+        <div class="action-buttons">
+            <a href="login.html" class="btn btn-primary">
+                <i class="fas fa-sign-in-alt"></i>
+                로그인 페이지로
+            </a>
+            <a href="index.html" class="btn btn-secondary">
+                <i class="fas fa-home"></i>
+                메인 페이지로
+            </a>
+        </div>
+        
+        <div class="warning-note">
+            <i class="fas fa-exclamation-triangle"></i>
+            <span>이 정보는 데모용입니다. 실제 운영 시에는 보안이 강화된 인증 시스템을 사용하세요.</span>
+        </div>
+    </div>
+</body>
+</html>
